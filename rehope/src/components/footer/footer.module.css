@@ -1,0 +1,14 @@
+#footer {
+    min-height: 15vh;
+    background:
+    radial-gradient(
+      circle at 10% 75%,
+      var(--verde-secundario),
+      var(--verde-primario)
+    ),
+    var(--verde-primario);
+}
+
+#img {
+  width: 80%;
+} 

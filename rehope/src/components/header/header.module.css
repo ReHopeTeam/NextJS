@@ -1,0 +1,14 @@
+#header {
+  min-height: 10vh;
+  background:
+    radial-gradient(
+      circle at 10% 75%,
+      var(--verde-secundario),
+      var(--verde-primario)
+    ),
+    var(--verde-primario);
+}
+
+#img {
+  width: 80%;
+}

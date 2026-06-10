@@ -1,6 +1,23 @@
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
+import { Quicksand, Comfortaa } from "next/font/google";
+
+const quicksand = Quicksand({
+  variable: "--font-quicksand",
+  weight: ["300", "400", "500", "600"],
+  subsets: ["latin"],
+});
+
+const comfortaa = Comfortaa({
+  variable: "--font-comfortaa",
+  weight: ["400", "600"],
+  subsets: ["latin"],
+});
 
 export default function App({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />;
+  return (
+    <main className={`${quicksand.variable} ${comfortaa.variable}`}>
+      <Component {...pageProps} />
+    </main>
+  );
 }
