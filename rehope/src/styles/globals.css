@@ -1,4 +1,13 @@
 /*? ========================= */
+/*?         EM TESTE          */
+/*? ========================= */
+
+.fixed {
+  z-index: 10;
+  position: fixed;
+}
+
+/*? ========================= */
 /*?        VARIÁVEIS          */
 /*? ========================= */
 
@@ -25,8 +34,8 @@
 
   /* Sombras */
   --shadow-sm: 0 2px 6px hsla(125, 60%, 25%, 0.1);
-  --shadow-md: 0 4px 12px hsla(125, 60%, 25%, 0.15);
-  --shadow-lg: 0 8px 24px hsla(125, 60%, 25%, 0.25);
+  --shadow-md: 0 4px 12px hsla(125, 60%, 0%, 0.2);
+  --shadow-lg: 0 8px 24px hsla(125, 60%, 25%, 0.3);
 }
 
 /*? ========================= */
@@ -43,7 +52,7 @@
 
 html {
   scrollbar-width: thin;
-  scrollbar-color: var(--verde-secundario) var(--bg);
+  scrollbar-color: var(--destaque) var(--verde-fonte);
 }
 
 html[data-scroll-behavior="smooth"] {
@@ -52,7 +61,11 @@ html[data-scroll-behavior="smooth"] {
 
 body {
   min-height: 100vh;
-  background: var(--bg);
+  background: radial-gradient(
+    circle at 50% 100%,
+    var(--bg),
+    color-mix(var(--bg) 100%, var(--destaque) 10%)
+  );
 }
 
 ::selection {
@@ -74,6 +87,33 @@ button,
 input {
   border: none;
   outline: none;
+}
+
+/*? ========================= */
+/*?          TOAST            */
+/*? ========================= */
+
+/* Altera o card do toast */
+.Toastify__toast {
+  overflow: hidden;
+  color: var(--verde-fonte) !important;
+  background: var(--bg) !important;
+  border-radius: 12px !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+/* Altera a barra de progresso do toast de sucesso */
+.Toastify__progress-bar--success {
+  background: linear-gradient(
+    to right,
+    var(--verde-primario),
+    var(--verde-secundario)
+  ) !important;
+}
+
+/* Altera a cor do ícone de sucesso */
+.Toastify__toast--success .Toastify__toast-icon svg {
+  fill: var(--verde-primario) !important;
 }
 
 /*? ========================= */
@@ -202,34 +242,11 @@ input {
 }
 
 .img_wrapper:hover img {
-  transform: scale(1.025);
+  transform: scale(1.015);
 }
 
 .img_wrapper:hover::after {
   opacity: 0.2;
-}
-
-/*? ========================= */
-/*?          TOAST            */
-/*? ========================= */
-
-.Toastify__toast {
-  color: var(--verde-fonte) !important;
-  background: var(--bg) !important;
-  border-radius: 12px !important;
-  box-shadow: var(--shadow-md) !important;
-}
-
-.Toastify__progress-bar--success {
-  background: linear-gradient(
-    to right,
-    var(--verde-primario),
-    var(--verde-secundario)
-  ) !important;
-}
-
-.Toastify__toast--success .Toastify__toast-icon svg {
-  fill: var(--verde-primario) !important;
 }
 
 /*? ========================= */
@@ -239,8 +256,8 @@ input {
 .form {
   width: 90%;
   display: flex;
-  flex-direction: column;
   align-items: center;
+  flex-direction: column;
   justify-content: center;
   gap: 20px;
 }
@@ -253,6 +270,7 @@ input {
 
 .input,
 .input2 {
+  box-shadow: inset var(--shadow-md);
   width: 100%;
   height: var(--height);
   padding: var(--padding-md);
@@ -281,12 +299,12 @@ input {
 
 .input:hover {
   border-bottom-color: var(--verde-secundario);
-  box-shadow: var(--shadow-sm);
+  box-shadow: inset var(--shadow-sm);
 }
 
 .input2:hover {
   border-bottom-color: var(--destaque);
-  box-shadow: var(--shadow-sm);
+  box-shadow: inset var(--shadow-sm);
 }
 
 .input:focus,
@@ -307,8 +325,8 @@ input {
   color: var(--cinza);
   font-size: 16px;
   pointer-events: none;
+  background: transparent;
   padding: var(--padding-sm);
-  background: var(--verde-fonte);
   border-radius: var(--radius-sm);
   border: 1px solid transparent;
   transition:
@@ -328,6 +346,7 @@ input {
 .input2:not(:placeholder-shown) ~ .label {
   top: 0;
   font-size: 12px;
+  background: var(--verde-fonte);
   border: 1px solid var(--bg);
   color: var(--bg);
 }
@@ -338,6 +357,7 @@ input {
 
 .btn {
   width: 100%;
+  max-width: 160px;
   height: var(--height);
   cursor: pointer;
   color: var(--bg);

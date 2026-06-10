@@ -4,12 +4,14 @@ type ButtonProps = ComponentPropsWithoutRef<"button"> & {
   children: ReactNode;
 };
 
-const Button = ({ className, children, onClick, ...props }: ButtonProps) => {
+const Botoes = ({ className, children, onClick, ...props }: ButtonProps) => {
+  const combinedClasses = `btn ${className || ""}`.trim();
+
   return (
-    <button className={className} onClick={onClick}>
+    <button className={combinedClasses} {...props} onClick={onClick}>
       {children}
     </button>
   );
 };
 
-export default Button;
+export default Botoes;

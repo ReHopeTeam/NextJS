@@ -14,7 +14,7 @@ const Footer = () => {
             <img
               className="img"
               id={styles.img}
-              src="/imgs/ico.svg"
+              src="/imgs/Logo.svg"
               alt="Logo do site"
             />
           </Link>

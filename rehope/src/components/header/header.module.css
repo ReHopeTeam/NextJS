@@ -7,8 +7,20 @@
       var(--verde-primario)
     ),
     var(--verde-primario);
+  clip-path: path(
+    "M0.000235557 0H1920V159.417C1920 159.417 1676 195.107 1478 128.961C1230 46.1113 802.5 204.149 542 128.961C306.921 61.1105 176.5 159.417 0 159.417L0.000235557 0Z"
+  );
+}
+
+/*? o ::after funciona como uma "extensão" do #header sem precisar aumentar os vh's.*/
+#header::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100px;
+  background: inherit;
 }
 
 #img {
-  width: 80%;
+  width: 30%;
 }

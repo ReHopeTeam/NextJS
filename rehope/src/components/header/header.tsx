@@ -2,6 +2,7 @@ import Link from "next/link";
 import styles from "./header.module.css";
 import Button from "@/components/button/button";
 import { useRouter } from "next/router";
+import { logout } from "@/pages/api/authService";
 
 const Header = () => {
   const router = useRouter();
@@ -15,7 +16,7 @@ const Header = () => {
             <img
               className="img"
               id={styles.img}
-              src="/imgs/ico.svg"
+              src="/imgs/Logo.svg"
               alt="Logo do site"
             />
           </Link>
@@ -28,7 +29,7 @@ const Header = () => {
           <a className="link" href="">
             Placeholder2
           </a>
-          <Button className="btn" children="Logout" type="submit" />
+          <Button children="Logout" onClick={() => logout()}/>
         </div>
       </div>
     </header>

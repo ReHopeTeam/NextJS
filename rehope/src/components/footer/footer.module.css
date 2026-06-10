@@ -1,14 +1,24 @@
 #footer {
-    min-height: 15vh;
-    background:
+  min-height: 15vh;
+  background:
     radial-gradient(
       circle at 10% 75%,
       var(--verde-secundario),
       var(--verde-primario)
     ),
     var(--verde-primario);
+  clip-path: path(
+    "M1920 169.031H0V9.61458C0 9.61458 244 -26.0757 442 40.0703C690 122.92 1117.5 -35.1173 1378 40.0703C1613.08 107.921 1743.5 9.61458 1920 9.61458L1920 169.031Z"
+  );
+}
+
+#footer::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  background: inherit;
 }
 
 #img {
-  width: 80%;
-} 
+  width: 30%;
+}

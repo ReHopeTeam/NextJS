@@ -1,3 +1,4 @@
+import Button from "@/components/button/button";
 import { Slide, toast, ToastOptions } from "react-toastify";
 
 const defaultOptions: ToastOptions = {
@@ -16,8 +17,8 @@ export const toastConfirmarExcluir = (aoConfirmar: () => void) => {
     ({ closeToast }) => (
       <div>
         <p>Deseja realmente excluir?</p>
-        <div style={{ display: "flex", gap: "8px", marginTop: "10px" }}>
-          <button
+        <div className="sbs">
+          <Button
             className="btn"
             onClick={() => {
               aoConfirmar();
@@ -26,7 +27,7 @@ export const toastConfirmarExcluir = (aoConfirmar: () => void) => {
             children="Sim"
           />
 
-          <button className="btn2" onClick={closeToast} children="Cancelar" />
+          <Button className="btn" onClick={closeToast} children="Cancelar" />
         </div>
       </div>
     ),
