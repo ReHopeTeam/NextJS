@@ -1,6 +1,7 @@
 import Button from "@/components/button/button";
 import Footer from "@/components/footer/footer";
 import Header from "@/components/header/header";
+import Lucide from "@/utils/lucide";
 import { ChangeEvent, useEffect, useState } from "react";
 
 const CadastroProduto = () => {
@@ -56,22 +57,8 @@ const CadastroProduto = () => {
                     </div>
                   ) : (
                     <>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                        <polyline points="17 8 12 3 7 8" />
-                        <line x1="12" y1="3" x2="12" y2="15" />
-                      </svg>
-                      <span>Upload Imagem</span>
+                      <Lucide name="Upload" size={24}/>
+                      <span>Escolher Imagem</span>
                     </>
                   )}
                 </label>

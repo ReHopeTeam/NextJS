@@ -1,6 +1,7 @@
 import { useState } from "react";
 import styles from "./lista.module.css";
 import Card from "@/components/cards/cards";
+import Lucide from "@/utils/lucide";
 
 type Produto = {
   id: number;
@@ -74,6 +75,7 @@ const Lista = () => {
             }}
           />
           <label htmlFor="pesquisa" className="label">
+            <Lucide name="Search" />
             Pesquise seu produto...
           </label>
         </div>
