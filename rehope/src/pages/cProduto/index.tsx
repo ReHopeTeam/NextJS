@@ -57,7 +57,7 @@ const CadastroProduto = () => {
                     </div>
                   ) : (
                     <>
-                      <Lucide name="Upload" size={24}/>
+                      <Lucide name="Upload" size={24} className="upload_lucide"/>
                       <span>Escolher Imagem</span>
                     </>
                   )}
@@ -72,6 +72,7 @@ const CadastroProduto = () => {
               </div>
               {/* Restante dos campos */}
               <div className="campo_form">
+                <Lucide name="RectangleEllipsis" className="lucide" />
                 <input
                   type="text"
                   id="codigo"
@@ -87,6 +88,7 @@ const CadastroProduto = () => {
 
             <div className="column full_height">
               <div className="campo_form">
+                <Lucide name="ALargeSmall" className="lucide" />
                 <input
                   type="text"
                   id="titulo"
@@ -99,6 +101,7 @@ const CadastroProduto = () => {
                 </label>
               </div>
               <div className="campo_select">
+                <Lucide name="MapPin" className="lucide" />
                 <select
                   name="localizacao"
                   id="localizacao"
@@ -114,6 +117,7 @@ const CadastroProduto = () => {
                 </label>
               </div>
               <div className="campo_select">
+                <Lucide name="User" className="lucide" />
                 <select name="usuario" id="usuario" className="select" required>
                   <option value=""></option>
                   <option value="1">Usuário 1</option>
@@ -124,6 +128,7 @@ const CadastroProduto = () => {
                 </label>
               </div>
               <div className="campo_form row">
+                <Lucide name="Tag" className="lucide" />
                 <div className="campo_form">
                   <input
                     type="text"
@@ -137,6 +142,7 @@ const CadastroProduto = () => {
                   </label>
                 </div>
                 <div className="campo_select">
+                  <Lucide name="RulerDimensionLine" className="lucide" />
                   <select
                     name="tamanho"
                     id="tamanho"
@@ -155,6 +161,7 @@ const CadastroProduto = () => {
             </div>
             <div className="column full_height">
               <div className="campo_form">
+                <Lucide name="MessageSquareText" className="lucide desc_lucide" />
                 <textarea
                   id="descricao"
                   placeholder=" "
@@ -168,6 +175,7 @@ const CadastroProduto = () => {
 
               <div className="campo_select row">
                 <div className="campo_select">
+                  <Lucide name="Type" className="lucide" />
                   <select name="tipo" id="tipo" className="select" required>
                     <option value=""></option> <option value="1">Tipo 1</option>
                     <option value="2">Tipo 2</option>
@@ -177,6 +185,7 @@ const CadastroProduto = () => {
                   </label>
                 </div>
                 <div className="campo_select">
+                  <Lucide name="Grid2X2" className="lucide" />
                   <select
                     name="categoria"
                     id="categoria"

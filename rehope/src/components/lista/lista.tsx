@@ -63,6 +63,7 @@ const Lista = () => {
     <section>
       <div className={styles.filtros}>
         <div className="campo_form">
+          <Lucide name="Search" className="lucide" />
           <input
             type="text"
             id="pesquisa"
@@ -75,11 +76,11 @@ const Lista = () => {
             }}
           />
           <label htmlFor="pesquisa" className="label">
-            <Lucide name="Search" />
             Pesquise seu produto...
           </label>
         </div>
         <div className="campo_select">
+          <Lucide name="Filter" className="lucide" />
           <select
             name="filtro"
             id="filtro"

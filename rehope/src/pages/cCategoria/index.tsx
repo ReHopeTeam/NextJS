@@ -2,6 +2,7 @@ import Button from "@/components/button/button";
 import Footer from "@/components/footer/footer";
 import Header from "@/components/header/header";
 import Link from "next/link";
+import Lucide from "@/utils/lucide";
 
 const CadastroCategoria = () => {
   return (
@@ -12,6 +13,7 @@ const CadastroCategoria = () => {
           <form className="form">
             <h1>Criar Categoria</h1>
             <div className="campo_form">
+              <Lucide name="Grid2X2Plus" className="lucide" />
               <input
                 type="text"
                 id="criarCategoria"

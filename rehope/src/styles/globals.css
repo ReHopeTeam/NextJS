@@ -240,6 +240,14 @@ a {
   box-shadow: inset var(--shadow-sm);
 }
 
+.input {
+  padding-left: 50px;
+}
+
+.select {
+  padding-left: 45px;
+}
+
 .input2 {
   color: var(--bg);
   background: var(--verde-fonte);
@@ -250,6 +258,7 @@ a {
 .textarea {
   height: 160px;
   resize: none;
+  padding-left: 50px;
 }
 
 .input::placeholder,
@@ -285,7 +294,7 @@ a {
 /* Labels e Efeitos Float */
 .label {
   position: absolute;
-  left: 10px;
+  left: 40px;
   top: 50%;
   transform: translateY(-50%);
   font-weight: 700;
@@ -337,6 +346,25 @@ a {
   top: 0;
   font-size: 0.8rem;
   transform: translateY(-50%);
+}
+
+/* Ajuste específico para ícones do Lucide */
+.lucide {
+  position: absolute;
+  left: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  pointer-events: none;
+  margin-right: 10px;
+}
+
+.upload_lucide {
+  position: sticky;
+}
+
+.desc_lucide {
+  top: 27px;
 }
 
 /* Upload e Arquivos */

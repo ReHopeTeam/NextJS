@@ -11,6 +11,16 @@ import {
   Delete,
   Filter,
   Upload,
+  Tag,
+  RectangleEllipsis,
+  RulerDimensionLine,
+  MapPin,
+  User,
+  ALargeSmall,
+  Type,
+  MessageSquareText,
+  Grid2X2,
+  Grid2X2Plus
 } from "lucide-react";
 
 const icons = {
@@ -24,7 +34,17 @@ const icons = {
   Eye,
   EyeOff,
   Filter,
-  Upload
+  Upload,
+  Tag, //? Preço
+  RectangleEllipsis, //? Código
+  RulerDimensionLine, //? Tamanho
+  MapPin,
+  User,
+  ALargeSmall, //? Título
+  Type,
+  MessageSquareText, //? Descriçao
+  Grid2X2, //? Categoria Normal
+  Grid2X2Plus, //? Adicionar Categoria
 };
 
 type IconName = keyof typeof icons;
@@ -35,7 +55,7 @@ interface IconProps extends LucideProps {
 
 export default function Icon({
   name,
-  size = 16,
+  size = 18,
   strokeWidth = 2,
   ...props
 }: IconProps) {
