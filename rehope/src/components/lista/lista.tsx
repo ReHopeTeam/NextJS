@@ -15,19 +15,19 @@ const Lista = () => {
 
   //? Dados temporários até integrar a API
   const [produtos] = useState<Produto[]>([
-    { id: 1, nome: "Placeholder1", preco: 100 },
-    { id: 2, nome: "Placeholder2", preco: 100 },
-    { id: 3, nome: "Placeholder3", preco: 100 },
-    { id: 4, nome: "Placeholder4", preco: 100 },
-    { id: 5, nome: "Placeholder5", preco: 100 },
-    { id: 6, nome: "Placeholder6", preco: 100 },
+    { id: 1, nome: "A", preco: 100 },
+    { id: 2, nome: "Z", preco: 90 },
+    { id: 3, nome: "B", preco: 80 },
+    { id: 4, nome: "Y", preco: 70 },
+    { id: 5, nome: "C", preco: 60 },
+    { id: 6, nome: "X", preco: 50 },
   ]);
 
   const itensPorPagina = 3;
 
   //? Pesquisa
   const produtosFiltrados = produtos.filter((produto) =>
-    produto.nome.toLowerCase().includes(pesquisa.toLowerCase())
+    produto.nome.toLowerCase().includes(pesquisa.toLowerCase()),
   );
 
   //? Ordenação
@@ -45,45 +45,58 @@ const Lista = () => {
     produtosOrdenados.sort((a, b) => a.nome.localeCompare(b.nome));
   }
 
+  if (ordenacao === "alfabetica-contraria") {
+    produtosOrdenados.sort((b, a) => a.nome.localeCompare(b.nome));
+  }
+  
+
   //? Paginação
   const indiceInicial = (paginaAtual - 1) * itensPorPagina;
   const indiceFinal = indiceInicial + itensPorPagina;
 
-  const produtosPaginados = produtosOrdenados.slice(
-    indiceInicial,
-    indiceFinal
-  );
+  const produtosPaginados = produtosOrdenados.slice(indiceInicial, indiceFinal);
 
-  const totalPaginas = Math.ceil(
-    produtosOrdenados.length / itensPorPagina
-  );
+  const totalPaginas = Math.ceil(produtosOrdenados.length / itensPorPagina);
 
   return (
     <section>
       <div className={styles.filtros}>
-        <input
-          type="text"
-          placeholder="Pesquise..."
-          value={pesquisa}
-          onChange={(e) => {
-            setPesquisa(e.target.value);
-            setPaginaAtual(1);
-          }}
-        />
-
-        <div className={styles.botoes}>
+        <div className="campo_form">
+          <input
+            type="text"
+            id="pesquisa"
+            placeholder=" "
+            className="input"
+            value={pesquisa}
+            onChange={(e) => {
+              setPesquisa(e.target.value);
+              setPaginaAtual(1);
+            }}
+          />
+          <label htmlFor="pesquisa" className="label">
+            Pesquise seu produto...
+          </label>
+        </div>
+        <div className="campo_select">
           <select
-            value={ordenacao}
+            name="filtro"
+            id="filtro"
+            className="select"
             onChange={(e) => {
               setOrdenacao(e.target.value);
               setPaginaAtual(1);
             }}
+            required
           >
-            <option value="">Ordem Padrão</option>
+            <option value=""></option>
             <option value="menor">Menor Preço</option>
             <option value="maior">Maior Preço</option>
             <option value="alfabetica">A-Z</option>
+            <option value="alfabetica-contraria">Z-A</option>
           </select>
+          <label htmlFor="filtro" className="label">
+            Filtrar
+          </label>
         </div>
       </div>
 
@@ -91,6 +104,7 @@ const Lista = () => {
         {produtosPaginados.map((produto) => (
           <Card
             key={produto.id}
+            id={produto.id}
             nome={produto.nome}
             preco={produto.preco}
           />
@@ -99,22 +113,15 @@ const Lista = () => {
 
       <nav className={styles.navegacao}>
         <ul>
-          {Array.from(
-            { length: totalPaginas },
-            (_, index) => (
-              <li
-                key={index + 1}
-                onClick={() => setPaginaAtual(index + 1)}
-                className={
-                  paginaAtual === index + 1
-                    ? styles.ativo
-                    : ""
-                }
-              >
-                {index + 1}
-              </li>
-            )
-          )}
+          {Array.from({ length: totalPaginas }, (_, index) => (
+            <li
+              key={index + 1}
+              onClick={() => setPaginaAtual(index + 1)}
+              className={paginaAtual === index + 1 ? styles.ativo : ""}
+            >
+              {index + 1}
+            </li>
+          ))}
         </ul>
       </nav>
     </section>

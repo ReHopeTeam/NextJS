@@ -13,7 +13,7 @@ const Card = ({ id, nome, preco, imagem }: CardProps) => {
   return (
     <article className="column">
       <li id={styles.card}>
-        <Link href={`/produto/${id}`}>
+        <Link href={`/detalhe/${id}`}>
           <img
             className="img"
             id={styles.img}
