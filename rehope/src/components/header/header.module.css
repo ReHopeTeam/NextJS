@@ -1,14 +1,10 @@
 #header {
   min-height: 10vh;
   background:
-    radial-gradient(
-      circle at 10% 75%,
-      var(--verde-secundario),
-      var(--verde-primario)
-    ),
+    linear-gradient(90deg, var(--verde-secundario), var(--verde-primario)),
     var(--verde-primario);
   clip-path: path(
-    "M0.000235557 0H1920V159.417C1920 159.417 1676 195.107 1478 128.961C1230 46.1113 802.5 204.149 542 128.961C306.921 61.1105 176.5 159.417 0 159.417L0.000235557 0Z"
+    "M0 0H1920V74.4229C1920 74.4229 1528 187.423 1407.5 91.9229C1287 -3.57715 1175 125.923 917 67.4229C659 8.92285 670 85.9229 553.5 112.923C437 139.923 183.819 123.277 106.5 106.423C52.6625 94.6875 0 57.3072 0 54.5C0 42 0 0 0 0Z"
   );
 }
 
@@ -22,5 +18,6 @@
 }
 
 #img {
-  width: 30%;
+  
+  width: 20%;
 }
