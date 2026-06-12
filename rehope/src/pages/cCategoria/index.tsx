@@ -1,4 +1,4 @@
-import Button from "@/components/button/button";
+  import Button from "@/components/button/button";
 import Footer from "@/components/footer/footer";
 import Header from "@/components/header/header";
 import Link from "next/link";
@@ -10,9 +10,9 @@ const CadastroCategoria = () => {
       <Header />
       <main className="min_height">
         <section className="container column">
-          <form className="form">
+          <form className="form info2">
             <h1>Criar Categoria</h1>
-            <div className="campo_form">
+            <div className="campo_form max_width">
               <Lucide name="Grid2X2Plus" className="lucide" />
               <input
                 type="text"

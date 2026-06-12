@@ -1,23 +1,21 @@
 #card {
-  max-width: 15vw;
-  height: 35vh;
+  width: 15vw;
+  height: 45vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   text-align: center;
-  border: 2px solid var(--verde-primario);
-  border-radius: 25px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--branco);
+  box-shadow: var(--shadow-md);
 }
 
 #img {
-  width: 50%;
+  width: 100%;
   aspect-ratio: 1 / 1;
   object-fit: cover;
   display: block;
   margin: 0 auto;
-}
-
-#botoes {
-  
 }

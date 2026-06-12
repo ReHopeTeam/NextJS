@@ -24,7 +24,7 @@ const Lista = () => {
     { id: 6, nome: "X", preco: 50 },
   ]);
 
-  const itensPorPagina = 3;
+  const itensPorPagina = 5;
 
   //? Pesquisa
   const produtosFiltrados = produtos.filter((produto) =>
@@ -49,7 +49,6 @@ const Lista = () => {
   if (ordenacao === "alfabetica-contraria") {
     produtosOrdenados.sort((b, a) => a.nome.localeCompare(b.nome));
   }
-  
 
   //? Paginação
   const indiceInicial = (paginaAtual - 1) * itensPorPagina;

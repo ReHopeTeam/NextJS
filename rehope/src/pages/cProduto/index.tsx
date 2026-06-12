@@ -2,7 +2,9 @@ import Button from "@/components/button/button";
 import Footer from "@/components/footer/footer";
 import Header from "@/components/header/header";
 import Lucide from "@/utils/lucide";
+import styles from "./cProduto.module.css";
 import { ChangeEvent, useEffect, useState } from "react";
+import Link from "next/link";
 
 const CadastroProduto = () => {
   const [preview, setPreview] = useState<string | null>(null);
@@ -36,7 +38,7 @@ const CadastroProduto = () => {
       <Header />
       <main className="min_height">
         <section className="container column">
-          <form className="form grid">
+          <form className="form grid info">
             <div className="column full_height">
               <div className="campo_form">
                 <label htmlFor="upload-foto" className="input_upload">
@@ -57,7 +59,11 @@ const CadastroProduto = () => {
                     </div>
                   ) : (
                     <>
-                      <Lucide name="Upload" size={24} className="upload_lucide"/>
+                      <Lucide
+                        name="Upload"
+                        size={24}
+                        className="upload_lucide"
+                      />
                       <span>Escolher Imagem</span>
                     </>
                   )}
@@ -70,7 +76,6 @@ const CadastroProduto = () => {
                   onChange={handleFileChange}
                 />
               </div>
-              {/* Restante dos campos */}
               <div className="campo_form">
                 <Lucide name="RectangleEllipsis" className="lucide" />
                 <input
@@ -85,7 +90,6 @@ const CadastroProduto = () => {
                 </label>
               </div>
             </div>
-
             <div className="column full_height">
               <div className="campo_form">
                 <Lucide name="ALargeSmall" className="lucide" />
@@ -98,6 +102,62 @@ const CadastroProduto = () => {
                 />
                 <label htmlFor="titulo" className="label">
                   Título
+                </label>
+              </div>
+              <div className="campo_form">
+                <Lucide name="Tag" className="lucide" />
+                <input
+                  type="text"
+                  id="preco"
+                  placeholder=" "
+                  className="input"
+                  required
+                />
+                <label htmlFor="preco" className="label">
+                  Preço
+                </label>
+              </div>
+              <div className="campo_form">
+                <Lucide
+                  name="MessageSquareText"
+                  className="lucide desc_lucide"
+                />
+                <textarea
+                  id="descricao"
+                  placeholder=" "
+                  className="textarea"
+                  required
+                />
+                <label htmlFor="descricao" className="label">
+                  Descrição
+                </label>
+              </div>
+            </div>
+            <div className="column full_height">
+              <div className="campo_select">
+                <Lucide name="Type" className="lucide" />
+                <select name="tipo" id="tipo" className="select" required>
+                  <option value=""></option> <option value="1">Tipo 1</option>
+                  <option value="2">Tipo 2</option>
+                </select>
+                <label htmlFor="tipo" className="label">
+                  Tipo
+                </label>
+              </div>
+              <div className="campo_select">
+                <Lucide name="Grid2X2" className="lucide" />
+                <select
+                  name="categoria"
+                  id="categoria"
+                  className="select"
+                  required
+                >
+                  <option value=""></option>
+                  <option value="1">Categoria 1</option>
+                  <option value="2">Categoria 2</option>
+                </select>
+                <label htmlFor="categoria" className="label">
+                  Categoria
                 </label>
               </div>
               <div className="campo_select">
@@ -127,83 +187,25 @@ const CadastroProduto = () => {
                   Usuário
                 </label>
               </div>
-              <div className="campo_form row">
-                <Lucide name="Tag" className="lucide" />
-                <div className="campo_form">
-                  <input
-                    type="text"
-                    id="preco"
-                    placeholder=" "
-                    className="input"
-                    required
-                  />
-                  <label htmlFor="preco" className="label">
-                    Preço
-                  </label>
-                </div>
-                <div className="campo_select">
-                  <Lucide name="RulerDimensionLine" className="lucide" />
-                  <select
-                    name="tamanho"
-                    id="tamanho"
-                    className="select"
-                    required
-                  >
-                    <option value=""></option>
-                    <option value="1">Tamanho 1</option>
-                    <option value="2">Tamanho 2</option>
-                  </select>
-                  <label htmlFor="tamanho" className="label">
-                    Tamanho
-                  </label>
-                </div>
-              </div>
-            </div>
-            <div className="column full_height">
-              <div className="campo_form">
-                <Lucide name="MessageSquareText" className="lucide desc_lucide" />
-                <textarea
-                  id="descricao"
-                  placeholder=" "
-                  className="textarea"
-                  required
-                />
-                <label htmlFor="descricao" className="label">
-                  Descrição
+              <div className="campo_select">
+                <Lucide name="RulerDimensionLine" className="lucide" />
+                <select name="tamanho" id="tamanho" className="select" required>
+                  <option value=""></option>
+                  <option value="1">Tamanho 1</option>
+                  <option value="2">Tamanho 2</option>
+                </select>
+                <label htmlFor="tamanho" className="label">
+                  Tamanho
                 </label>
               </div>
-
-              <div className="campo_select row">
-                <div className="campo_select">
-                  <Lucide name="Type" className="lucide" />
-                  <select name="tipo" id="tipo" className="select" required>
-                    <option value=""></option> <option value="1">Tipo 1</option>
-                    <option value="2">Tipo 2</option>
-                  </select>
-                  <label htmlFor="tipo" className="label">
-                    Tipo
-                  </label>
-                </div>
-                <div className="campo_select">
-                  <Lucide name="Grid2X2" className="lucide" />
-                  <select
-                    name="categoria"
-                    id="categoria"
-                    className="select"
-                    required
-                  >
-                    <option value=""></option>
-                    <option value="1">Categoria 1</option>
-                    <option value="2">Categoria 2</option>
-                  </select>
-                  <label htmlFor="categoria" className="label">
-                    Categoria
-                  </label>
-                </div>
-              </div>
             </div>
-            <Button children="Salvar" />
           </form>
+          <div className="row">
+            <Link href="/home" className="btn2">
+              Voltar
+            </Link>
+            <Button id={styles.button} children="Salvar" />
+          </div>
         </section>
       </main>
       <Footer />

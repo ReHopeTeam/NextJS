@@ -13,27 +13,26 @@ const Card = ({ id, nome, preco, imagem }: CardProps) => {
   return (
     <article className="column">
       <li id={styles.card}>
-        <Link href={`/detalhe/${id}`}>
-          <img
-            className="img"
-            id={styles.img}
-            src={imagem || "/imgs/ImagemDoLogin.png"}
-            alt={nome}
-          />
-        </Link>
-
-        <span>{nome}</span>
-
+        <div>
+          <Link href={`/detalhe/${id}`}>
+            <img
+              className="img"
+              id={styles.img}
+              src={imagem || "/imgs/ImagemDoLogin.png"}
+              alt={nome}
+            />
+          </Link>
+          <span className="title">{nome}</span>
+        </div>
         <p>
           {preco.toLocaleString("pt-BR", {
             style: "currency",
             currency: "BRL",
           })}
         </p>
-
-        <div className="row sbs" id={styles.botoes}>
-          <Button children="Editar" />
-          <Button children="Excluir" />
+        <div className="row no_gap" id={styles.botoes}>
+          <Button children="Editar" className="btn_card" />
+          <Button children="Excluir" className="btn_card" />
         </div>
       </li>
     </article>

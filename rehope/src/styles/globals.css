@@ -13,7 +13,8 @@
   --preto: hsl(0, 0%, 0%);
 
   /* Cores auxiliares */
-  --vermelho: rgb(255, 0, 0);
+  --verde-vivo: hsl(150, 100%, 40%);
+  --vermelho: hsl(340, 100%, 50%);
 
   /* Fontes (Dica: Lembre-se de importar estas fontes no HTML ou @import) */
   --font-comfortaa: "Comfortaa", cursive, sans-serif;
@@ -25,10 +26,12 @@
   /* Espaçamentos */
   --padding-sm: 2px 5px;
   --padding-md: 10px;
+  --padding-lg: 24px;
 
   /* Bordas */
   --radius-sm: 5px;
   --radius-md: 10px;
+  --radius-lg: 24px;
 
   /* Sombras */
   --shadow-sm: 0 2px 6px hsla(125, 60%, 25%, 0.1);
@@ -106,21 +109,51 @@ select {
 .h1 {
   font-size: 2.5rem;
 }
+
 .h2 {
   font-size: 2rem;
 }
+
 .h3 {
   font-size: 1.5rem;
 }
+
 .h4 {
   font-size: 1rem;
 }
+
 .p {
   font-size: 1rem;
 }
 
 .white {
   color: var(--bg);
+}
+
+.title {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--verde-primario);
+  width: 100%;
+  color: var(--branco);
+}
+
+.ativo,
+.inativo {
+  padding: var(--padding-md);
+  border-radius: var(--radius-md);
+}
+
+.ativo {
+  color: var(--verde-vivo);
+  border: 2px solid var(--verde-vivo);
+}
+
+.inativo {
+  color: var(--vermelho);
+  border: 2px solid var(--vermelho);
 }
 
 /*? =========================== */
@@ -209,7 +242,8 @@ a {
 .campo_select {
   position: relative;
   width: 100%;
-  max-width: 400px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
 }
 
 /* Estrutura Base dos Inputs */
@@ -240,7 +274,8 @@ a {
   box-shadow: inset var(--shadow-sm);
 }
 
-.input {
+.input,
+.input2 {
   padding-left: 50px;
 }
 
@@ -256,7 +291,7 @@ a {
 }
 
 .textarea {
-  height: 160px;
+  height: 320px;
   resize: none;
   padding-left: 50px;
 }
@@ -300,7 +335,7 @@ a {
   font-weight: 700;
   color: var(--cinza);
   pointer-events: none;
-  background: transparent;
+  background: inherit;
   padding: var(--padding-sm);
   border-radius: var(--radius-sm);
   border: 1px solid transparent;
@@ -413,25 +448,29 @@ a {
 /*? 7. BOTÕES   */
 /*? =========== */
 .btn,
-.btn2 {
+.btn2,
+.btn_card {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 100px;
-  max-width: 200px;
   height: var(--height);
   padding: var(--padding-md);
   cursor: pointer;
   font-weight: 600;
   color: var(--bg);
-  border-radius: var(--radius-md);
-
   box-shadow: var(--shadow-md);
   filter: brightness(1);
   transition:
     transform 0.15s ease,
     box-shadow 0.15s ease,
     filter 0.15s ease;
+}
+
+.btn,
+.btn2 {
+  border-radius: var(--radius-md);
+  min-width: 100px;
+  max-width: 200px;
 }
 
 .btn {
@@ -447,10 +486,21 @@ a {
   border: 2px solid var(--verde-secundario);
 }
 
+.btn_card {
+  height: var(--height);
+  border-radius: 0;
+  background: radial-gradient(
+    circle at 0% 100%,
+    color-mix(var(--verde-primario), var(--verde-fonte)),
+    var(--verde-secundario)
+  );
+  width: 100%;
+}
+
 .btn:hover,
 .btn2:hover {
   transform: translateY(-3px);
-  filter: brightness(1.25);
+  filter: brightness(1.15);
   box-shadow: var(--shadow-lg);
 }
 
@@ -458,6 +508,14 @@ a {
 .btn2:active {
   transform: translateY(1px);
   box-shadow: var(--shadow-sm);
+}
+
+.btn_card:hover {
+  transform: translateY(0);
+}
+
+.btn_card:active {
+  transform: translateY(0);
 }
 
 .btn_delete {
@@ -480,6 +538,30 @@ a {
 
 .btn_delete:hover {
   background: color-mix(in srgb, var(--vermelho), transparent 25%);
+}
+
+.btn_icon {
+  all: unset;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 3;
+}
+
+.btn_icon:hover {
+  transform: translateY(-50%);
+  box-sizing: border-box;
+}
+
+.btn_icon:active {
+  transform: translateY(-50%);
 }
 
 /*? =================================== */
@@ -519,12 +601,40 @@ a {
   justify-content: center;
 }
 
+.start {
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.no_gap {
+  width: 100%;
+  gap: 0;
+}
+
 /* Grid Layout */
 .grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  max-width: 1000px;
+  grid-template-columns: 0.8fr 1fr 0.8fr;
+  max-width: 1400px;
+  max-height: 600px;
   gap: 20px;
+}
+
+.flex_wrap {
+  flex: 1;
+  flex-wrap: wrap;
+}
+
+.info {
+  padding: var(--padding-lg);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  background: linear-gradient(
+    to bottom,
+    var(--bg),
+    color-mix(var(--bg), var(--destaque))
+  );
+  border: 2px solid var(--destaque);
 }
 
 /* Sizing Utilities */
@@ -532,8 +642,16 @@ a {
   min-height: 75vh;
 }
 
+.max_width {
+  max-width: 400px;
+}
+
 .small {
   height: 36px;
+}
+
+.small_radius {
+  border-radius: var(--radius-sm);
 }
 
 .full_height {

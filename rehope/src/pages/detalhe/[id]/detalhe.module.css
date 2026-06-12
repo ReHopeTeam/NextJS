@@ -1,1 +1,7 @@
-/*? Placeholder, altere quando precisar. */
+#img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  display: block;
+  margin: 0 auto;
+}
