@@ -31,7 +31,7 @@ const Card = ({ id, nome, preco, imagem }: CardProps) => {
           })}
         </p>
 
-        <div className="row">
+        <div className="row sbs" id={styles.botoes}>
           <Button children="Editar" />
           <Button children="Excluir" />
         </div>

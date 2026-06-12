@@ -1,5 +1,5 @@
 #card {
-  max-width: 20vw;
+  max-width: 15vw;
   height: 35vh;
   display: flex;
   flex-direction: column;
@@ -16,4 +16,8 @@
   object-fit: cover;
   display: block;
   margin: 0 auto;
+}
+
+#botoes {
+  
 }
