@@ -12,7 +12,7 @@ type Produto = {
   produtoID: number;
   codigo: string;
   nome: string;
-  preço: string;
+  preco: string;
   status: boolean;
   descricao: string;
   tipo: string;
@@ -68,7 +68,7 @@ const Detalhe = () => {
             </div>
             <div className="column start">
               <h1>{produto?.nome}</h1>
-              <h3>{produto?.preço}</h3>
+              <h3>{produto?.preco}</h3>
               <p>{produto?.descricao}</p>
             </div>
             <div className="column start">

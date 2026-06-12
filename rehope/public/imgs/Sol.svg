@@ -1,0 +1,13 @@
+<svg width="180" height="180" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<circle cx="90" cy="90" r="45" stroke="white" stroke-width="10"/>
+<g id="Sol_3_inner" data-figma-trr="r8u5-0f">
+<rect x="85" y="0.138977" width="10" height="29.9538" rx="5" fill="white"/>
+</g>
+<use xlink:href="#Sol_3_inner" transform="translate(90.0004 -37.2794) rotate(45)"/>
+<use xlink:href="#Sol_3_inner" transform="translate(180.001 7.1825e-06) rotate(90)"/>
+<use xlink:href="#Sol_3_inner" transform="translate(217.28 90.0004) rotate(135)"/>
+<use xlink:href="#Sol_3_inner" transform="translate(180.001 180.001) rotate(-180)"/>
+<use xlink:href="#Sol_3_inner" transform="translate(90.0004 217.28) rotate(-135)"/>
+<use xlink:href="#Sol_3_inner" transform="translate(-4.3217e-06 180.001) rotate(-90)"/>
+<use xlink:href="#Sol_3_inner" transform="translate(-37.2794 90.0004) rotate(-45)"/>
+</svg>

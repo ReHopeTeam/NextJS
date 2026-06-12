@@ -20,7 +20,9 @@ import {
   Type,
   MessageSquareText,
   Grid2X2,
-  Grid2X2Plus
+  Grid2X2Plus,
+  Sun,
+  Moon
 } from "lucide-react";
 
 const icons = {
@@ -45,6 +47,8 @@ const icons = {
   MessageSquareText, //? Descriçao
   Grid2X2, //? Categoria Normal
   Grid2X2Plus, //? Adicionar Categoria
+  Sun,
+  Moon
 };
 
 type IconName = keyof typeof icons;

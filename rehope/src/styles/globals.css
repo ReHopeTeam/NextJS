@@ -39,6 +39,10 @@
   --shadow-lg: 0 8px 24px hsla(125, 60%, 25%, 0.2);
 }
 
+:root.darkmode {
+  --bg: hsl(145, 90%, 5%);
+}
+
 /*? ========================= */
 /*? 2. RESET & ESTILOS BASE   */
 /*? ========================= */
@@ -85,6 +89,11 @@ select {
   border: none;
   outline: none;
   background: transparent;
+}
+
+.dark {
+  background: var(--verde-primario);
+  color: var(--branco);
 }
 
 /*? ======================== */
@@ -135,9 +144,7 @@ select {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--verde-primario);
   width: 100%;
-  color: var(--branco);
 }
 
 .ativo,
@@ -166,7 +173,7 @@ a {
 }
 
 .link {
-  color: var(--bg);
+  color: var(--branco);
 }
 
 .link::after {
@@ -224,6 +231,10 @@ a {
 
 .img_wrapper:hover::after {
   opacity: 0.2;
+}
+
+.icon {
+  width: 40px;
 }
 
 /*? ==================================== */
@@ -457,7 +468,7 @@ a {
   padding: var(--padding-md);
   cursor: pointer;
   font-weight: 600;
-  color: var(--bg);
+  color: var(--branco);
   box-shadow: var(--shadow-md);
   filter: brightness(1);
   transition:
@@ -486,17 +497,6 @@ a {
   border: 2px solid var(--verde-secundario);
 }
 
-.btn_card {
-  height: var(--height);
-  border-radius: 0;
-  background: radial-gradient(
-    circle at 0% 100%,
-    color-mix(var(--verde-primario), var(--verde-fonte)),
-    var(--verde-secundario)
-  );
-  width: 100%;
-}
-
 .btn:hover,
 .btn2:hover {
   transform: translateY(-3px);
@@ -508,14 +508,6 @@ a {
 .btn2:active {
   transform: translateY(1px);
   box-shadow: var(--shadow-sm);
-}
-
-.btn_card:hover {
-  transform: translateY(0);
-}
-
-.btn_card:active {
-  transform: translateY(0);
 }
 
 .btn_delete {

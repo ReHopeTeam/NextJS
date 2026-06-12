@@ -3,6 +3,7 @@ import styles from "./header.module.css";
 import Button from "@/components/button/button";
 import { useRouter } from "next/router";
 import { logout } from "@/pages/api/authService";
+import { TrocaTema } from "@/utils/trocaTema";
 
 const Header = () => {
   const router = useRouter();
@@ -23,6 +24,7 @@ const Header = () => {
         </div>
         {/* "botões" na direita da página */}
         <div className="sbs">
+        <TrocaTema />
           <a className="link" href="">
             Placeholder1
           </a>

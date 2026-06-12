@@ -1,45 +1,60 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./lista.module.css";
 import Card from "@/components/cards/cards";
 import Lucide from "@/utils/lucide";
+import { useParams } from "next/navigation";
+import { listar, listarPorId } from "@/pages/api/mockService";
+import { erro } from "@/utils/toast";
 
 type Produto = {
-  id: number;
+  produtoID: number;
   nome: string;
-  preco: number;
+  preco: string;
 };
 
 const Lista = () => {
   const [paginaAtual, setPaginaAtual] = useState(1);
   const [ordenacao, setOrdenacao] = useState("");
   const [pesquisa, setPesquisa] = useState("");
+  const [produto, setProduto] = useState<Produto[]>([]);
+  
+  const params = useParams();
+  const id = params?.id;
 
-  //? Dados temporários até integrar a API
-  const [produtos] = useState<Produto[]>([
-    { id: 1, nome: "A", preco: 100 },
-    { id: 2, nome: "Z", preco: 90 },
-    { id: 3, nome: "B", preco: 80 },
-    { id: 4, nome: "Y", preco: 70 },
-    { id: 5, nome: "C", preco: 60 },
-    { id: 6, nome: "X", preco: 50 },
-  ]);
+  useEffect(() => {
+    listarJogo();
+  }, []);
+
+  async function listarJogo() {
+    try {
+      const response = await listar();
+      setProduto(response);
+    } catch (error: any) {
+      erro(error.message || "Erro ao carregar a lista.");
+    }
+  }
 
   const itensPorPagina = 5;
 
-  //? Pesquisa
-  const produtosFiltrados = produtos.filter((produto) =>
-    produto.nome.toLowerCase().includes(pesquisa.toLowerCase()),
+  // Auxiliar para converter "R$ 149,90" em float (149.90) para o sort funcionar
+  const converterPreco = (precoStr: string): number => {
+    return parseFloat(precoStr.replace("R$ ", "").replace(".", "").replace(",", "."));
+  };
+
+  //? Filtro de Pesquisa
+  const produtosFiltrados = produto.filter((p) =>
+    p.nome.toLowerCase().includes(pesquisa.toLowerCase())
   );
 
   //? Ordenação
   const produtosOrdenados = [...produtosFiltrados];
 
   if (ordenacao === "menor") {
-    produtosOrdenados.sort((a, b) => a.preco - b.preco);
+    produtosOrdenados.sort((a, b) => converterPreco(a.preco) - converterPreco(b.preco));
   }
 
   if (ordenacao === "maior") {
-    produtosOrdenados.sort((a, b) => b.preco - a.preco);
+    produtosOrdenados.sort((a, b) => converterPreco(b.preco) - converterPreco(a.preco));
   }
 
   if (ordenacao === "alfabetica") {
@@ -47,7 +62,7 @@ const Lista = () => {
   }
 
   if (ordenacao === "alfabetica-contraria") {
-    produtosOrdenados.sort((b, a) => a.nome.localeCompare(b.nome));
+    produtosOrdenados.sort((a, b) => b.nome.localeCompare(a.nome));
   }
 
   //? Paginação
@@ -55,8 +70,10 @@ const Lista = () => {
   const indiceFinal = indiceInicial + itensPorPagina;
 
   const produtosPaginados = produtosOrdenados.slice(indiceInicial, indiceFinal);
-
   const totalPaginas = Math.ceil(produtosOrdenados.length / itensPorPagina);
+
+  const cardsFantasmas =
+    paginaAtual === totalPaginas ? itensPorPagina - produtosPaginados.length : 0;
 
   return (
     <section>
@@ -84,6 +101,7 @@ const Lista = () => {
             name="filtro"
             id="filtro"
             className="select"
+            value={ordenacao}
             onChange={(e) => {
               setOrdenacao(e.target.value);
               setPaginaAtual(1);
@@ -103,29 +121,38 @@ const Lista = () => {
       </div>
 
       <ul className="row">
-        {produtosPaginados.map((produto) => (
+        {produtosPaginados.map((item) => (
           <Card
-            key={produto.id}
-            id={produto.id}
-            nome={produto.nome}
-            preco={produto.preco}
+            key={item.produtoID}
+            id={item.produtoID}
+            nome={item.nome}
+            preco={item.preco}
+          />
+        ))}
+
+        {Array.from({ length: cardsFantasmas }).map((_, index) => (
+          <li
+            key={`fantasma-${index}`}
+            className={styles.cardFantasma}
           />
         ))}
       </ul>
 
-      <nav>
-        <ul id={styles.paginacao}>
-          {Array.from({ length: totalPaginas }, (_, index) => (
-            <li
-              key={index + 1}
-              onClick={() => setPaginaAtual(index + 1)}
-              className={`btn ${paginaAtual === index + 1 ? styles.ativo : ""}`}
-            >
-              {index + 1}
-            </li>
-          ))}
-        </ul>
-      </nav>
+      {totalPaginas > 1 && (
+        <nav>
+          <ul id={styles.paginacao}>
+            {Array.from({ length: totalPaginas }, (_, index) => (
+              <li
+                key={index + 1}
+                onClick={() => setPaginaAtual(index + 1)}
+                className={`btn ${paginaAtual === index + 1 ? styles.ativo : ""}`}
+              >
+                {index + 1}
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )}
     </section>
   );
 };

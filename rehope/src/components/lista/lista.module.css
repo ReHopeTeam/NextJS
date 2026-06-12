@@ -9,3 +9,33 @@
   gap: 5%;
   padding: 5%;
 }
+
+.cardFantasma {
+height: 100%;
+width: 15vw;
+display: flex;
+flex-direction: column;
+justify-content: space-between;
+border-radius: var(--radius-lg);
+overflow: hidden;
+background: var(--branco);
+box-shadow: var(--shadow-md);
+pointer-events: none;
+border: 2px dashed var(--verde-fonte);
+}
+
+.cardFantasma::before {
+content: "";
+width: 100%;
+aspect-ratio: 1 / 1;
+display: block;
+background: hsl(0, 0%, 85%);
+}
+
+.cardFantasma::after {
+content: "";
+display: block;
+height: var(--height);
+width: 100%;
+background: hsl(0, 0%, 80%);
+}
