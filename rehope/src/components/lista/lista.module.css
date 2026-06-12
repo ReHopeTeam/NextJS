@@ -1,0 +1,13 @@
+#filtros {
+    padding: 5%;
+}
+
+
+
+#paginacao {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 5%;
+    padding: 5%;
+}

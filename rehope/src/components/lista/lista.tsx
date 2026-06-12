@@ -61,7 +61,7 @@ const Lista = () => {
 
   return (
     <section>
-      <div className={styles.filtros}>
+      <div className="row sbs" id={styles.filtros}>
         <div className="campo_form">
           <Lucide name="Search" className="lucide" />
           <input
@@ -114,13 +114,13 @@ const Lista = () => {
         ))}
       </ul>
 
-      <nav className={styles.navegacao}>
-        <ul>
+      <nav>
+        <ul id={styles.paginacao}>
           {Array.from({ length: totalPaginas }, (_, index) => (
             <li
               key={index + 1}
               onClick={() => setPaginaAtual(index + 1)}
-              className={paginaAtual === index + 1 ? styles.ativo : ""}
+              className={`btn ${paginaAtual === index + 1 ? styles.ativo : ""}`}
             >
               {index + 1}
             </li>

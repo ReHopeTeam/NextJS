@@ -11,7 +11,7 @@ const Home = () => {
     <>
       <Header />
       <main className="min_height">
-        <section>
+        <section id={styles.section}>
           <Lista />
           <Link href="/login" className="btn2">Login</Link>
           <Link href="/cProduto" className="btn2">+ Produto</Link>
