@@ -5,6 +5,7 @@ import { login } from "../api/authService";
 import { erro, notificacao } from "@/utils/toast";
 import Lucide from "@/utils/lucide";
 import Button from "@/components/button/button";
+import { TrocaTema } from "@/utils/trocaTema";
 
 const Login = () => {
   const [email, setEmail] = useState<string>("");
@@ -67,6 +68,9 @@ const Login = () => {
         />
       </div>
       <section id={styles.login_form} className="column">
+        <div id={styles.tema_btn}>
+          <TrocaTema />
+        </div>
         <form className="form" onSubmit={autenticar}>
           <h1 className="h1 white">Login</h1>
 

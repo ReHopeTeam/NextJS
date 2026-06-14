@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react';
 
-export function TrocaTema() {
+type TrocaTemaProps = {
+  className?: string;
+};
+
+export function TrocaTema({ className }: TrocaTemaProps) {
   const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
@@ -22,8 +26,12 @@ export function TrocaTema() {
   };
 
   return (
-    <button onClick={trocaTema}>
-      <img src={`/imgs/${isDark ? 'Sol' : 'Lua'}.svg`} alt="Mudar o tema de cores" className="icon"/>
+    <button onClick={trocaTema} className={className}>
+      <img
+        src={`/imgs/${isDark ? 'Sol' : 'Lua'}.svg`}
+        alt="Mudar o tema de cores"
+        className={isDark ? "iconSol" : "iconLua"}
+      />
     </button>
   );
 }

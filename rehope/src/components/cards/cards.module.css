@@ -1,5 +1,9 @@
-#card {
+#card,
+.cardFantasma {
   width: 15vw;
+}
+
+#card {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -47,4 +51,18 @@
     hsl(340, 100%, 40%),
     hsl(10, 100%, 25%)
   );
+}
+
+.cardFantasma {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--branco);
+  box-shadow: var(--shadow-md);
+  pointer-events: none;
+  border: 2px dashed var(--verde-fonte);
+  opacity: 0.3;
+  filter: grayscale(90%);
 }

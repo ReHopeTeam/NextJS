@@ -36,7 +36,7 @@ const Lista = () => {
 
   const itensPorPagina = 5;
 
-  // Auxiliar para converter "R$ 149,90" em float (149.90) para o sort funcionar
+  //? Auxiliar para converter "R$ 149,90" em float (149.90) para o sort funcionar
   const converterPreco = (precoStr: string): number => {
     return parseFloat(precoStr.replace("R$ ", "").replace(".", "").replace(",", "."));
   };
@@ -73,7 +73,14 @@ const Lista = () => {
   const totalPaginas = Math.ceil(produtosOrdenados.length / itensPorPagina);
 
   const cardsFantasmas =
-    paginaAtual === totalPaginas ? itensPorPagina - produtosPaginados.length : 0;
+  paginaAtual === totalPaginas
+    ? itensPorPagina - produtosPaginados.length
+    : 0;
+
+  const cardsExibidos = [
+    ...produtosPaginados,
+    ...Array(cardsFantasmas).fill(null),
+  ];
 
   return (
     <section>
@@ -121,19 +128,11 @@ const Lista = () => {
       </div>
 
       <ul className="row">
-        {produtosPaginados.map((item) => (
+        {cardsExibidos.map((item, index) => (
           <Card
-            key={item.produtoID}
-            id={item.produtoID}
-            nome={item.nome}
-            preco={item.preco}
-          />
-        ))}
-
-        {Array.from({ length: cardsFantasmas }).map((_, index) => (
-          <li
-            key={`fantasma-${index}`}
-            className={styles.cardFantasma}
+            key={item?.produtoID ?? `fantasma-${index}`}
+            fantasma={!item}
+            {...(item || {})}
           />
         ))}
       </ul>

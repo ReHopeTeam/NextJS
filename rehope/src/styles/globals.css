@@ -233,8 +233,22 @@ a {
   opacity: 0.2;
 }
 
-.icon {
-  width: 40px;
+.iconSol, .iconLua {
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+.iconSol {
+  width: 50px; /*? Ajuste específico para o ícone do Sol, que precisa ser maior que o da Lua */
+}
+
+.iconLua {
+  width: 35px;
+}
+
+.iconSol:hover,
+.iconLua:hover {
+  transform: rotate(360deg) scale(1.1);
 }
 
 /*? ==================================== */

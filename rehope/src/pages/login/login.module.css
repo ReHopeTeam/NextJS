@@ -22,3 +22,8 @@
     color-mix(in srgb, var(--verde-fonte), var(--preto));
 }
 
+#tema_btn {
+  position: absolute;
+  right: 40px;
+  top: 40px;
+}
