@@ -38,6 +38,7 @@
 }
 
 .editar {
+  box-shadow: none;
   background: radial-gradient(
     circle at 0% 100%,
     hsl(160, 100%, 40%),
@@ -49,6 +50,7 @@
 }
 
 .excluir {
+  box-shadow: none;
   background: radial-gradient(
     circle at 100% 0%,
     hsl(340, 100%, 40%),

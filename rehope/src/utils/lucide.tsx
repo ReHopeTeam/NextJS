@@ -21,8 +21,9 @@ import {
   MessageSquareText,
   Grid2X2,
   Grid2X2Plus,
-  Sun,
-  Moon
+  Lock,
+  Phone,
+  Mail
 } from "lucide-react";
 
 const icons = {
@@ -37,39 +38,40 @@ const icons = {
   EyeOff,
   Filter,
   Upload,
-  Tag, //? Preço
-  RectangleEllipsis, //? Código
-  RulerDimensionLine, //? Tamanho
+  Tag,
+  RectangleEllipsis,
+  RulerDimensionLine,
   MapPin,
   User,
-  ALargeSmall, //? Título
+  ALargeSmall,
   Type,
-  MessageSquareText, //? Descriçao
-  Grid2X2, //? Categoria Normal
-  Grid2X2Plus, //? Adicionar Categoria
-  Sun,
-  Moon
+  MessageSquareText,
+  Grid2X2,
+  Grid2X2Plus,
+  Lock, //? Senha no cadastrar usuário
+  Phone,
+  Mail
 };
 
 type IconName = keyof typeof icons;
 
-interface IconProps extends LucideProps {
-  name: IconName;
+interface IconProps extends Omit<LucideProps, "name"> {
+  name?: IconName | null;
 }
 
 export default function Icon({
   name,
-  size = 18,
+  size = 20,
   strokeWidth = 2,
   ...props
 }: IconProps) {
+  // 1. Se o nome não foi passado, for nulo ou não existir no mapeamento, previne o erro retornando null
+  if (!name || !icons[name]) {
+    return null;
+  }
+
   const LucideIcon = icons[name];
 
-  return (
-    <LucideIcon
-      size={size}
-      strokeWidth={strokeWidth}
-      {...props}
-    />
-  );
+  // 2. Só renderiza se for um componente válido
+  return <LucideIcon size={size} strokeWidth={strokeWidth} {...props} />;
 }

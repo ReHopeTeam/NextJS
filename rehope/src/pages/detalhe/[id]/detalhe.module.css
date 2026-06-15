@@ -1,3 +1,41 @@
+.imgContainer {
+  position: relative;
+  width: 100%;
+}
+
+.ativoH3,
+.inativoH3 {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 1.5rem;
+
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+}
+
+.ativoH3 {
+  color: var(--verde-vivo);
+  border: 2px solid var(--verde-vivo);
+}
+
+.inativoH3 {
+  color: var(--vermelho);
+  border: 2px solid var(--vermelho);
+}
+
+.ativoImg {
+  border: 2px solid var(--verde-vivo);
+}
+
+.inativoImg {
+  border: 2px solid var(--vermelho);
+}
+
 #img {
   width: 100%;
   aspect-ratio: 1 / 1;

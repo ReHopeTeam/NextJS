@@ -10,16 +10,16 @@
   --bg: hsl(35, 100%, 97%);
   --branco: hsl(0, 0%, 100%);
   --cinza: hsl(0, 0%, 60%);
-  --preto: hsl(0, 0%, 0%);
+  --preto: hsl(145, 100%, 5%);
 
   /* Cores auxiliares */
   --verde-tema: hsl(150, 100%, 40%);
   --verde-vivo: hsl(125, 100%, 40%);
   --vermelho: hsl(340, 100%, 50%);
-  --lucide:
 
-    /* Variáveis Semânticas Adaptáveis (Fundo de inputs/cards e textos) */
-    --surface: var(--branco);
+  /* Variáveis Semânticas Adaptáveis */
+  --lucide: var(--verde-vivo);
+  --surface: hsl(0, 0%, 100%);
   --text-main: var(--verde-fonte);
   --border-input: color-mix(in srgb, var(--bg), transparent 90%);
 
@@ -27,10 +27,8 @@
   --font-comfortaa: "Comfortaa", cursive, sans-serif;
   --font-quicksand: "Quicksand", sans-serif;
 
-  /* Dimensões */
+  /* Dimensões e Espaçamentos */
   --height: 50px;
-
-  /* Espaçamentos */
   --padding-sm: 2px 5px;
   --padding-md: 10px;
   --padding-lg: 24px;
@@ -47,23 +45,23 @@
 }
 
 :root.darkmode {
-  /* 1. Ajuste de Fundo e Texto Base */
+  /* Ajuste de Fundo e Texto Base */
   --bg: hsl(145, 90%, 5%);
   --surface: hsl(145, 90%, 10%);
-  --verde-fonte: hsl(145, 20%, 90%);
+  --verde-fonte: hsl(145, 100%, 97%);
   --text-main: var(--verde-fonte);
   --branco: hsl(0, 0%, 100%);
   --cinza: hsl(0, 0%, 75%);
 
-  /* 2. Ajuste dos Verdes (Mais brilhantes para contraste no escuro) */
-  --verde-primario: hsl(125, 35%, 35%);
-  --verde-secundario: hsl(115, 35%, 55%);
+  /* Ajuste dos Verdes */
+  --verde-primario: hsl(125, 35%, 25%);
+  --verde-secundario: hsl(150, 100%, 40%);
   --verde-tema: hsl(150, 100%, 65%);
   --verde-vivo: hsl(125, 100%, 65%);
   --destaque: hsl(85, 40%, 25%);
   --border-input: hsl(145, 90%, 18%);
 
-  /* 3. Ajuste de Sombras (Sombras escuras puras para dar profundidade no Dark) */
+  /* Ajuste de Sombras */
   --shadow-sm: 0 2px 6px hsla(0, 0%, 0%, 0.4);
   --shadow-md: 0 4px 12px hsla(0, 0%, 0%, 0.55);
   --shadow-lg: 0 8px 24px hsla(0, 0%, 0%, 0.7);
@@ -91,9 +89,7 @@ html[data-scroll-behavior="smooth"] {
 
 body {
   min-height: 100vh;
-  background: radial-gradient(circle at 50% 100%,
-      var(--bg),
-      color-mix(in srgb, var(--bg) 100%, var(--destaque) 10%));
+  background: radial-gradient(circle at 50% 100%, var(--bg), color-mix(in srgb, var(--bg) 100%, var(--destaque) 10%));
 }
 
 ::selection {
@@ -102,14 +98,9 @@ body {
   text-shadow: 0 0 10px var(--bg);
 }
 
-li {
-  list-style: none;
-}
+li { list-style: none; }
 
-button,
-input,
-textarea,
-select {
+button, input, textarea, select {
   border: none;
   outline: none;
   background: transparent;
@@ -123,52 +114,32 @@ select {
 /*? ======================== */
 /*? 3. TIPOGRAFIA & TEXTOS   */
 /*? ======================== */
-.p,
-.h1,
-.h2,
-.h3,
-.h4 {
-  overflow-wrap: break-word;
-}
+.preto { color: var(--preto); }
+.branco { color: var(--branco); }
 
-.h1,
-.h2,
-.h3,
-.h4 {
+.p, .h1, .h2, .h3, .h4 { overflow-wrap: break-word; }
+
+.h1, .h2, .h3, .h4 {
   font-family: var(--font-quicksand);
   text-wrap: balance;
 }
 
-.h1 {
-  font-size: 2.5rem;
-}
-
-.h2 {
-  font-size: 2rem;
-}
-
-.h3 {
-  font-size: 1.5rem;
-}
-
-.h4 {
-  font-size: 1rem;
-}
-
-.p {
-  font-size: 1rem;
-}
+.h1 { font-size: 2.5rem; }
+.h2 { font-size: 2rem; }
+.h3 { font-size: 1.5rem; }
+.h4 { font-size: 1.25rem; }
+.p  { font-size: 1rem; }
 
 .title {
-  height: 40px;
+  height: 80px;
+  padding: 0 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
 }
 
-.ativo,
-.inativo {
+.ativo, .inativo {
   padding: var(--padding-md);
   border-radius: var(--radius-md);
 }
@@ -183,6 +154,11 @@ select {
   border: 2px solid var(--vermelho);
 }
 
+span {
+  font-size: 1.25rem;
+  color: var(--verde-tema);
+}
+
 /*? =========================== */
 /*? 4. LINKS & INTERATIVIDADE   */
 /*? =========================== */
@@ -192,9 +168,7 @@ a {
   color: inherit;
 }
 
-.link {
-  color: var(--branco);
-}
+.link { color: var(--branco); }
 
 .link::after {
   content: "";
@@ -208,25 +182,17 @@ a {
   transition: width 0.25s ease;
 }
 
-.link:hover::after {
-  width: 100%;
-}
+.link:hover::after { width: 100%; }
 
 /*? ============================= */
 /*? 5. MÍDIA (IMAGENS & VÍDEOS)   */
 /*? ============================= */
-.img,
-.picture,
-.video,
-.canvas,
-.svg {
+.img, .picture, .video, .canvas, .svg {
   display: block;
   max-width: 100%;
 }
 
-.path {
-  fill: var(--verde-tema);
-}
+.path { fill: var(--verde-tema); }
 
 .img_wrapper {
   position: relative;
@@ -249,30 +215,19 @@ a {
   transition: opacity 0.4s ease;
 }
 
-.img_wrapper:hover img {
-  transform: scale(1.015);
-}
+.img_wrapper:hover img { transform: scale(1.015); }
+.img_wrapper:hover::after { opacity: 0.2; }
 
-.img_wrapper:hover::after {
-  opacity: 0.2;
-}
-
-.iconSol,
-.iconLua {
+.iconSol, .iconLua {
   height: 50px;
   width: 50px;
   cursor: pointer;
-  transition: transform 0.2s ease-in-out;
+  transition: transform 1s cubic-bezier(.60, -0.75, .4, 1);
 }
 
-.iconLua {
-  padding: 7.5px;
-}
+.iconLua { padding: 7.5px; }
 
-.iconSol:hover,
-.iconLua:hover {
-  transform: rotate(360deg) scale(1.1);
-}
+.iconSol:hover, .iconLua:hover { transform: rotate(360deg) scale(1.1); }
 
 /*? ==================================== */
 /*? 6. FORMULÁRIOS & ENTRADAS (INPUTS)   */
@@ -286,8 +241,7 @@ a {
   gap: 20px;
 }
 
-.campo_form,
-.campo_select {
+.campo_form, .campo_select {
   position: relative;
   width: 100%;
   border-radius: var(--radius-md);
@@ -295,67 +249,43 @@ a {
 }
 
 /* Estrutura Base dos Inputs */
-.input,
-.input_upload,
-.select,
-.textarea {
+.input, .input_upload, .select, .textarea {
   display: flex;
   flex-direction: row;
   align-items: center;
   width: 100%;
-  height: var(--height);
   padding: var(--padding-md);
   border-radius: var(--radius-md);
   border: 2px solid var(--border-input);
-  transition:
-    border-color 0.15s ease,
-    box-shadow 0.15s ease,
-    transform 0.15s ease;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
 }
 
-.input,
-.select,
-.textarea {
+.input, .select, .textarea {
   background: var(--surface);
   border-bottom: 2px solid var(--verde-secundario);
   box-shadow: inset var(--shadow-sm);
 }
 
-.input {
-  padding-left: 50px;
-}
-
-.select {
-  padding-left: 45px;
-}
+.input, .textarea { padding-left: 50px; }
+.select { padding-left: 45px; height: var(--height); }
+.input { height: var(--height); }
 
 .textarea {
   height: 320px;
   resize: none;
-  padding-left: 50px;
 }
 
-.input::placeholder,
-.textarea::placeholder {
-  color: transparent;
-}
+.input::placeholder, .textarea::placeholder { color: transparent; }
 
 /* Hovers e Focus */
-.input:hover,
-.textarea:hover {
+.input:hover, .textarea:hover {
   border-bottom-color: var(--destaque);
   box-shadow: inset var(--shadow-md);
 }
 
-.input:focus,
-.input:not(:placeholder-shown),
-.select:focus,
-.select:valid {
-  border: 2px solid var(--verde-secundario);
-}
-
-.input:focus:not(:placeholder-shown),
-.textarea:focus:not(:placeholder-shown) {
+.input:focus, .input:not(:placeholder-shown),
+.textarea:focus, .textarea:not(:placeholder-shown),
+.select:focus, .select:valid {
   border: 2px solid var(--verde-secundario);
 }
 
@@ -372,20 +302,14 @@ a {
   padding: var(--padding-sm);
   border-radius: var(--radius-sm);
   border: 1px solid transparent;
-  transition:
-    top 0.15s ease,
-    font-size 0.15s ease,
-    color 0.15s ease,
-    transform 0.15s ease;
+  transition: top 0.15s ease, font-size 0.15s ease, color 0.15s ease, transform 0.15s ease;
 }
 
 /* Label Flutuante - Centralizado e Unificado */
-.input:focus~.label,
-.input:not(:placeholder-shown)~.label,
-.textarea:focus~.label,
-.textarea:not(:placeholder-shown)~.label,
-.select:focus~.label,
-.select:valid~.label {
+.input:focus ~ .label, .input:not(:placeholder-shown) ~ .label,
+.textarea:focus ~ .label, .textarea:not(:placeholder-shown) ~ .label,
+.select:focus ~ .label, .select:valid ~ .label,
+.campo_select.open .label, .campo_select.has-value .label {
   top: 0;
   font-size: 0.8rem;
   color: var(--verde-secundario);
@@ -393,20 +317,19 @@ a {
   border: 1px solid var(--verde-secundario);
 }
 
-/* Ajuste específico para Label com Textarea */
+/* Ajustes específicos de Label */
 .campo_form:has(.textarea) .label {
   top: 15px;
   transform: none;
 }
 
-.campo_form:has(.textarea) .textarea:focus~.label,
-.campo_form:has(.textarea) .textarea:not(:placeholder-shown)~.label {
+.campo_form:has(.textarea) .textarea:focus ~ .label,
+.campo_form:has(.textarea) .textarea:not(:placeholder-shown) ~ .label {
   top: 0;
-  font-size: 0.8rem;
   transform: translateY(-50%);
 }
 
-/* Ajuste específico para ícones do Lucide */
+/* Ícones do Lucide */
 .lucide {
   position: absolute;
   left: 18px;
@@ -415,63 +338,30 @@ a {
   z-index: 2;
   pointer-events: none;
   margin-right: 10px;
-}
-
-.lucide path {
   stroke: var(--verde-tema);
 }
 
-.icon_branco {
-  stroke: var(--branco);
-}
-
-.editar_lucide {
-  position: static;
-  transform: none;
-  left: auto;
-  top: auto;
-  margin-left: 5%;
-}
-
-.excluir_lucide {
-  position: static;
-  transform: none;
-  left: auto;
-  top: auto;
-  margin-right: 5%;
-}
-
-.upload_lucide {
-  position: sticky;
-}
-
-.desc_lucide {
-  top: 27px;
-}
+.icon_branco { stroke: var(--branco); }
+.reset_lucide { width: 24px; height: 32px; position: static; transform: none; }
+.upload_lucide { position: sticky; }
+.desc_lucide { top: 27px; }
 
 /* Upload e Arquivos */
-.input_img {
-  display: none;
-}
+.input_img { display: none; }
 
 .input_upload {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  padding: 0;
-  width: 100%;
   height: 100%;
   aspect-ratio: 1 / 1;
   cursor: pointer;
   border: 2px dashed var(--verde-primario);
   overflow: hidden;
   box-shadow: inset 0 0 25px color-mix(in srgb, var(--verde-primario), transparent 75%);
+  gap: 10px;
+  padding: 0;
+  justify-content: center;
 }
 
-.input_upload img {
-  pointer-events: none;
-}
+.input_upload img { pointer-events: none; }
 
 .full_size_preview {
   display: flex;
@@ -490,12 +380,48 @@ a {
   border-radius: var(--radius-md);
 }
 
+/* Dropdown Options */
+.dropdown_options {
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 0;
+  width: 100%;
+  background: var(--surface);
+  border: 2px solid var(--border-input);
+  border-bottom: 2px solid var(--verde-secundario);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  z-index: 99;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.dropdown_options::-webkit-scrollbar { width: 6px; }
+.dropdown_options::-webkit-scrollbar-thumb { background: var(--verde-secundario); border-radius: 10px; }
+
+.dropdown_options li {
+  display: flex;
+  align-items: center;
+  padding: var(--padding-md) var(--padding-md) var(--padding-md) 50px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.dropdown_options li:hover {
+  background: var(--verde-primario);
+  color: var(--branco);
+}
+
+.campo_select.open .select {
+  border: 2px solid var(--verde-secundario);
+  box-shadow: var(--shadow-md);
+}
+
 /*? =========== */
 /*? 7. BOTÕES   */
 /*? =========== */
-.btn,
-.btn2,
-.btn_card {
+.btn, .btn2, .btn_card {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -505,50 +431,32 @@ a {
   font-weight: 600;
   color: var(--branco);
   box-shadow: var(--shadow-md);
-  filter: brightness(1);
-  transition:
-    transform 0.15s ease,
-    box-shadow 0.15s ease,
-    filter 0.15s ease;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
 }
 
-.btn,
-.btn2 {
+.btn, .btn2 {
   border-radius: var(--radius-md);
-  min-width: 100px;
+  min-width: 60px;
   max-width: 200px;
 }
 
-.btn {
-  background: radial-gradient(circle at 0% 100%,
-      var(--verde-secundario),
-      var(--verde-primario));
-}
-
-/* Força o texto interno do .btn a ser sempre branco em ambos os temas */
-.btn * {
-  color: var(--branco) !important;
-}
+.btn { background: radial-gradient(circle at 0% 100%, var(--verde-secundario), var(--verde-primario)); }
+.btn * { color: var(--branco) !important; }
 
 .btn2 {
   color: var(--verde-secundario);
   border: 2px solid var(--verde-secundario);
 }
+.btn2 * { color: var(--verde-secundario); }
 
-.btn2 * {
-  color: var(--verde-secundario);
-}
-
-.btn:hover,
-.btn2:hover {
+.btn:hover, .btn2:hover {
   z-index: 2;
   transform: translateY(-3px);
   filter: brightness(1.15);
   box-shadow: var(--shadow-lg);
 }
 
-.btn:active,
-.btn2:active {
+.btn:active, .btn2:active {
   transform: translateY(1px);
   box-shadow: var(--shadow-sm);
 }
@@ -571,9 +479,7 @@ a {
   transition: background 0.2s ease;
 }
 
-.btn_delete:hover {
-  background: color-mix(in srgb, var(--vermelho), transparent 25%);
-}
+.btn_delete:hover { background: color-mix(in srgb, var(--vermelho), transparent 25%); }
 
 .btn_icon {
   all: unset;
@@ -590,9 +496,7 @@ a {
   z-index: 3;
 }
 
-.btn_icon:hover {
-  transform: translateY(-50%);
-}
+.btn_icon:hover { transform: translateY(-50%); }
 
 /*? =================================== */
 /*? 8. LAYOUT, GRID & UTILITY CLASSES   */
@@ -607,101 +511,42 @@ a {
 }
 
 /* Flex Combinations */
-.sbs {
-  display: flex;
-  align-items: center;
-  gap: 2vw;
-}
-
-.row,
-.column {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.row {
-  flex-direction: row;
-  justify-content: space-between;
-}
-
-.column {
-  height: 100%;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.start {
-  align-items: flex-start;
-  justify-content: flex-start;
-}
-
-.no_gap {
-  width: 100%;
-  gap: 0;
-}
+.sbs { display: flex; align-items: center; gap: 2vw; }
+.row, .column { display: flex; align-items: center; gap: 10px; }
+.row { flex-direction: row; justify-content: space-between; }
+.column { height: 100%; flex-direction: column; justify-content: center; }
+.start { align-items: flex-start; justify-content: flex-start; }
+.no_gap { width: 100%; gap: 0; }
 
 /* Grid Layout */
 .grid {
   display: grid;
   grid-template-columns: 0.8fr 1fr 0.8fr;
   max-width: 1400px;
-  max-height: 600px;
   gap: 20px;
 }
 
-.flex_wrap {
-  flex: 1;
-  flex-wrap: wrap;
-}
+.flex_wrap { flex: 1; flex-wrap: wrap; }
 
 .info {
   padding: var(--padding-lg);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
-  background: linear-gradient(to bottom,
-      var(--surface),
-      color-mix(in srgb, var(--surface) 100%, var(--destaque) 8%));
+  background: linear-gradient(to bottom, var(--surface), color-mix(in srgb, var(--surface) 100%, var(--destaque) 8%));
   border: 2px solid var(--destaque);
 }
 
 /* Sizing Utilities */
-.min_height {
-  min-height: 75vh;
-}
-
-.max_width {
-  max-width: 400px;
-}
-
-.small {
-  height: 36px;
-}
-
-.small_radius {
-  border-radius: var(--radius-sm);
-}
-
-.full_height {
-  height: 100%;
-  justify-content: space-between;
-}
+.min_height { padding: 2.5vh 0; min-height: 70vh; }
+.max_width { max-width: 400px; }
+.small { height: 36px; }
+.small_radius { border-radius: var(--radius-sm); }
+.full_height { height: 100%; justify-content: space-between; }
 
 /* Positioning Utilities */
-.fixed {
-  z-index: 10;
-  position: fixed;
-}
-
-.relative_pos {
-  position: relative;
-}
-
-.upload_box_wrapper {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
+.fixed { z-index: 10; position: fixed; }
+.relative_pos { position: relative; }
+.upload_box_wrapper { position: relative; width: 100%; height: 100%; }
 
 /*? ================================================ */
 /*? 9. COMPONENTES DE TERCEIROS & CUSTOM SCROLLBARS  */
@@ -710,49 +555,39 @@ a {
 .Toastify__toast {
   overflow: hidden;
   color: var(--text-main) !important;
-  background: var(--branco) !important;
+  background: var(--surface) !important;
   border-radius: 12px !important;
   box-shadow: var(--shadow-md) !important;
 }
 
 .Toastify__progress-bar--success {
-  background: linear-gradient(to right,
-      var(--verde-primario),
-      var(--verde-secundario)) !important;
+  background: linear-gradient(to right, var(--verde-primario), var(--verde-secundario)) !important;
 }
 
-.Toastify__toast--success .Toastify__toast-icon svg {
-  fill: var(--verde-primario) !important;
-}
+.Toastify__toast--success .Toastify__toast-icon svg { fill: var(--verde-primario) !important; }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
+/* Custom Scrollbar Global */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--verde-secundario); border-radius: 20px; }
+::-webkit-scrollbar-thumb:hover { background: var(--verde-primario); }
 
-::-webkit-scrollbar-track {
-  background: var(--bg);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--verde-secundario);
-  border-radius: 20px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--verde-primario);
-}
-
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus,
-textarea:-webkit-autofill,
-textarea:-webkit-autofill:hover,
-textarea:-webkit-autofill:focus,
-select:-webkit-autofill,
-select:-webkit-autofill:hover,
-select:-webkit-autofill:focus {
+/* Autofill Fix */
+input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus,
+textarea:-webkit-autofill, textarea:-webkit-autofill:hover, textarea:-webkit-autofill:focus,
+select:-webkit-autofill, select:-webkit-autofill:hover, select:-webkit-autofill:focus {
   -webkit-text-fill-color: var(--text-main) !important;
   -webkit-box-shadow: inset 0 0 0px 1000px var(--surface);
   transition: background-color 1.5s ease-in-out;
+}
+
+/*? =================================== */
+/*? 10. MEDIA QUERIES (RESPONSIVIDADE)  */
+/*? =================================== */
+@media (max-width: 1080px) {
+  .to_column { flex-direction: column; }
+}
+
+@media (max-width: 768px) {
+  .grid { grid-template-columns: 1fr; }
 }

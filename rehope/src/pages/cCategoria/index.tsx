@@ -1,4 +1,4 @@
-  import Button from "@/components/button/button";
+import Button from "@/components/button/button";
 import Footer from "@/components/footer/footer";
 import Header from "@/components/header/header";
 import Link from "next/link";

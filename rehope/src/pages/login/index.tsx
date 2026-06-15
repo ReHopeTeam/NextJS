@@ -21,13 +21,15 @@ const Login = () => {
       notificacao("Login bem sucedido!");
       router.push("/home");
     } catch (error: any) {
-      erro(error.response?.data || "Erro ao fazer login");
+      const mensagemErro =
+        error.response?.data || error.message || "Erro ao fazer login";
+      erro(mensagemErro);
     }
   }
 
   return (
     <main id={styles.login}>
-      {/* SVGs mantidos idênticos ao seu original */}
+      {/* SVG de Background Superior */}
       <svg
         width="660"
         height="300"
@@ -44,6 +46,8 @@ const Login = () => {
           className="path"
         />
       </svg>
+
+      {/* SVG de Background Inferior */}
       <svg
         width="660"
         height="300"
@@ -60,6 +64,7 @@ const Login = () => {
           className="path"
         />
       </svg>
+
       <div className="img_wrapper">
         <img
           src="/imgs/ImagemDoLogin.png"
@@ -67,16 +72,18 @@ const Login = () => {
           id={styles.login_img}
         />
       </div>
+
       <section id={styles.login_form} className="column">
         <div id={styles.tema_btn}>
-          <TrocaTema/>
+          <TrocaTema />
         </div>
+
         <form className="form" onSubmit={autenticar}>
           <h1 className="h1 white">Login</h1>
 
           {/* Campo de E-mail */}
           <div className="campo_form">
-            <Lucide name="User" className="lucide" color="#fff" />
+            <Lucide name="User" className="lucide" />
             <input
               type="email"
               id="email"
@@ -91,12 +98,14 @@ const Login = () => {
             </label>
           </div>
 
+          {/* Campo de Senha */}
           <div className="campo_form">
+            <Lucide name="Lock" className="lucide" />
             <input
               type={ativo ? "text" : "password"}
               id="senha"
               placeholder=" "
-              className="input input_senha"
+              className="input"
               value={senha}
               onChange={(e) => setSenha(e.target.value)}
               required
@@ -109,12 +118,15 @@ const Login = () => {
               type="button"
               className="btn_icon"
               onClick={() => setAtivo(!ativo)}
+              style={{ left: "auto", right: "30px" }}
             >
-              <Lucide name={ativo ? "EyeOff" : "Eye"} color="#fff" />
+              <Lucide name={ativo ? "EyeOff" : "Eye"}/>
             </Button>
           </div>
 
-          <Button type="submit">Entrar</Button>
+          <Button type="submit" className="btn">
+            Entrar
+          </Button>
         </form>
       </section>
     </main>

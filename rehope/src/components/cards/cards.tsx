@@ -11,8 +11,13 @@ type CardProps = {
   fantasma?: boolean;
 };
 
-const Card = ({ produtoID, nome, preco, imagem, fantasma = false, }: CardProps) => {
-
+const Card = ({
+  produtoID,
+  nome,
+  preco,
+  imagem,
+  fantasma = false,
+}: CardProps) => {
   return (
     <article className="column">
       <li
@@ -33,14 +38,14 @@ const Card = ({ produtoID, nome, preco, imagem, fantasma = false, }: CardProps) 
 
             <p className="title">R$ 00,00</p>
 
-            <div className="row no_gap" id={styles.botoes}>
+            <div className="row no_gap to_column" id={styles.botoes}>
               <Button className={`${styles.btn_card} ${styles.excluir}`}>
-                <Lucide className="excluir_lucide" name="Delete" />
+                <Lucide className="reset_lucide" name="Delete" />
                 Excluir
               </Button>
 
               <Button className={`${styles.btn_card} ${styles.editar}`}>
-                <Lucide className="editar_lucide" name="SquarePen" />
+                <Lucide className="reset_lucide" name="SquarePen" />
                 Editar
               </Button>
             </div>
@@ -59,16 +64,16 @@ const Card = ({ produtoID, nome, preco, imagem, fantasma = false, }: CardProps) 
               <span className="title dark">{nome}</span>
             </div>
 
-            <p className="title">{preco}</p>
+            <h3 className="title preto">{preco}</h3>
 
-            <div className="row no_gap" id={styles.botoes}>
+            <div className="row no_gap to_column">
               <Button className={`${styles.btn_card} ${styles.excluir}`}>
-                <Lucide className="excluir_lucide icon_branco" name="Delete" color="#fff" />
+                <Lucide className="reset_lucide icon_branco" name="Delete" />
                 Excluir
               </Button>
 
               <Button className={`${styles.btn_card} ${styles.editar}`}>
-                <Lucide className="editar_lucide icon_branco" name="SquarePen" />
+                <Lucide className="reset_lucide icon_branco" name="SquarePen" />
                 Editar
               </Button>
             </div>
