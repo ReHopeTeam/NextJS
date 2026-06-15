@@ -1,110 +1,152 @@
-import Footer from "@/components/footer/footer";
-import Header from "@/components/header/header";
-import styles from "./detalhe.module.css";
-import { listarPorId } from "@/pages/api/mockService";
-import { erro } from "@/utils/toast";
-import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import Link from "next/link";
+import styles from "./detalhe.module.css";
+import Card from "@/components/cards/cards";
 import Lucide from "@/utils/lucide";
+import { listar } from "@/pages/api/mockService";
+import { erro } from "@/utils/toast";
 
 type Produto = {
   produtoID: number;
-  codigo: string;
   nome: string;
   preco: string;
-  status: boolean;
-  descricao: string;
-  tipo: string;
-  categoria: string;
-  localizacao: string;
-  tamanho: string;
-  usuario: string;
 };
 
-const Detalhe = () => {
-  const [produto, setProduto] = useState<Produto | null>(null);
-  const params = useParams();
-  const id = params?.id;
+const Lista = () => {
+  const [paginaAtual, setPaginaAtual] = useState(1);
+  const [ordenacao, setOrdenacao] = useState("");
+  const [pesquisa, setPesquisa] = useState("");
+  const [produto, setProduto] = useState<Produto[]>([]);
+
+  useEffect(() => {
+    listarJogo();
+  }, []);
 
   async function listarJogo() {
     try {
-      const response = await listarPorId(Number(id));
+      const response = await listar();
       setProduto(response);
     } catch (error: any) {
-      erro(error.message);
+      erro(error.message || "Erro ao carregar a lista.");
     }
   }
 
-  useEffect(() => {
-    if (!id) return;
-    listarJogo();
-  }, [id]);
+  const itensPorPagina = 5;
+
+  //? Auxiliar para converter "R$ 149,90" em float (149.90) para o sort funcionar
+  const converterPreco = (precoStr: string): number => {
+    return parseFloat(precoStr.replace("R$ ", "").replace(".", "").replace(",", "."));
+  };
+
+  //? Filtro de Pesquisa
+  const produtosFiltrados = produto.filter((p) =>
+    p.nome.toLowerCase().includes(pesquisa.toLowerCase())
+  );
+
+  //? Ordenação
+  const produtosOrdenados = [...produtosFiltrados];
+
+  if (ordenacao === "menor") {
+    produtosOrdenados.sort((a, b) => converterPreco(a.preco) - converterPreco(b.preco));
+  }
+
+  if (ordenacao === "maior") {
+    produtosOrdenados.sort((a, b) => converterPreco(b.preco) - converterPreco(a.preco));
+  }
+
+  if (ordenacao === "alfabetica") {
+    produtosOrdenados.sort((a, b) => a.nome.localeCompare(b.nome));
+  }
+
+  if (ordenacao === "alfabetica-contraria") {
+    produtosOrdenados.sort((a, b) => b.nome.localeCompare(a.nome));
+  }
+
+  //? Paginação
+  const indiceInicial = (paginaAtual - 1) * itensPorPagina;
+  const indiceFinal = indiceInicial + itensPorPagina;
+
+  const produtosPaginados = produtosOrdenados.slice(indiceInicial, indiceFinal);
+  const totalPaginas = Math.ceil(produtosOrdenados.length / itensPorPagina);
+
+  const cardsFantasmas = itensPorPagina - produtosPaginados.length;
+
+  const cardsExibidos = [
+    ...produtosPaginados,
+    ...Array(cardsFantasmas).fill(null),
+  ];
 
   return (
-    <>
-      <Header />
-      <main className="min_height">
-        <section className="container column">
-          <article className="grid info">
-            <div className="column start">
-              <img
-                id={styles.img}
-                src="../imgs/ImagemDoLogin.png"
-                alt=""
-                className="img small_radius"
-              />
-              <div className="row">
-                <h4>Código:</h4>
-                <p>{produto?.codigo}</p>
-              </div>
-              <div>
-                {produto?.status ? (
-                  <h3 className="ativo">Ativo</h3>
-                ) : (
-                  <h3 className="inativo">Inativo</h3>
-                )}
-              </div>
-            </div>
-            <div className="column start">
-              <h1>{produto?.nome}</h1>
-              <h3>{produto?.preco}</h3>
-              <p>{produto?.descricao}</p>
-            </div>
-            <div className="column start">
-              <div>
-                <h3>Tipo:</h3>
-                <p>{produto?.tipo}</p>
-              </div>
-              <div>
-                <h3>Categoria:</h3>
-                <p>{produto?.categoria}</p>
-              </div>
-              <div>
-                <h3>Localização:</h3>
-                <p>{produto?.localizacao}</p>
-              </div>
-              <div className="row">
-                <Lucide name="RulerDimensionLine" />
-                <div>
-                  <h3>Tamanho:</h3>
-                  <p>{produto?.tamanho}</p>
-                </div>
-              </div>
-              <div>
-                <h3>Usuário:</h3>
-                <p>{produto?.usuario}</p>
-              </div>
-            </div>
-          </article>
-          <Link href="/home" className="btn2">
-            Voltar
-          </Link>
-        </section>
-      </main>
-      <Footer />
-    </>
+    <section>
+      <div className="row sbs" id={styles.filtros}>
+        <div className="campo_form">
+          <Lucide name="Search" className="lucide" />
+          <input
+            type="text"
+            id="pesquisa"
+            placeholder=" "
+            className="input"
+            value={pesquisa}
+            onChange={(e) => {
+              setPesquisa(e.target.value);
+              setPaginaAtual(1); // Reset da página
+            }}
+          />
+          <label htmlFor="pesquisa" className="label">
+            Pesquise seu produto...
+          </label>
+        </div>
+        <div className="campo_select">
+          <Lucide name="Filter" className="lucide" />
+          <select
+            name="filtro"
+            id="filtro"
+            className="select"
+            value={ordenacao}
+            onChange={(e) => {
+              setOrdenacao(e.target.value);
+              setPaginaAtual(1);
+            }}
+            required
+          >
+            <option value=""></option>
+            <option value="menor">Menor Preço</option>
+            <option value="maior">Maior Preço</option>
+            <option value="alfabetica">A-Z</option>
+            <option value="alfabetica-contraria">Z-A</option>
+          </select>
+          <label htmlFor="filtro" className="label">
+            Filtrar
+          </label>
+        </div>
+      </div>
+
+      <ul className="row">
+        {cardsExibidos.map((item, index) => (
+          <Card
+            key={item?.produtoID ?? `fantasma-${index}`}
+            fantasma={!item}
+            {...(item || {})}
+          />
+        ))}
+      </ul>
+
+      {totalPaginas > 1 && (
+        <nav>
+          <ul id={styles.paginacao}>
+            {Array.from({ length: totalPaginas }, (_, index) => (
+              <li
+                key={index + 1}
+                onClick={() => setPaginaAtual(index + 1)}
+                className={`btn ${paginaAtual === index + 1 ? styles.ativo : ""}`}
+              >
+                {index + 1}
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )}
+    </section>
   );
 };
 
-export default Detalhe;
+export default Lista;

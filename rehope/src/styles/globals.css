@@ -13,10 +13,17 @@
   --preto: hsl(0, 0%, 0%);
 
   /* Cores auxiliares */
-  --verde-vivo: hsl(150, 100%, 40%);
+  --verde-tema: hsl(150, 100%, 40%);
+  --verde-vivo: hsl(125, 100%, 40%);
   --vermelho: hsl(340, 100%, 50%);
+  --lucide:
 
-  /* Fontes (Dica: Lembre-se de importar estas fontes no HTML ou @import) */
+    /* Variáveis Semânticas Adaptáveis (Fundo de inputs/cards e textos) */
+    --surface: var(--branco);
+  --text-main: var(--verde-fonte);
+  --border-input: color-mix(in srgb, var(--bg), transparent 90%);
+
+  /* Fontes */
   --font-comfortaa: "Comfortaa", cursive, sans-serif;
   --font-quicksand: "Quicksand", sans-serif;
 
@@ -40,7 +47,26 @@
 }
 
 :root.darkmode {
+  /* 1. Ajuste de Fundo e Texto Base */
   --bg: hsl(145, 90%, 5%);
+  --surface: hsl(145, 90%, 10%);
+  --verde-fonte: hsl(145, 20%, 90%);
+  --text-main: var(--verde-fonte);
+  --branco: hsl(0, 0%, 100%);
+  --cinza: hsl(0, 0%, 75%);
+
+  /* 2. Ajuste dos Verdes (Mais brilhantes para contraste no escuro) */
+  --verde-primario: hsl(125, 35%, 35%);
+  --verde-secundario: hsl(115, 35%, 55%);
+  --verde-tema: hsl(150, 100%, 65%);
+  --verde-vivo: hsl(125, 100%, 65%);
+  --destaque: hsl(85, 40%, 25%);
+  --border-input: hsl(145, 90%, 18%);
+
+  /* 3. Ajuste de Sombras (Sombras escuras puras para dar profundidade no Dark) */
+  --shadow-sm: 0 2px 6px hsla(0, 0%, 0%, 0.4);
+  --shadow-md: 0 4px 12px hsla(0, 0%, 0%, 0.55);
+  --shadow-lg: 0 8px 24px hsla(0, 0%, 0%, 0.7);
 }
 
 /*? ========================= */
@@ -51,12 +77,12 @@
   padding: 0;
   box-sizing: border-box;
   font-family: var(--font-comfortaa);
-  color: var(--verde-fonte);
+  color: var(--text-main);
 }
 
 html {
   scrollbar-width: thin;
-  scrollbar-color: var(--destaque) var(--verde-fonte);
+  scrollbar-color: var(--verde-secundario) var(--bg);
 }
 
 html[data-scroll-behavior="smooth"] {
@@ -65,11 +91,9 @@ html[data-scroll-behavior="smooth"] {
 
 body {
   min-height: 100vh;
-  background: radial-gradient(
-    circle at 50% 100%,
-    var(--bg),
-    color-mix(in srgb, var(--bg) 100%, var(--destaque) 10%)
-  );
+  background: radial-gradient(circle at 50% 100%,
+      var(--bg),
+      color-mix(in srgb, var(--bg) 100%, var(--destaque) 10%));
 }
 
 ::selection {
@@ -133,10 +157,6 @@ select {
 
 .p {
   font-size: 1rem;
-}
-
-.white {
-  color: var(--bg);
 }
 
 .title {
@@ -204,6 +224,10 @@ a {
   max-width: 100%;
 }
 
+.path {
+  fill: var(--verde-tema);
+}
+
 .img_wrapper {
   position: relative;
   display: inline-block;
@@ -233,17 +257,16 @@ a {
   opacity: 0.2;
 }
 
-.iconSol, .iconLua {
+.iconSol,
+.iconLua {
+  height: 50px;
+  width: 50px;
   cursor: pointer;
   transition: transform 0.2s ease-in-out;
 }
 
-.iconSol {
-  width: 50px; /*? Ajuste específico para o ícone do Sol, que precisa ser maior que o da Lua */
-}
-
 .iconLua {
-  width: 35px;
+  padding: 7.5px;
 }
 
 .iconSol:hover,
@@ -273,7 +296,6 @@ a {
 
 /* Estrutura Base dos Inputs */
 .input,
-.input2,
 .input_upload,
 .select,
 .textarea {
@@ -284,7 +306,7 @@ a {
   height: var(--height);
   padding: var(--padding-md);
   border-radius: var(--radius-md);
-  border: 2px solid color-mix(in srgb, var(--bg), transparent 90%);
+  border: 2px solid var(--border-input);
   transition:
     border-color 0.15s ease,
     box-shadow 0.15s ease,
@@ -294,25 +316,17 @@ a {
 .input,
 .select,
 .textarea {
-  background: var(--branco);
+  background: var(--surface);
   border-bottom: 2px solid var(--verde-secundario);
   box-shadow: inset var(--shadow-sm);
 }
 
-.input,
-.input2 {
+.input {
   padding-left: 50px;
 }
 
 .select {
   padding-left: 45px;
-}
-
-.input2 {
-  color: var(--bg);
-  background: var(--verde-fonte);
-  border-bottom: 2px solid var(--bg);
-  box-shadow: inset var(--shadow-md);
 }
 
 .textarea {
@@ -322,7 +336,6 @@ a {
 }
 
 .input::placeholder,
-.input2::placeholder,
 .textarea::placeholder {
   color: transparent;
 }
@@ -334,11 +347,6 @@ a {
   box-shadow: inset var(--shadow-md);
 }
 
-.input2:hover {
-  border-bottom-color: var(--destaque);
-  box-shadow: inset var(--shadow-sm);
-}
-
 .input:focus,
 .input:not(:placeholder-shown),
 .select:focus,
@@ -346,9 +354,9 @@ a {
   border: 2px solid var(--verde-secundario);
 }
 
-.input2:focus,
-.input2:not(:placeholder-shown) {
-  border: 2px solid var(--bg);
+.input:focus:not(:placeholder-shown),
+.textarea:focus:not(:placeholder-shown) {
+  border: 2px solid var(--verde-secundario);
 }
 
 /* Labels e Efeitos Float */
@@ -360,7 +368,7 @@ a {
   font-weight: 700;
   color: var(--cinza);
   pointer-events: none;
-  background: inherit;
+  background: transparent;
   padding: var(--padding-sm);
   border-radius: var(--radius-sm);
   border: 1px solid transparent;
@@ -371,28 +379,18 @@ a {
     transform 0.15s ease;
 }
 
-/* Label Flutuante - Inputs Padrão, Textarea e Select */
-.input:focus ~ .label,
-.input:not(:placeholder-shown) ~ .label,
-.textarea:focus ~ .label,
-.textarea:not(:placeholder-shown) ~ .label,
-.select:focus ~ .label,
-.select:valid ~ .label {
+/* Label Flutuante - Centralizado e Unificado */
+.input:focus~.label,
+.input:not(:placeholder-shown)~.label,
+.textarea:focus~.label,
+.textarea:not(:placeholder-shown)~.label,
+.select:focus~.label,
+.select:valid~.label {
   top: 0;
   font-size: 0.8rem;
   color: var(--verde-secundario);
-  background: var(--branco);
+  background: var(--bg);
   border: 1px solid var(--verde-secundario);
-}
-
-/* Label Flutuante - Input Variável (input2) */
-.input2:focus ~ .label,
-.input2:not(:placeholder-shown) ~ .label {
-  top: 0;
-  font-size: 0.8rem;
-  color: var(--bg);
-  background: var(--verde-fonte);
-  border: 1px solid var(--bg);
 }
 
 /* Ajuste específico para Label com Textarea */
@@ -401,8 +399,8 @@ a {
   transform: none;
 }
 
-.campo_form:has(.textarea) .textarea:focus ~ .label,
-.campo_form:has(.textarea) .textarea:not(:placeholder-shown) ~ .label {
+.campo_form:has(.textarea) .textarea:focus~.label,
+.campo_form:has(.textarea) .textarea:not(:placeholder-shown)~.label {
   top: 0;
   font-size: 0.8rem;
   transform: translateY(-50%);
@@ -417,6 +415,30 @@ a {
   z-index: 2;
   pointer-events: none;
   margin-right: 10px;
+}
+
+.lucide path {
+  stroke: var(--verde-tema);
+}
+
+.icon_branco {
+  stroke: var(--branco);
+}
+
+.editar_lucide {
+  position: static;
+  transform: none;
+  left: auto;
+  top: auto;
+  margin-left: 5%;
+}
+
+.excluir_lucide {
+  position: static;
+  transform: none;
+  left: auto;
+  top: auto;
+  margin-right: 5%;
 }
 
 .upload_lucide {
@@ -444,8 +466,7 @@ a {
   cursor: pointer;
   border: 2px dashed var(--verde-primario);
   overflow: hidden;
-  box-shadow: inset 0 0 25px
-    color-mix(in srgb, var(--verde-primario), transparent 75%);
+  box-shadow: inset 0 0 25px color-mix(in srgb, var(--verde-primario), transparent 75%);
 }
 
 .input_upload img {
@@ -499,11 +520,14 @@ a {
 }
 
 .btn {
-  background: radial-gradient(
-    circle at 0% 100%,
-    var(--verde-secundario),
-    var(--verde-primario)
-  );
+  background: radial-gradient(circle at 0% 100%,
+      var(--verde-secundario),
+      var(--verde-primario));
+}
+
+/* Força o texto interno do .btn a ser sempre branco em ambos os temas */
+.btn * {
+  color: var(--branco) !important;
 }
 
 .btn2 {
@@ -511,8 +535,13 @@ a {
   border: 2px solid var(--verde-secundario);
 }
 
+.btn2 * {
+  color: var(--verde-secundario);
+}
+
 .btn:hover,
 .btn2:hover {
+  z-index: 2;
   transform: translateY(-3px);
   filter: brightness(1.15);
   box-shadow: var(--shadow-lg);
@@ -562,11 +591,6 @@ a {
 }
 
 .btn_icon:hover {
-  transform: translateY(-50%);
-  box-sizing: border-box;
-}
-
-.btn_icon:active {
   transform: translateY(-50%);
 }
 
@@ -635,11 +659,9 @@ a {
   padding: var(--padding-lg);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
-  background: linear-gradient(
-    to bottom,
-    var(--bg),
-    color-mix(var(--bg), var(--destaque))
-  );
+  background: linear-gradient(to bottom,
+      var(--surface),
+      color-mix(in srgb, var(--surface) 100%, var(--destaque) 8%));
   border: 2px solid var(--destaque);
 }
 
@@ -675,7 +697,6 @@ a {
   position: relative;
 }
 
-/* Custom wrapper para uploads para evitar conflito com a utilitária relative_pos global */
 .upload_box_wrapper {
   position: relative;
   width: 100%;
@@ -688,25 +709,23 @@ a {
 /* Toastify Customization */
 .Toastify__toast {
   overflow: hidden;
-  color: var(--verde-fonte) !important;
-  background: var(--bg) !important;
+  color: var(--text-main) !important;
+  background: var(--branco) !important;
   border-radius: 12px !important;
   box-shadow: var(--shadow-md) !important;
 }
 
 .Toastify__progress-bar--success {
-  background: linear-gradient(
-    to right,
-    var(--verde-primario),
-    var(--verde-secundario)
-  ) !important;
+  background: linear-gradient(to right,
+      var(--verde-primario),
+      var(--verde-secundario)) !important;
 }
 
 .Toastify__toast--success .Toastify__toast-icon svg {
   fill: var(--verde-primario) !important;
 }
 
-/* Custom Scrollbar (Chromium-based engines) */
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -733,7 +752,7 @@ textarea:-webkit-autofill:focus,
 select:-webkit-autofill,
 select:-webkit-autofill:hover,
 select:-webkit-autofill:focus {
-  -webkit-text-fill-color: var(--verde-fonte) !important;
-  -webkit-box-shadow: inset 0 0 0px 1000px var(--destaque);
+  -webkit-text-fill-color: var(--text-main) !important;
+  -webkit-box-shadow: inset 0 0 0px 1000px var(--surface);
   transition: background-color 1.5s ease-in-out;
 }

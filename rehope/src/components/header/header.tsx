@@ -25,7 +25,7 @@ const Header = () => {
         {/* "botões" na direita da página */}
         <div className="sbs">
         <TrocaTema />
-          <a className="link" href="">
+          <a className="link" href="/">
             Placeholder1
           </a>
           <a className="link" href="">

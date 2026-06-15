@@ -4,14 +4,14 @@ import Button from "@/components/button/button";
 import Lucide from "@/utils/lucide";
 
 type CardProps = {
-  id?: number;
+  produtoID: number;
   nome?: string;
   preco?: string;
   imagem?: string;
   fantasma?: boolean;
 };
 
-const Card = ({ id, nome, preco, imagem, fantasma = false, }: CardProps) => {
+const Card = ({ produtoID, nome, preco, imagem, fantasma = false, }: CardProps) => {
 
   return (
     <article className="column">
@@ -34,21 +34,21 @@ const Card = ({ id, nome, preco, imagem, fantasma = false, }: CardProps) => {
             <p className="title">R$ 00,00</p>
 
             <div className="row no_gap" id={styles.botoes}>
-              <Button className={`${styles.btn_card} ${styles.editar}`}>
-                <Lucide name="SquarePen" color="#fff" />
-                Editar
+              <Button className={`${styles.btn_card} ${styles.excluir}`}>
+                <Lucide className="excluir_lucide" name="Delete" />
+                Excluir
               </Button>
 
-              <Button className={`${styles.btn_card} ${styles.excluir}`}>
-                <Lucide name="Delete" color="#fff" />
-                Excluir
+              <Button className={`${styles.btn_card} ${styles.editar}`}>
+                <Lucide className="editar_lucide" name="SquarePen" />
+                Editar
               </Button>
             </div>
           </>
         ) : (
           <>
             <div>
-              <Link href={`/detalhe/${id}`}>
+              <Link href={`/detalhe/${produtoID}`}>
                 <img
                   className="img"
                   id={styles.img}
@@ -62,14 +62,14 @@ const Card = ({ id, nome, preco, imagem, fantasma = false, }: CardProps) => {
             <p className="title">{preco}</p>
 
             <div className="row no_gap" id={styles.botoes}>
-              <Button className={`${styles.btn_card} ${styles.editar}`}>
-                <Lucide name="SquarePen" color="#fff" />
-                Editar
+              <Button className={`${styles.btn_card} ${styles.excluir}`}>
+                <Lucide className="excluir_lucide icon_branco" name="Delete" color="#fff" />
+                Excluir
               </Button>
 
-              <Button className={`${styles.btn_card} ${styles.excluir}`}>
-                <Lucide name="Delete" color="#fff" />
-                Excluir
+              <Button className={`${styles.btn_card} ${styles.editar}`}>
+                <Lucide className="editar_lucide icon_branco" name="SquarePen" />
+                Editar
               </Button>
             </div>
           </>

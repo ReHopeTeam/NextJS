@@ -103,17 +103,15 @@ const produtosSimulados: Produto[] = [
 // Simula a busca de um produto por ID
 export async function listarPorId(id: number): Promise<Produto> {
   return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      const produtoEncontrado = produtosSimulados.find(
-        (p) => p.produtoID === id,
-      );
+    const produtoEncontrado = produtosSimulados.find(
+      (p) => p.produtoID === id,
+    );
 
-      if (produtoEncontrado) {
-        resolve(produtoEncontrado);
-      } else {
-        reject(new Error(`Produto com o ID ${id} não foi encontrado.`));
-      }
-    });
+    if (produtoEncontrado) {
+      resolve(produtoEncontrado);
+    } else {
+      reject(new Error(`Produto com o ID ${id} não foi encontrado.`));
+    }
   });
 }
 

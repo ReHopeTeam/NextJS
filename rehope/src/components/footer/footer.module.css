@@ -22,3 +22,13 @@
 #img {
   width: 30%;
 }
+
+.social_link {
+  display: inline-block;
+}
+
+.social_icon {
+  width: 4rem;
+  height: auto;
+  filter: invert(1);
+}

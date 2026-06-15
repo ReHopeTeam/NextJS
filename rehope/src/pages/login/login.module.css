@@ -2,12 +2,6 @@
   height: 100vh;
   display: grid;
   grid-template-columns: 1fr minmax(240px, 30vw);
-  background:
-    radial-gradient(
-      circle at 0% 100%,
-      var(--verde-fonte),
-      var(--verde-primario)
-    );
 }
 
 #login_img {

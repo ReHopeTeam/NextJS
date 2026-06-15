@@ -20,8 +20,13 @@ const Footer = () => {
           </Link>
         </div>
 				{/* <div> do botão que redireciona para a home */}
-				<div>
-					
+				<div className="row">
+          <Link className={styles.social_link} href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">
+            <img className={styles.social_icon} src="/imgs/Instagram.svg" alt="Instagram da ReHope" />
+          </Link>
+          <Link className={styles.social_link} href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">
+            <img className={styles.social_icon} src="/imgs/Facebook.svg" alt="Facebook da ReHope" />
+          </Link>
 				</div>
 			</div>
 		</footer>
