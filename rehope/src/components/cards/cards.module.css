@@ -11,7 +11,7 @@
   text-align: center;
   border-radius: var(--radius-lg);
   overflow: hidden;
-  background: var(--branco);
+  background: var(--bg);
   box-shadow: var(--shadow-md);
 }
 
@@ -21,13 +21,11 @@
   object-fit: cover;
   display: block;
   margin: 0 auto;
-  border-left: 3px solid var(--verde-primario);
-  border-right: 3px solid var(--verde-primario);
-  transition: filter .2s;
+  transition: filter 0.2s;
 }
 
 #img:hover {
-  filter: brightness(.8) sepia(100%) hue-rotate(80deg) saturate(150%);
+  filter: brightness(0.8) sepia(100%) hue-rotate(80deg) saturate(150%);
 }
 
 .btn_card {
@@ -44,7 +42,6 @@
   transform: translateY(0);
 }
 
-
 .excluir {
   box-shadow: none;
   background: radial-gradient(
@@ -52,16 +49,18 @@
     hsl(350, 55%, 40%),
     hsl(350, 55%, 20%)
   );
+
+  gap: 0.5rem;
 }
 
 .editar {
-    box-shadow: none;
-    background: radial-gradient(
-      circle at 0% 100%,
-      hsl(115, 35%, 40%),
-      hsl(125, 35%, 20%)
-    );
-  
+  box-shadow: none;
+  background: radial-gradient(
+    circle at 0% 100%,
+    hsl(115, 35%, 40%),
+    hsl(125, 35%, 20%)
+  );
+
   display: flex;
   flex-direction: row-reverse;
   gap: 0.5rem;
@@ -72,7 +71,7 @@
   flex-direction: column;
   justify-content: space-between;
   border-radius: var(--radius-lg);
-  overflow: hidden; 
+  overflow: hidden;
   background: var(--branco);
   box-shadow: var(--shadow-md);
   pointer-events: none;

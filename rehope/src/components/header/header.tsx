@@ -1,8 +1,6 @@
 import Link from "next/link";
 import styles from "./header.module.css";
-import Button from "@/components/button/button";
 import { useRouter } from "next/router";
-import { logout } from "@/pages/api/authService";
 import { TrocaTema } from "@/utils/trocaTema";
 
 const Header = () => {
@@ -25,21 +23,15 @@ const Header = () => {
         {/* "botões" na direita da página */}
         <div id={styles.div}>
           <Link className="link" href="/cCategoria">
-            <p className="branco">
-              <span>+</span> Categoria
-            </p>
+            <span>+</span> Categoria
           </Link>
 
           <Link className="link" href="/cProduto">
-            <p className="branco">
-              <span>+</span> Produto
-            </p>
+            <span>+</span> Produto
           </Link>
 
           <Link className="link" href="/cUsuario">
-            <p className="branco">
-              <span>+</span> Usuário
-            </p>
+            <span>+</span> Usuário
           </Link>
           <div className="row">
             <img
@@ -48,12 +40,11 @@ const Header = () => {
               src="/imgs/CardFantasma.png"
               alt=""
             />
-            <div className="column">
-              <h4 className="h4 branco">Nome</h4>
-              <p className="p branco">Email</p>
+            <div className="column no_gap" id={styles.user_info}>
+              <h4 className="h4">Convidado</h4>
+              <p className="p">Email</p>
             </div>
           </div>
-          {/* <Button children="Logout" onClick={() => logout()} /> */}
           <TrocaTema />
         </div>
       </div>

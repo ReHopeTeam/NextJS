@@ -79,7 +79,7 @@ const Login = () => {
         </div>
 
         <form className="form" onSubmit={autenticar}>
-          <h1 className="h1 white">Login</h1>
+          <h1 className="h1">Login</h1>
 
           {/* Campo de E-mail */}
           <div className="campo_form">
@@ -114,14 +114,13 @@ const Login = () => {
               Senha
             </label>
 
-            <Button
+            <button
               type="button"
               className="btn_icon"
               onClick={() => setAtivo(!ativo)}
-              style={{ left: "auto", right: "30px" }}
             >
-              <Lucide name={ativo ? "EyeOff" : "Eye"}/>
-            </Button>
+              <Lucide name={ativo ? "EyeOff" : "Eye"} className="reset_lucide"/>
+            </button>
           </div>
 
           <Button type="submit" className="btn">

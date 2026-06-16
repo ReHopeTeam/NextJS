@@ -33,3 +33,28 @@
   align-items: center;
   gap: 2vw;
 }
+
+#user_info {
+  width: 200px;
+  height: 60px;
+  color: var(--branco);
+  padding: var(--padding-md);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  background: linear-gradient(
+    135deg,
+    var(--verde-secundario),
+    var(--verde-primario)
+  );
+  transition: box-shadow 0.2s ease;
+}
+
+#user_info:hover {
+  z-index: 2;
+  box-shadow: var(--shadow-md);
+}
+
+#user_info h4,
+#user_info p {
+  color: white;
+}

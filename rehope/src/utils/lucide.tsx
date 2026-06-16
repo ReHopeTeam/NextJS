@@ -23,7 +23,10 @@ import {
   Grid2X2Plus,
   Lock,
   Phone,
-  Mail
+  Mail,
+  ShieldEllipsis,
+  ShieldCheck,
+  ShieldX
 } from "lucide-react";
 
 const icons = {
@@ -48,9 +51,12 @@ const icons = {
   MessageSquareText,
   Grid2X2,
   Grid2X2Plus,
-  Lock, //? Senha no cadastrar usuário
+  Lock,
   Phone,
-  Mail
+  Mail,
+  ShieldEllipsis,
+  ShieldCheck,
+  ShieldX
 };
 
 type IconName = keyof typeof icons;

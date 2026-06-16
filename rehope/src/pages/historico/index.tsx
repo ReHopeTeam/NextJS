@@ -26,7 +26,7 @@ const Historico = () => {
         ) : ( */}
           <table className="table">
             <thead>
-              <tr className="tr">
+              <tr className="tr small_padding">
                 <th>Data da alteração</th>
                 <th>Produto</th>
                 <th>Preço Anterior</th>

@@ -4,11 +4,18 @@ import Card from "@/components/cards/cards";
 import Lucide from "@/utils/lucide";
 import { listar } from "@/pages/api/mockService";
 import { erro } from "@/utils/toast";
+import Button from "../button/button";
 
 type Produto = {
   produtoID: number;
   nome: string;
   preco: string;
+};
+
+type Status = {
+  padrao: boolean;
+  ativo: boolean;
+  inativo: boolean;
 };
 
 const LABELS_ORDENACAO: Record<string, string> = {
@@ -41,6 +48,7 @@ const Lista = () => {
   const [produto, setProduto] = useState<Produto[]>([]);
   const [selectAberto, setSelectAberto] = useState(false);
   const selectRef = useRef<HTMLDivElement>(null);
+  const [status, setStatus] = useState<Status[]>([]);
 
   useEffect(() => {
     listarJogo();
@@ -119,9 +127,9 @@ const Lista = () => {
     setSelectAberto(false);
   };
 
-  // ========================================================
-  // LÓGICA DE PAGINAÇÃO FIXA (Exemplo baseado em 5 botões)
-  // ========================================================
+  // ========================
+  // LÓGICA DE PAGINAÇÃO FIXA
+  // ========================
   const maxBotoesVisiveis = 5;
 
   const obterIntervaloPaginas = () => {
@@ -154,7 +162,7 @@ const Lista = () => {
 
   return (
     <section>
-      <div className="row" id={styles.filtros}>
+      <div className="sbs" id={styles.filtros}>
         {/* Input de Pesquisa */}
         <div className="campo_form">
           <Lucide name="Search" className="lucide" />
@@ -174,7 +182,7 @@ const Lista = () => {
           </label>
         </div>
 
-        {/* Select Customizado em React */}
+        {/* Select Customizado */}
         <div
           className={`campo_select ${selectAberto ? "open" : ""} ${ordenacao ? "has-value" : ""}`}
           ref={selectRef}
@@ -241,6 +249,19 @@ const Lista = () => {
             </ul>
           )}
         </div>
+
+        {/* Botões de auxílios de pesquisa */}
+        <div className="row">
+          <button id={styles.btn_inativo}>
+            <Lucide name="ShieldX" className="reset_lucide" />
+          </button>
+          <button id={styles.btn_ativo}>
+            <Lucide name="ShieldCheck" className="reset_lucide" />
+          </button>
+          <button id={styles.btn_padrao}>
+            <Lucide name="ShieldEllipsis" className="reset_lucide" />
+          </button>
+        </div>
       </div>
 
       {/* Listagem de Cards */}
@@ -260,10 +281,10 @@ const Lista = () => {
           <ul id={styles.paginacao}>
             {/* Botão Começo */}
             <li
-              className="btn"
+              className="btn small_width"
               onClick={() => paginaAtual > 1 && setPaginaAtual(1)}
               style={{
-                opacity: paginaAtual === 1 ? 0.5 : 1,
+                opacity: paginaAtual === 1 ? 0.25 : 1,
                 cursor: paginaAtual === 1 ? "not-allowed" : "pointer",
               }}
             >
@@ -272,7 +293,7 @@ const Lista = () => {
 
             {/* Botão Anterior */}
             <li
-              className="btn"
+              className="btn small_width"
               onClick={() => paginaAtual > 1 && setPaginaAtual(paginaAtual - 1)}
               style={{
                 opacity: paginaAtual === 1 ? 0.5 : 1,
@@ -287,7 +308,7 @@ const Lista = () => {
               <li
                 key={`pag-${pagina}`}
                 onClick={() => setPaginaAtual(pagina)}
-                className={`${paginaAtual === pagina ? "btn" : "btn2"}`}
+                className={`${paginaAtual === pagina ? "btn" : "btn2"} small_width`}
               >
                 {pagina}
               </li>
@@ -295,7 +316,7 @@ const Lista = () => {
 
             {/* Botão Próximo */}
             <li
-              className="btn"
+              className="btn small_width"
               onClick={() =>
                 paginaAtual < totalPaginas && setPaginaAtual(paginaAtual + 1)
               }
@@ -310,12 +331,12 @@ const Lista = () => {
 
             {/* Botão Último */}
             <li
-              className="btn"
+              className="btn small_width"
               onClick={() =>
                 paginaAtual < totalPaginas && setPaginaAtual(totalPaginas)
               }
               style={{
-                opacity: paginaAtual === totalPaginas ? 0.5 : 1,
+                opacity: paginaAtual === totalPaginas ? 0.25 : 1,
                 cursor:
                   paginaAtual === totalPaginas ? "not-allowed" : "pointer",
               }}

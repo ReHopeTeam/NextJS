@@ -7,7 +7,53 @@
   flex-direction: row;
   justify-content: center;
   gap: 10px;
-  padding: 3%;
+  padding: 2.5%;
   flex-wrap: wrap;
   list-style: none;
+}
+
+#btn_padrao,
+#btn_ativo,
+#btn_inativo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  width: var(--height);
+  height: var(--height);
+  border-radius: var(--radius-md);
+  transition: transform 0.15s ease;
+}
+
+#btn_padrao {
+  border: 2px solid var(--verde-fonte);
+  background: color-mix(in srgb, var(--verde-fonte) 15%, transparent);
+}
+
+#btn_padrao svg {
+  stroke: var(--verde-fonte);
+}
+
+#btn_ativo {
+  border: 2px solid var(--verde-vivo);
+  background: color-mix(in srgb, var(--verde-vivo) 15%, transparent);
+}
+
+#btn_ativo svg {
+  stroke: var(--verde-vivo);
+}
+
+#btn_inativo {
+  border: 2px solid var(--vermelho);
+  background: color-mix(in srgb, var(--vermelho) 15%, transparent);
+}
+
+#btn_inativo svg {
+  stroke: var(--vermelho);
+}
+
+#btn_padrao:hover,
+#btn_ativo:hover,
+#btn_inativo:hover {
+  transform: translateY(-2px);
 }
