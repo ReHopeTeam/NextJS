@@ -154,7 +154,7 @@ const Lista = () => {
 
   return (
     <section>
-      <div className="row sbs" id={styles.filtros}>
+      <div className="row" id={styles.filtros}>
         {/* Input de Pesquisa */}
         <div className="campo_form">
           <Lucide name="Search" className="lucide" />
@@ -244,7 +244,7 @@ const Lista = () => {
       </div>
 
       {/* Listagem de Cards */}
-      <ul className="row">
+      <ul className="sbs">
         {cardsExibidos.map((item, index) => (
           <Card
             key={item?.produtoID ?? `fantasma-${index}`}

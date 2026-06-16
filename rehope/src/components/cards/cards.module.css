@@ -21,6 +21,13 @@
   object-fit: cover;
   display: block;
   margin: 0 auto;
+  border-left: 3px solid var(--verde-primario);
+  border-right: 3px solid var(--verde-primario);
+  transition: filter .2s;
+}
+
+#img:hover {
+  filter: brightness(.8) sepia(100%) hue-rotate(80deg) saturate(150%);
 }
 
 .btn_card {
@@ -37,25 +44,27 @@
   transform: translateY(0);
 }
 
-.editar {
-  box-shadow: none;
-  background: radial-gradient(
-    circle at 0% 100%,
-    hsl(160, 100%, 40%),
-    hsl(190, 100%, 25%)
-  );
-
-  display: flex;
-  flex-direction: row-reverse;
-}
 
 .excluir {
   box-shadow: none;
   background: radial-gradient(
     circle at 100% 0%,
-    hsl(340, 100%, 40%),
-    hsl(10, 100%, 25%)
+    hsl(350, 35%, 40%),
+    hsl(350, 35%, 20%)
   );
+}
+
+.editar {
+    box-shadow: none;
+    background: radial-gradient(
+      circle at 0% 100%,
+      hsl(115, 35%, 40%),
+      hsl(125, 35%, 20%)
+    );
+  
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 0.5rem;
 }
 
 .cardFantasma {
@@ -63,7 +72,7 @@
   flex-direction: column;
   justify-content: space-between;
   border-radius: var(--radius-lg);
-  overflow: hidden;
+  overflow: hidden; 
   background: var(--branco);
   box-shadow: var(--shadow-md);
   pointer-events: none;

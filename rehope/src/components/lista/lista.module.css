@@ -1,5 +1,5 @@
 #filtros {
-  padding: 5%;
+  padding: 2% 15%;
 }
 
 #paginacao {
@@ -7,7 +7,7 @@
   flex-direction: row;
   justify-content: center;
   gap: 10px;
-  padding: 5%;
+  padding: 3%;
   flex-wrap: wrap;
   list-style: none;
 }
