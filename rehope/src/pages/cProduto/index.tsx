@@ -144,7 +144,7 @@ const CadastroProduto = () => {
     const config = CONFIG_SELECTS[campo];
     const valorAtual = valoresSelect[campo];
     const aberto = selectAberto[campo];
-    
+
     // Encontra a label correspondente ao valor selecionado atualmente
     const labelExibida = config.opcoes.find(o => o.value === valorAtual)?.label || "";
 

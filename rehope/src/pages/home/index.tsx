@@ -12,6 +12,7 @@ const Home = () => {
         <section id={styles.section}>
           <Lista />
           <Link href="/login" className="btn2">Login</Link>
+          <Link href="/historico" className="btn2">Histórico</Link>
         </section>
       </main>
       <Footer />

@@ -67,7 +67,7 @@ const Detalhe = () => {
                 <p>{produto?.codigo}</p>
               </div>
             </div>
-            <div className="column start">
+            <div className="column start" id={styles.espacamento1}>
               <h1>{produto?.nome}</h1>
               <h3>{produto?.preco}</h3>
               <p>{produto?.descricao}</p>
