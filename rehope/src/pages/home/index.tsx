@@ -11,9 +11,6 @@ const Home = () => {
       <main className="min_height">
         <section id={styles.section}>
           <Lista />
-          <Link href="/historico" className="btn2">
-            Histórico
-          </Link>
         </section>
       </main>
       <Footer />

@@ -51,31 +51,40 @@ const Header = () => {
       />
 
       <aside className={styles.sidebar}>
-        <Button
+        <button
+          type="button"
+          className={styles.closeButton}
           onClick={() => setMenuAberto(false)}
         >
-          X
-        </Button>
+          <Lucide name="X" className="lucide" />
+        </button>
 
         <Link
           href="/cCategoria"
           className={styles.menuLink}
         >
-          + Categoria
+          Cadastrar Categoria
         </Link>
 
         <Link
           href="/cProduto"
           className={styles.menuLink}
         >
-          + Produto
+          Cadastrar Produto
         </Link>
 
         <Link
           href="/cUsuario"
           className={styles.menuLink}
         >
-          + Usuário
+          Cadastrar Usuário
+        </Link>
+        
+        <Link
+          href="/historico"
+          className={styles.menuLink}
+        >
+          Histórico
         </Link>
 
         <Link
@@ -94,13 +103,6 @@ const Header = () => {
         <div className="container row">
           {/* <div> do botão que redireciona para a home */}
           <div className="row">
-            <button
-              type="button"
-              className={styles.menuIcon}
-              onClick={() => setMenuAberto(true)}
-            >
-              <Lucide name="Menu" className="lucide" />
-            </button>
             <Link href="/home">
               <img
                 className="img"
@@ -134,6 +136,13 @@ const Header = () => {
               )}
             </div>
             <TrocaTema />
+            <button
+              type="button"
+              className={styles.menuIcon}
+              onClick={() => setMenuAberto(true)}
+            >
+              <Lucide name="Menu" className="lucide" />
+            </button>
           </div>
         </div>
       </header>
