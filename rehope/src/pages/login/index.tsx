@@ -13,9 +13,9 @@ const Login = () => {
   const [ativo, setAtivo] = useState<boolean>(false);
 
   const imagens = [
-  "/imgs/ImagemDoLogin.png",
-  "/imgs/ImagemDoLogin2.png",
-  "/imgs/ImagemDoLogin3.png",
+    "/imgs/ImagemDoLogin.png",
+    "/imgs/ImagemDoLogin2.png",
+    "/imgs/ImagemDoLogin3.png",
   ];
 
   const [imagemAtual, setImagemAtual] = useState(0);
@@ -94,6 +94,12 @@ const Login = () => {
         </div>
 
         <form className="form" onSubmit={autenticar}>
+          <img
+            className="img"
+            id={styles.img}
+            src="/imgs/LogoBranca.svg"
+            alt="Logo do site"
+          />
           <h1 className="h1">Login</h1>
 
           {/* Campo de E-mail */}
@@ -134,7 +140,10 @@ const Login = () => {
               className="btn_icon"
               onClick={() => setAtivo(!ativo)}
             >
-              <Lucide name={ativo ? "EyeOff" : "Eye"} className="reset_lucide"/>
+              <Lucide
+                name={ativo ? "EyeOff" : "Eye"}
+                className="reset_lucide"
+              />
             </button>
           </div>
 

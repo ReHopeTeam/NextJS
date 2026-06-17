@@ -6,30 +6,48 @@ const Footer = () => {
   const router = useRouter();
 
   return (
-    <footer id={styles.footer}>
-			<div className="container row">
-				{/* <div> do botão que redireciona para a home */}
+    <footer id={styles.footer} className="main_footer">
+      <div className="container row">
+        {/* <div> do botão que redireciona para a home */}
         <div>
           <Link href="/home">
             <img
               className="img"
               id={styles.img}
-              src="/imgs/Logo.svg"
+              src="/imgs/LogoBranca.svg"
               alt="Logo do site"
             />
           </Link>
         </div>
-				{/* <div> do botão que redireciona para a home */}
-				<div className="row">
-          <Link className={styles.social_link} href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">
-            <img className={styles.social_icon} src="/imgs/Instagram.svg" alt="Instagram da ReHope" />
+        {/* <div> do botão que redireciona para a home */}
+        <div className="row">
+          <Link
+            className={styles.social_link}
+            href="https://www.instagram.com"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img
+              className={styles.social_icon}
+              src="/imgs/Instagram.svg"
+              alt="Instagram da ReHope"
+            />
           </Link>
-          <Link className={styles.social_link} href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">
-            <img className={styles.social_icon} src="/imgs/Facebook.svg" alt="Facebook da ReHope" />
+          <Link
+            className={styles.social_link}
+            href="https://www.facebook.com"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img
+              className={styles.social_icon}
+              src="/imgs/Facebook.svg"
+              alt="Facebook da ReHope"
+            />
           </Link>
-				</div>
-			</div>
-		</footer>
+        </div>
+      </div>
+    </footer>
   );
 };
 

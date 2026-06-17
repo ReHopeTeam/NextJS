@@ -1,21 +1,15 @@
-import { useEffect, useState, useRef, Fragment } from "react";
+import { useEffect, useState, useRef } from "react";
 import styles from "./lista.module.css";
 import Card from "@/components/cards/cards";
 import Lucide from "@/utils/lucide";
 import { listar } from "@/pages/api/mockService";
 import { erro } from "@/utils/toast";
-import Button from "../button/button";
 
 type Produto = {
   produtoID: number;
   nome: string;
   preco: string;
-};
-
-type Status = {
-  padrao: boolean;
-  ativo: boolean;
-  inativo: boolean;
+  status: boolean; // Mantido o booleano que seus cards usam
 };
 
 const LABELS_ORDENACAO: Record<string, string> = {
@@ -26,14 +20,7 @@ const LABELS_ORDENACAO: Record<string, string> = {
   "alfabetica-contraria": "Z-A",
 };
 
-const ICONES_ORDENACAO: Record<
-  string,
-  | "Filter"
-  | "ChartNoAxesColumnDecreasing"
-  | "ChartNoAxesColumnIncreasing"
-  | "ArrowDownAZ"
-  | "ArrowDownZA"
-> = {
+const ICONES_ORDENACAO: Record<string, any> = {
   "": "Filter",
   menor: "ChartNoAxesColumnDecreasing",
   maior: "ChartNoAxesColumnIncreasing",
@@ -48,7 +35,11 @@ const Lista = () => {
   const [produto, setProduto] = useState<Produto[]>([]);
   const [selectAberto, setSelectAberto] = useState(false);
   const selectRef = useRef<HTMLDivElement>(null);
-  const [status, setStatus] = useState<Status[]>([]);
+
+  // Estado simples para saber qual tipo de filtro de status está ativo por palavra-chave
+  const [statusFiltro, setStatusFiltro] = useState<
+    "todos" | "ativo" | "inativo"
+  >("todos");
 
   useEffect(() => {
     listarJogo();
@@ -63,7 +54,6 @@ const Lista = () => {
         setSelectAberto(false);
       }
     };
-
     document.addEventListener("mousedown", fecharAoClicarFora);
     return () => document.removeEventListener("mousedown", fecharAoClicarFora);
   }, []);
@@ -85,12 +75,24 @@ const Lista = () => {
     );
   };
 
-  const produtosFiltrados = produto.filter((p) =>
-    p.nome.toLowerCase().includes(pesquisa.toLowerCase()),
-  );
+  // ==========================================
+  // FILTRAGEM COMBINADA (PESQUISA + STATUS)
+  // ==========================================
+  const produtosFiltrados = produto.filter((p) => {
+    const correspondePesquisa = p.nome
+      .toLowerCase()
+      .includes(pesquisa.toLowerCase());
 
+    // Filtra usando o valor booleano (p.ativo) do seu produto
+    if (statusFiltro === "ativo")
+      return correspondePesquisa && p.status === true;
+    if (statusFiltro === "inativo")
+      return correspondePesquisa && p.status === false;
+    return correspondePesquisa; // "todos" exibe tudo
+  });
+
+  // Ordenação
   const produtosOrdenados = [...produtosFiltrados];
-
   if (ordenacao === "menor") {
     produtosOrdenados.sort(
       (a, b) => converterPreco(a.preco) - converterPreco(b.preco),
@@ -105,9 +107,9 @@ const Lista = () => {
     produtosOrdenados.sort((a, b) => b.nome.localeCompare(a.nome));
   }
 
+  // Paginação
   const indiceInicial = (paginaAtual - 1) * itensPorPagina;
   const indiceFinal = indiceInicial + itensPorPagina;
-
   const produtosPaginados = produtosOrdenados.slice(indiceInicial, indiceFinal);
   const totalPaginas = Math.ceil(produtosOrdenados.length / itensPorPagina);
 
@@ -115,7 +117,6 @@ const Lista = () => {
     paginaAtual === totalPaginas
       ? itensPorPagina - produtosPaginados.length
       : 0;
-
   const cardsExibidos = [
     ...produtosPaginados,
     ...Array(cardsFantasmas).fill(null),
@@ -127,34 +128,28 @@ const Lista = () => {
     setSelectAberto(false);
   };
 
-  // ========================
-  // LÓGICA DE PAGINAÇÃO FIXA
-  // ========================
-  const maxBotoesVisiveis = 5;
+  const handleMudarStatus = (novoStatus: "todos" | "ativo" | "inativo") => {
+    setStatusFiltro(novoStatus);
+    setPaginaAtual(1);
+  };
 
+  const maxBotoesVisiveis = 5;
   const obterIntervaloPaginas = () => {
-    // Se o total de páginas for menor que o máximo permitido, mostra todas
     if (totalPaginas <= maxBotoesVisiveis) {
       return Array.from({ length: totalPaginas }, (_, i) => i + 1);
     }
-
-    // Calcula metade dos botões para tentar centralizar a página atual
     const metadeJulgada = Math.floor(maxBotoesVisiveis / 2);
     let inicio = paginaAtual - metadeJulgada;
     let fim = paginaAtual + metadeJulgada;
 
-    // Ajusta o início se bater na borda esquerda (início da paginação)
     if (inicio < 1) {
       inicio = 1;
       fim = maxBotoesVisiveis;
     }
-
-    // Ajusta o fim se bater na borda direita (fim da paginação)
     if (fim > totalPaginas) {
       fim = totalPaginas;
       inicio = totalPaginas - maxBotoesVisiveis + 1;
     }
-
     return Array.from({ length: fim - inicio + 1 }, (_, i) => inicio + i);
   };
 
@@ -197,7 +192,6 @@ const Lista = () => {
                 : "translateY(-50%)",
             }}
           />
-
           <div
             className="select"
             tabIndex={0}
@@ -211,54 +205,77 @@ const Lista = () => {
           >
             <span>{LABELS_ORDENACAO[ordenacao]}</span>
           </div>
-
           <label className="label">Filtrar</label>
 
           {selectAberto && (
             <ul className="dropdown_options" style={{ display: "block" }}>
               <li onClick={() => handleSelecionarOrdenacao("")}>
-                <Lucide name="RectangleEllipsis" className="reset_lucide" />
+                <Lucide name="RectangleEllipsis" className="reset_lucide" />{" "}
                 Nenhum
               </li>
               <li onClick={() => handleSelecionarOrdenacao("menor")}>
                 <Lucide
                   name="ChartNoAxesColumnDecreasing"
                   className="reset_lucide"
-                />
+                />{" "}
                 Menor Preço
               </li>
               <li onClick={() => handleSelecionarOrdenacao("maior")}>
                 <Lucide
                   name="ChartNoAxesColumnIncreasing"
                   className="reset_lucide"
-                />
+                />{" "}
                 Maior Preço
               </li>
               <li onClick={() => handleSelecionarOrdenacao("alfabetica")}>
-                <Lucide name="ArrowDownAZ" className="reset_lucide" />
-                A-Z
+                <Lucide name="ArrowDownAZ" className="reset_lucide" /> A-Z
               </li>
               <li
                 onClick={() =>
                   handleSelecionarOrdenacao("alfabetica-contraria")
                 }
               >
-                <Lucide name="ArrowDownZA" className="reset_lucide" />
-                Z-A
+                <Lucide name="ArrowDownZA" className="reset_lucide" /> Z-A
               </li>
             </ul>
           )}
         </div>
 
-        {/* Botões de auxílios de pesquisa */}
+        {/* Botões com controle de opacidade inline */}
         <div className="row">
-          <button id={styles.btn_inativo}>
+          {/* Botão Inativo */}
+          <button
+            id={styles.btn_inativo}
+            onClick={() => handleMudarStatus("inativo")}
+            style={{
+              opacity: statusFiltro === "inativo" ? 1 : 0.5,
+              transition: "opacity 0.2s ease",
+            }}
+          >
             <Lucide name="ShieldX" className="reset_lucide" />
           </button>
-          <button id={styles.btn_ativo}>
+
+          {/* Botão Ativo */}
+          <button
+            id={styles.btn_ativo}
+            onClick={() => handleMudarStatus("ativo")}
+            style={{
+              opacity: statusFiltro === "ativo" ? 1 : 0.5,
+              transition: "opacity 0.2s ease",
+            }}
+          >
             <Lucide name="ShieldCheck" className="reset_lucide" />
           </button>
-          <button id={styles.btn_padrao}>
+
+          {/* Botão Padrão */}
+          <button
+            id={styles.btn_padrao}
+            onClick={() => handleMudarStatus("todos")}
+            style={{
+              opacity: statusFiltro === "todos" ? 1 : 0.5,
+              transition: "opacity 0.2s ease",
+            }}
+          >
             <Lucide name="ShieldEllipsis" className="reset_lucide" />
           </button>
         </div>
@@ -270,16 +287,15 @@ const Lista = () => {
           <Card
             key={item?.produtoID ?? `fantasma-${index}`}
             fantasma={!item}
-            {...(item || {})}
+            {...(item || {})} // Aqui o booleano `ativo` do item é repassado perfeitamente para o Card
           />
         ))}
       </ul>
 
-      {/* Paginação Estabilizada */}
+      {/* Paginação */}
       {totalPaginas > 1 && (
         <nav>
           <ul id={styles.paginacao}>
-            {/* Botão Começo */}
             <li
               className="btn small_width"
               onClick={() => paginaAtual > 1 && setPaginaAtual(1)}
@@ -290,8 +306,6 @@ const Lista = () => {
             >
               {"<<"}
             </li>
-
-            {/* Botão Anterior */}
             <li
               className="btn small_width"
               onClick={() => paginaAtual > 1 && setPaginaAtual(paginaAtual - 1)}
@@ -302,8 +316,6 @@ const Lista = () => {
             >
               {"<"}
             </li>
-
-            {/* Renderização das páginas calculadas */}
             {paginasVisiveis.map((pagina) => (
               <li
                 key={`pag-${pagina}`}
@@ -313,8 +325,6 @@ const Lista = () => {
                 {pagina}
               </li>
             ))}
-
-            {/* Botão Próximo */}
             <li
               className="btn small_width"
               onClick={() =>
@@ -328,8 +338,6 @@ const Lista = () => {
             >
               {">"}
             </li>
-
-            {/* Botão Último */}
             <li
               className="btn small_width"
               onClick={() =>

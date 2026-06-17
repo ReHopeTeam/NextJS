@@ -18,6 +18,7 @@
 }
 
 #img {
+  min-width: 120px;
   width: 20%;
 }
 
@@ -31,14 +32,14 @@
 #div {
   display: flex;
   align-items: center;
-  gap: 1vw;
+  gap: 2vw;
 }
 
 #user_info {
-  width: 200px;
+  min-width: 200px;
   height: 60px;
   color: var(--branco);
-  padding: var(--padding-md);
+  padding: var(--padding-sm);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
   background: linear-gradient(
@@ -51,6 +52,7 @@
 
 #user_info:hover {
   z-index: 2;
+  transform: none;
   box-shadow: var(--shadow-md);
 }
 

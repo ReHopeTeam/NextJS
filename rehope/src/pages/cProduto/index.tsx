@@ -2,7 +2,6 @@ import Button from "@/components/button/button";
 import Footer from "@/components/footer/footer";
 import Header from "@/components/header/header";
 import Lucide from "@/utils/lucide";
-import styles from "./cProduto.module.css";
 import { ChangeEvent, useEffect, useState, useRef } from "react";
 import Link from "next/link";
 
@@ -146,16 +145,21 @@ const CadastroProduto = () => {
     const aberto = selectAberto[campo];
 
     // Encontra a label correspondente ao valor selecionado atualmente
-    const labelExibida = config.opcoes.find(o => o.value === valorAtual)?.label || "";
+    const labelExibida =
+      config.opcoes.find((o) => o.value === valorAtual)?.label || "";
 
     return (
-      <div className={`campo_select ${aberto ? "open" : ""} ${valorAtual ? "has-value" : ""}`}>
+      <div
+        className={`campo_select ${aberto ? "open" : ""} ${valorAtual ? "has-value" : ""}`}
+      >
         <Lucide
           name={config.icone}
           className="lucide rotate"
           style={{
             transition: "transform 0.2s ease",
-            transform: aberto ? "translateY(-50%) rotate(180deg)" : "translateY(-50%)",
+            transform: aberto
+              ? "translateY(-50%) rotate(180deg)"
+              : "translateY(-50%)",
           }}
         />
 
@@ -182,7 +186,10 @@ const CadastroProduto = () => {
               Nenhum
             </li>
             {config.opcoes.map((opcao) => (
-              <li key={opcao.value} onClick={() => handleSelecionarOpcao(campo, opcao.value)}>
+              <li
+                key={opcao.value}
+                onClick={() => handleSelecionarOpcao(campo, opcao.value)}
+              >
                 {opcao.label}
               </li>
             ))}
@@ -203,14 +210,26 @@ const CadastroProduto = () => {
                 <label htmlFor="upload-foto" className="input_upload">
                   {preview ? (
                     <div className="relative_pos full_size_preview">
-                      <img src={preview} alt="Preview" className="preview_img" />
-                      <button type="button" onClick={handleRemoveImage} className="btn_delete">
+                      <img
+                        src={preview}
+                        alt="Preview"
+                        className="preview_img"
+                      />
+                      <button
+                        type="button"
+                        onClick={handleRemoveImage}
+                        className="btn_delete"
+                      >
                         X
                       </button>
                     </div>
                   ) : (
                     <>
-                      <Lucide name="Upload" size={24} className="upload_lucide" />
+                      <Lucide
+                        name="Upload"
+                        size={24}
+                        className="upload_lucide"
+                      />
                       <span>Escolher Imagem</span>
                     </>
                   )}
@@ -225,7 +244,13 @@ const CadastroProduto = () => {
               </div>
               <div className="campo_form">
                 <Lucide name="RectangleEllipsis" className="lucide" />
-                <input type="text" id="codigo" placeholder=" " className="input small" required />
+                <input
+                  type="text"
+                  id="codigo"
+                  placeholder=" "
+                  className="input small"
+                  required
+                />
                 <label htmlFor="codigo" className="label">
                   Código
                 </label>
@@ -235,21 +260,41 @@ const CadastroProduto = () => {
             <div className="column full_height">
               <div className="campo_form">
                 <Lucide name="ALargeSmall" className="lucide" />
-                <input type="text" id="titulo" placeholder=" " className="input" required />
+                <input
+                  type="text"
+                  id="titulo"
+                  placeholder=" "
+                  className="input"
+                  required
+                />
                 <label htmlFor="titulo" className="label">
                   Título
                 </label>
               </div>
               <div className="campo_form">
                 <Lucide name="Tag" className="lucide" />
-                <input type="text" id="preco" placeholder=" " className="input" required />
+                <input
+                  type="text"
+                  id="preco"
+                  placeholder=" "
+                  className="input"
+                  required
+                />
                 <label htmlFor="preco" className="label">
                   Preço
                 </label>
               </div>
               <div className="campo_form">
-                <Lucide name="MessageSquareText" className="lucide desc_lucide" />
-                <textarea id="descricao" placeholder=" " className="textarea" required />
+                <Lucide
+                  name="MessageSquareText"
+                  className="lucide desc_lucide"
+                />
+                <textarea
+                  id="descricao"
+                  placeholder=" "
+                  className="textarea"
+                  required
+                />
                 <label htmlFor="descricao" className="label">
                   Descrição
                 </label>
@@ -270,7 +315,7 @@ const CadastroProduto = () => {
             <Link href="/home" className="btn2">
               Voltar
             </Link>
-            <Button id={styles.button} children="Salvar" />
+            <Button children="Salvar" />
           </div>
         </section>
       </main>
