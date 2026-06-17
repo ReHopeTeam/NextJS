@@ -36,7 +36,7 @@ const Card = ({
               <span className="title dark">⟬ ??? ⟭</span>
             </div>
 
-            <p className="title">R$ 00,00</p>
+            <h3 className="title"></h3>
 
             <div className="row no_gap to_column" id={styles.botoes}>
               <Button className={`${styles.btn_card} ${styles.excluir}`}>
@@ -64,7 +64,7 @@ const Card = ({
               <span className="title dark">{nome}</span>
             </div>
 
-            <h3 className="title dark">{preco}</h3>
+            <h3 className="title">{preco}</h3>
 
             <div className="row no_gap to_column">
               <Button className={`${styles.btn_card} ${styles.excluir}`}>

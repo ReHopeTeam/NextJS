@@ -5,6 +5,8 @@ import { TrocaTema } from "@/utils/trocaTema";
 import { useEffect, useState } from "react";
 import { logout, obterUsuarioAutenticado } from "@/pages/api/authService";
 import Button from "../button/button";
+import { createPortal } from "react-dom";
+import Lucide from "@/utils/lucide";
 
 interface Token {
   id: string;
@@ -15,10 +17,13 @@ interface Token {
 const Header = () => {
   const [usuario, setUsuario] = useState<Token | null>(null);
   const [estaAutenticado, setEstaAutenticado] = useState(false);
+  const [menuAberto, setMenuAberto] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   const router = useRouter();
 
   useEffect(() => {
+    setMounted(true);
     const dados = obterUsuarioAutenticado();
 
     if (dados) {
@@ -38,58 +43,107 @@ const Header = () => {
     router.push("/login");
   };
 
+  const menuLateral = (
+    <>
+      <div
+        className={styles.overlay}
+        onClick={() => setMenuAberto(false)}
+      />
+
+      <aside className={styles.sidebar}>
+        <Button
+          onClick={() => setMenuAberto(false)}
+        >
+          X
+        </Button>
+
+        <Link
+          href="/cCategoria"
+          className={styles.menuLink}
+        >
+          + Categoria
+        </Link>
+
+        <Link
+          href="/cProduto"
+          className={styles.menuLink}
+        >
+          + Produto
+        </Link>
+
+        <Link
+          href="/cUsuario"
+          className={styles.menuLink}
+        >
+          + Usuário
+        </Link>
+
+        <Link
+          href="/home"
+          className={styles.menuLink}
+        >
+          Tela Inicial
+        </Link>
+      </aside>
+    </>
+  );
+
   return (
-    <header id={styles.header} className="main_header">
-      <div className="container row">
-        {/* <div> do botão que redireciona para a home */}
-        <div>
-          <Link href="/home">
-            <img
-              className="img"
-              id={styles.img}
-              src="/imgs/Logo.svg"
-              alt="Logo do site"
-            />
-          </Link>
-        </div>
-        {/* "botões" na direita da página */}
-        <div id={styles.div}>
-          <Link className="row no_gap link" href="/cCategoria">
-            <span>+</span> <p className="white">Categoria</p>
-          </Link>
-
-          <Link className="row no_gap link" href="/cProduto">
-            <span>+</span> <p className="white">Produto</p>
-          </Link>
-
-          <Link className="row no_gap link" href="/cUsuario">
-            <span>+</span> <p className="white">Usuário</p>
-          </Link>
+    <>
+      <header id={styles.header} className="main_header">
+        <div className="container row">
+          {/* <div> do botão que redireciona para a home */}
           <div className="row">
-            {usuario ? (
-              <Button
-                className="column no_gap"
-                id={styles.user_info}
-                onClick={handleLogout}
-              >
-                <h4 className="h4">{usuario.nome}</h4>
-                <p className="p">{usuario.email}</p>
-              </Button>
-            ) : (
-              <Button
-                className="column no_gap"
-                id={styles.user_info}
-                onClick={handleLogout}
-              >
-                <h4 className="h4">Nome</h4>
-                <p className="p">email@email.com</p>
-              </Button>
-            )}
+            <button
+              type="button"
+              className={styles.menuIcon}
+              onClick={() => setMenuAberto(true)}
+            >
+              <Lucide name="Menu" className="lucide" />
+            </button>
+            <Link href="/home">
+              <img
+                className="img"
+                id={styles.img}
+                src="/imgs/Logo.svg"
+                alt="Logo do site"
+              />
+            </Link>
           </div>
-          <TrocaTema />
+          {/* "botões" na direita da página */}
+          <div id={styles.div}>
+            <div className="row">
+              {usuario ? (
+                <Button
+                  className="column no_gap"
+                  id={styles.user_info}
+                  onClick={handleLogout}
+                >
+                  <h4 className="h4">{usuario.nome}</h4>
+                  <p className="p">{usuario.email}</p>
+                </Button>
+              ) : (
+                <Button
+                  className="column no_gap"
+                  id={styles.user_info}
+                  onClick={handleLogout}
+                >
+                  <h4 className="h4">Nome</h4>
+                  <p className="p">email@email.com</p>
+                </Button>
+              )}
+            </div>
+            <TrocaTema />
+          </div>
         </div>
-      </div>
-    </header>
+      </header>
+      {mounted &&
+        menuAberto &&
+        createPortal(
+          menuLateral,
+          document.body
+        )}
+    </>
   );
 };
 
