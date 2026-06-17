@@ -7,16 +7,6 @@
       var(--verde-primario)
     ),
     var(--verde-primario);
-  clip-path: path(
-    "M1920 264.512H0.000244141V34.0186C0.000244141 34.0186 301.5 -21.1275 499.5 45.0186C627.716 87.8519 674 34.0186 835.5 29.5186C997 25.0186 1235 125.019 1381 45.0186C1527 -34.9814 1920 16.0186 1920 16.0186V264.512Z"
-  );
-}
-
-#footer::after {
-  content: "";
-  position: absolute;
-  width: 100%;
-  background: inherit;
 }
 
 #img {

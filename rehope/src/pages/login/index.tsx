@@ -100,7 +100,7 @@ const Login = () => {
             src="/imgs/LogoBranca.svg"
             alt="Logo do site"
           />
-          <h1 className="h1">Login</h1>
+          <h1 className="h1" id={styles.h1}>Login</h1>
 
           {/* Campo de E-mail */}
           <div className="campo_form">
