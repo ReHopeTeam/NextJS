@@ -46,8 +46,10 @@
 
 #espacamento1 {
   gap: 5%;
+  padding: 2% 0%;
 }
 
 #espacamento2 {
-  
+  gap: 10%;
+  padding: 2% 5%;
 }

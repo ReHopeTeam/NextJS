@@ -31,4 +31,11 @@
   width: 4rem;
   height: auto;
   filter: invert(1);
+  transition: filter 0.1s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.social_icon:hover {
+  transform: scale(1.2);
+  filter: invert(69%) sepia(100%) saturate(2000%) hue-rotate(100deg)
+    brightness(105%) contrast(105%);
 }

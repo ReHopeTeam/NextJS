@@ -1,4 +1,5 @@
 import Footer from "@/components/footer/footer";
+import Button from "@/components/button/button";
 import Header from "@/components/header/header";
 import styles from "./detalhe.module.css";
 import { erro } from "@/utils/toast";
@@ -72,7 +73,7 @@ const Detalhe = () => {
               <h3>{produto?.preco}</h3>
               <p>{produto?.descricao}</p>
             </div>
-            <div className="column start">
+            <div className="column start" id={styles.espacamento2}>
               <div className="row">
                 <Lucide name="Type" className="reset_lucide" />
                 <div>
@@ -110,9 +111,12 @@ const Detalhe = () => {
               </div>
             </div>
           </article>
-          <Link href="/home" className="btn2">
-            Voltar
-          </Link>
+          <div className="row">
+            <Link href="/home" className="btn2">
+              Voltar
+            </Link>
+            <Button id={styles.button} children="Editar" />
+          </div>
         </section>
       </main>
       <Footer />
