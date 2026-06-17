@@ -1,6 +1,6 @@
 import styles from "./login.module.css";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { login } from "../api/authService";
 import { erro, notificacao } from "@/utils/toast";
 import Lucide from "@/utils/lucide";
@@ -11,6 +11,21 @@ const Login = () => {
   const [email, setEmail] = useState<string>("");
   const [senha, setSenha] = useState<string>("");
   const [ativo, setAtivo] = useState<boolean>(false);
+
+  const imagens = [
+  "/imgs/ImagemDoLogin.png",
+  "/imgs/ImagemDoLogin2.png",
+  "/imgs/ImagemDoLogin3.png",
+  ];
+
+  const [imagemAtual, setImagemAtual] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setImagemAtual((prev) => (prev + 1) % imagens.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
 
   const router = useRouter();
 
@@ -67,7 +82,7 @@ const Login = () => {
 
       <div className="img_wrapper">
         <img
-          src="/imgs/ImagemDoLogin.png"
+          src={imagens[imagemAtual]}
           alt="Imagem do Bazar ReHope"
           id={styles.login_img}
         />
