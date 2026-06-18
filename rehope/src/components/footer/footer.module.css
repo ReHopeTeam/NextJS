@@ -1,16 +1,40 @@
 #footer {
   min-height: 15vh;
-  background:
-    radial-gradient(
-      circle at 10% 75%,
-      var(--verde-secundario),
-      var(--verde-primario)
-    ),
-    var(--verde-primario);
+  background: transparent;
+  position: relative;
+}
+
+#footer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+
+  background: linear-gradient(
+    to right,
+    var(--verde-primario) 0%,
+    var(--verde-primario) 10%,
+    transparent 25%,
+    transparent 75%,
+    var(--verde-primario) 90%,
+    var(--verde-primario) 100%
+  );
 }
 
 #img {
   width: 7rem;
+  filter: invert(20%) sepia(14%) saturate(1200%) hue-rotate(76deg) brightness(45%) contrast(105%);
+  transition: transform 0.2s ease;
+}
+
+#img:hover {
+  transform: translateY(-2px) scale(1.1);
+}
+
+:global(html.darkmode) #img {
+  filter: brightness(2);
 }
 
 .social_link {
@@ -18,15 +42,16 @@
 }
 
 .social_icon {
-  width: 2rem;
+  width: 3rem;
   height: auto;
+  filter: invert(20%) sepia(14%) saturate(1200%) hue-rotate(76deg) brightness(45%) contrast(105%);
+  transition: transform 0.2s ease;
+}
+
+:global(html.darkmode) .social_icon {
   filter: grayscale(1) brightness(2);
-  transition:
-    filter 0.2s ease,
-    transform 0.2s ease;
 }
 
 .social_icon:hover {
-  filter: none;
-  transform: translateY(-2px);
+  transform: translateY(-2px) scale(1.1);
 }
