@@ -18,8 +18,9 @@ const Header = () => {
   const [usuario, setUsuario] = useState<Token | null>(null);
   const [estaAutenticado, setEstaAutenticado] = useState(false);
   const [menuAberto, setMenuAberto] = useState(false);
-  const [mounted, setMounted] = useState(false);
+  const [estaFechando, setEstaFechando] = useState(false);
 
+  const [mounted, setMounted] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -35,7 +36,6 @@ const Header = () => {
     }
   }, []);
 
-  // Função para gerenciar o clique de logout de forma limpa
   const handleLogout = async () => {
     await logout();
     setUsuario(null);
@@ -43,18 +43,26 @@ const Header = () => {
     router.push("/login");
   };
 
+  const handleFecharMenu = () => {
+    setEstaFechando(true);
+    setTimeout(() => {
+      setMenuAberto(false);
+      setEstaFechando(false);
+    }, 300);
+  };
+
   const menuLateral = (
     <>
       <div
-        className={styles.overlay}
-        onClick={() => setMenuAberto(false)}
+        className={estaFechando ? styles.overlayClosing : styles.overlay}
+        onClick={handleFecharMenu}
       />
 
-      <aside className={styles.sidebar}>
+      <aside className={estaFechando ? styles.sidebarClosing : styles.sidebar}>
         <button
           type="button"
           className={styles.closeButton}
-          onClick={() => setMenuAberto(false)}
+          onClick={handleFecharMenu}
         >
           <Lucide name="X" className="lucide" />
         </button>
@@ -62,48 +70,49 @@ const Header = () => {
         <Link
           href="/cCategoria"
           className={styles.menuLink}
+          onClick={handleFecharMenu}
         >
           Cadastrar Categoria
         </Link>
-
         <Link
           href="/cLocalizacao"
           className={styles.menuLink}
+          onClick={handleFecharMenu}
         >
           Cadastrar Localização
         </Link>
-
         <Link
           href="/cProduto"
           className={styles.menuLink}
+          onClick={handleFecharMenu}
         >
           Cadastrar Produto
         </Link>
-
         <Link
           href="/cTProduto"
           className={styles.menuLink}
+          onClick={handleFecharMenu}
         >
           Cadastrar Tipo
         </Link>
-
         <Link
           href="/cUsuario"
           className={styles.menuLink}
+          onClick={handleFecharMenu}
         >
           Cadastrar Usuário
         </Link>
-        
         <Link
           href="/historico"
           className={styles.menuLink}
+          onClick={handleFecharMenu}
         >
           Histórico
         </Link>
-
         <Link
           href="/home"
           className={styles.menuLink}
+          onClick={handleFecharMenu}
         >
           Tela Inicial
         </Link>
@@ -115,7 +124,6 @@ const Header = () => {
     <>
       <header id={styles.header} className="main_header">
         <div className="container row">
-          {/* <div> do botão que redireciona para a home */}
           <div className="row">
             <Link href="/home">
               <img
@@ -126,7 +134,7 @@ const Header = () => {
               />
             </Link>
           </div>
-          {/* "botões" na direita da página */}
+
           <div id={styles.div}>
             <div className="row">
               {usuario ? (
@@ -160,12 +168,8 @@ const Header = () => {
           </div>
         </div>
       </header>
-      {mounted &&
-        menuAberto &&
-        createPortal(
-          menuLateral,
-          document.body
-        )}
+
+      {mounted && menuAberto && createPortal(menuLateral, document.body)}
     </>
   );
 };

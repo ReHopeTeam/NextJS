@@ -18,7 +18,7 @@ interface Produto {
   categoriaID: number;
   localizacaoID: number;
   usuarioID: string;
-};
+}
 
 const LABELS_ORDENACAO: Record<string, string> = {
   "": "",
@@ -44,7 +44,9 @@ const Lista = () => {
   const [selectAberto, setSelectAberto] = useState(false);
   const selectRef = useRef<HTMLDivElement>(null);
 
-  // Estado simples para saber qual tipo de filtro de status está ativo por palavra-chave
+  // 1. O número de itens por página agora é um estado reativo (padrão iniciado em 5)
+  const [itensPorPagina, setItensPorPagina] = useState<number>(5);
+
   const [statusFiltro, setStatusFiltro] = useState<
     "todos" | "ativo" | "inativo"
   >("todos");
@@ -75,8 +77,6 @@ const Lista = () => {
     }
   }
 
-  const itensPorPagina = 5;
-
   // ==========================================
   // FILTRAGEM COMBINADA (PESQUISA + STATUS)
   // ==========================================
@@ -85,12 +85,11 @@ const Lista = () => {
       .toLowerCase()
       .includes(pesquisa.toLowerCase());
 
-    // Filtra usando o valor booleano (p.ativo) do seu produto
     if (statusFiltro === "ativo")
       return correspondePesquisa && p.statusProduto === true;
     if (statusFiltro === "inativo")
       return correspondePesquisa && p.statusProduto === false;
-    return correspondePesquisa; // "todos" exibe tudo
+    return correspondePesquisa;
   });
 
   // Ordenação
@@ -104,9 +103,13 @@ const Lista = () => {
       (a, b) => desformatarPreco(b.preco) - desformatarPreco(a.preco),
     );
   } else if (ordenacao === "alfabetica") {
-    produtosOrdenados.sort((a, b) => a.nomeProduto.localeCompare(b.nomeProduto));
+    produtosOrdenados.sort((a, b) =>
+      a.nomeProduto.localeCompare(b.nomeProduto),
+    );
   } else if (ordenacao === "alfabetica-contraria") {
-    produtosOrdenados.sort((a, b) => b.nomeProduto.localeCompare(a.nomeProduto));
+    produtosOrdenados.sort((a, b) =>
+      b.nomeProduto.localeCompare(a.nomeProduto),
+    );
   }
 
   // Paginação
@@ -121,7 +124,7 @@ const Lista = () => {
       : 0;
   const cardsExibidos = [
     ...produtosPaginados,
-    ...Array(cardsFantasmas).fill(null),
+    ...Array(cardsFantasmas > 0 ? cardsFantasmas : 0).fill(null),
   ];
 
   const handleSelecionarOrdenacao = (valor: string) => {
@@ -132,6 +135,17 @@ const Lista = () => {
 
   const handleMudarStatus = (novoStatus: "todos" | "ativo" | "inativo") => {
     setStatusFiltro(novoStatus);
+    setPaginaAtual(1);
+  };
+
+  // 2. Controla a alteração de quantidade, resetando para a página 1 para evitar bugs de exibição
+  const handleMudarItensPorPagina = (valor: string) => {
+    const qtd = parseInt(valor, 10);
+    if (!isNaN(qtd) && qtd > 0) {
+      setItensPorPagina(qtd);
+    } else if (valor === "") {
+      setItensPorPagina(1); // Evita deixar o input completamente quebrado e zerado
+    }
     setPaginaAtual(1);
   };
 
@@ -243,9 +257,31 @@ const Lista = () => {
           )}
         </div>
 
-        {/* Botões com controle de opacidade inline */}
-        <div className="row">
-          {/* Botão Inativo */}
+        {/* Botões de Filtros e o Novo Input de Quantidade */}
+        <div className="row" style={{ alignItems: "center", gap: "1rem" }}>
+          {/* 3. Input Number para alterar dinamicamente a quantidade de itens por página */}
+          <div
+            className="campo_form"
+            style={{ minWidth: "90px", width: "90px", margin: 0 }}
+          >
+            <input
+              type="number"
+              id="itensPorPagina"
+              className="input"
+              min="1"
+              value={itensPorPagina}
+              onChange={(e) => handleMudarItensPorPagina(e.target.value)}
+              style={{ textAlign: "center", paddingLeft: "15px" }}
+            />
+            <label
+              htmlFor="itensPorPagina"
+              className="label"
+              style={{ left: "15px" }}
+            >
+              Qtd.
+            </label>
+          </div>
+
           <button
             id={styles.btn_inativo}
             onClick={() => handleMudarStatus("inativo")}
@@ -256,7 +292,6 @@ const Lista = () => {
             <Lucide name="ShieldX" className="reset_lucide" />
           </button>
 
-          {/* Botão Ativo */}
           <button
             id={styles.btn_ativo}
             onClick={() => handleMudarStatus("ativo")}
@@ -267,7 +302,6 @@ const Lista = () => {
             <Lucide name="ShieldCheck" className="reset_lucide" />
           </button>
 
-          {/* Botão Padrão */}
           <button
             id={styles.btn_padrao}
             onClick={() => handleMudarStatus("todos")}

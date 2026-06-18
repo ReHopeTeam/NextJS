@@ -2,7 +2,6 @@ import styles from "./home.module.css";
 import Header from "@/components/header/header";
 import Footer from "@/components/footer/footer";
 import Lista from "@/components/lista/lista";
-import Link from "next/link";
 
 const Home = () => {
   return (

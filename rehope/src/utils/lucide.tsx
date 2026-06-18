@@ -28,7 +28,8 @@ import {
   ShieldCheck,
   ShieldX,
   Menu,
-  X
+  X,
+  NotepadText,
 } from "lucide-react";
 
 const icons = {
@@ -60,7 +61,8 @@ const icons = {
   ShieldCheck,
   ShieldX,
   Menu,
-  X
+  X,
+  NotepadText,
 };
 
 type IconName = keyof typeof icons;

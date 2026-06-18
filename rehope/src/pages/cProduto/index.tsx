@@ -176,15 +176,12 @@ const CadastroProduto = () => {
     }
 
     if (telaEditar) {
-      // 👇 CORRIGIDO: Passando o 'id' diretamente como String (Guid), sem envolver em Number()
       await editarProduto(String(id), dados); 
       notificacao("Produto editado com sucesso!");
     } else {
       await cadastrarProduto(dados);
       notificacao("Produto cadastrado com sucesso!");
     }
-
-    router.push("/home");
   } catch (error: any) {
     erro(error.message || "Erro ao salvar o produto.");
   }

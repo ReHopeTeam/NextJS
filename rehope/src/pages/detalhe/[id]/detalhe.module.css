@@ -53,3 +53,24 @@
   gap: 10%;
   padding: 2% 5%;
 }
+
+#historico {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  width: var(--height);
+  height: var(--height);
+  border-radius: var(--radius-md);
+  border: 2px solid var(--verde-fonte);
+  background: color-mix(in srgb, var(--verde-fonte) 15%, transparent);
+  transition: transform 0.15s ease;
+}
+
+#historico svg {
+  stroke: var(--verde-fonte);
+}
+
+#historico:hover {
+  transform: translateY(-2px);
+}

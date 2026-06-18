@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Button from "@/components/button/button";
 import Footer from "@/components/footer/footer";
 import Header from "@/components/header/header";
@@ -14,8 +13,6 @@ const CadastroUsuario = () => {
   const [senha, setSenha] = useState<string>("");
   const [telefone, setTelefone] = useState<string>("");
 
-  const router = useRouter();
-
   async function salvarUsuario(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     try {
@@ -28,7 +25,6 @@ const CadastroUsuario = () => {
 
       await cadastrarUsuario(dados);
       notificacao("Usuário cadastrado!");
-      router.push("/home")
     } catch (error: any) {
       erro("Erro ao cadastrar!");
     }

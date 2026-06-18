@@ -1,7 +1,11 @@
 #footer {
   min-height: 15vh;
   position: relative;
-  background: linear-gradient(to top, color-mix(var(--bg), var(--destaque)), transparent);
+  background: linear-gradient(
+    to top,
+    color-mix(var(--bg), var(--destaque)),
+    transparent
+  );
 }
 
 #footer::before {
@@ -12,17 +16,18 @@
   width: 100%;
   height: 2px;
   background: linear-gradient(
-    to right, 
-    var(--verde-primario) 0%, 
-    transparent 35%, 
-    transparent 65%, 
-    var(--verde-primario) 100%
+    to right,
+    color-mix(var(--verde-secundario), var(--surface)) 0%,
+    transparent 35%,
+    transparent 65%,
+    color-mix(var(--verde-secundario), var(--surface)) 100%
   );
 }
 
 #img {
   width: 7rem;
-  filter: invert(20%) sepia(14%) saturate(1200%) hue-rotate(76deg) brightness(45%) contrast(105%);
+  filter: invert(20%) sepia(14%) saturate(1200%) hue-rotate(76deg)
+    brightness(45%) contrast(105%);
 }
 
 :global(html.darkmode) #img {
@@ -36,7 +41,8 @@
 .social_icon {
   width: 3rem;
   height: auto;
-  filter: invert(20%) sepia(14%) saturate(1200%) hue-rotate(76deg) brightness(45%) contrast(105%);
+  filter: invert(20%) sepia(14%) saturate(1200%) hue-rotate(76deg)
+    brightness(45%) contrast(105%);
   transition: transform 0.2s ease;
 }
 

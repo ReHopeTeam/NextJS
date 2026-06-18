@@ -3,25 +3,21 @@ import Footer from "@/components/footer/footer";
 import Header from "@/components/header/header";
 import Link from "next/link";
 import Lucide from "@/utils/lucide";
-import styles from "@/pages/cCategoria/cCategoria.module.css"
+import styles from "@/pages/cCategoria/cCategoria.module.css";
 import { useState } from "react";
 import { erro, notificacao } from "@/utils/toast";
 import { cadastrarLocalizacao } from "../api/genericService";
 
 const CadastroLocalizacao = () => {
-
-  const[localizacao, setLocalizacao] = useState<string>("");
-  
-  async function cadastrarLocalizacao(e: React.FormEvent<HTMLFormElement>)
-  {
+  const [localizacao, setLocalizacao] = useState<string>("");
+  async function handleCadastro(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    try
-    {
-      await cadastrarLocalizacao(localizacao);
+    try {
+      await cadastrarLocalizacao({ nomeLocalizacao: localizacao });
+
       notificacao("Cadastro realizado com sucesso!");
-    }
-    catch (error: any)
-    {
+      setLocalizacao("");
+    } catch (error: any) {
       erro(error.message);
     }
   }
@@ -32,7 +28,7 @@ const CadastroLocalizacao = () => {
 
       <main className="min_height">
         <section className="container column" id={styles.width}>
-          <form className="form info2" onSubmit={cadastrarLocalizacao}>
+          <form className="form info2" onSubmit={handleCadastro}>
             <h1>Criar Localização</h1>
 
             <div className="campo_form max_width">

@@ -6,7 +6,12 @@ import { erro } from "@/utils/toast";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Lucide from "@/utils/lucide";
-import { listarCategoriaPorId, listarLocalizacaoPorId, listarProdutoPorId, listarUsuarioPorId } from "@/pages/api/genericService";
+import {
+  listarCategoriaPorId,
+  listarLocalizacaoPorId,
+  listarProdutoPorId,
+  listarUsuarioPorId,
+} from "@/pages/api/genericService";
 import { useRouter } from "next/router";
 
 type Produto = {
@@ -39,11 +44,18 @@ const Detalhe = () => {
       const response = await listarProdutoPorId(id as string);
       const produtoDados = response as unknown as Produto;
 
-      const [resUsuario, resCategoria, resLocalizacao] = await Promise.allSettled([
-        produtoDados.usuarioID ? listarUsuarioPorId(produtoDados.usuarioID) : null,
-        produtoDados.categoriaID ? listarCategoriaPorId(produtoDados.categoriaID) : null,
-        produtoDados.localizacaoID ? listarLocalizacaoPorId(produtoDados.localizacaoID) : null,
-      ]);
+      const [resUsuario, resCategoria, resLocalizacao] =
+        await Promise.allSettled([
+          produtoDados.usuarioID
+            ? listarUsuarioPorId(produtoDados.usuarioID)
+            : null,
+          produtoDados.categoriaID
+            ? listarCategoriaPorId(produtoDados.categoriaID)
+            : null,
+          produtoDados.localizacaoID
+            ? listarLocalizacaoPorId(produtoDados.localizacaoID)
+            : null,
+        ]);
 
       if (resUsuario.status === "fulfilled" && resUsuario.value) {
         produtoDados.nomeUsuario = resUsuario.value.nome;
@@ -64,7 +76,6 @@ const Detalhe = () => {
       }
 
       setProduto(produtoDados);
-
     } catch (error: any) {
       erro(error.message || "Erro ao carregar os detalhes do produto.");
     }
@@ -87,11 +98,16 @@ const Detalhe = () => {
                   id={styles.img}
                   src={produto?.imagemUrl || "../imgs/ImagemDoLogin.png"}
                   alt={produto?.nomeProduto}
-                  className={`img small_radius ${produto?.statusProduto ? styles.ativoImg : styles.inativoImg
-                    }`}
+                  className={`img small_radius ${
+                    produto?.statusProduto ? styles.ativoImg : styles.inativoImg
+                  }`}
                 />
 
-                <h3 className={produto?.statusProduto ? styles.ativoH3 : styles.inativoH3}>
+                <h3
+                  className={
+                    produto?.statusProduto ? styles.ativoH3 : styles.inativoH3
+                  }
+                >
                   {produto?.statusProduto ? "Ativo" : "Inativo"}
                 </h3>
               </div>
@@ -120,7 +136,12 @@ const Detalhe = () => {
                 <Lucide name="Grid2X2" className="reset_lucide" />
                 <div>
                   <h3>Categoria:</h3>
-                  <p>{produto?.nomeCategoria || (produto?.categoriaID ? "Carregando..." : "Não informado")}</p>
+                  <p>
+                    {produto?.nomeCategoria ||
+                      (produto?.categoriaID
+                        ? "Carregando..."
+                        : "Não informado")}
+                  </p>
                 </div>
               </div>
 
@@ -128,7 +149,12 @@ const Detalhe = () => {
                 <Lucide name="MapPin" className="reset_lucide" />
                 <div>
                   <h3>Localização:</h3>
-                  <p>{produto?.nomeLocalizacao || (produto?.localizacaoID ? "Carregando..." : "Não informado")}</p>
+                  <p>
+                    {produto?.nomeLocalizacao ||
+                      (produto?.localizacaoID
+                        ? "Carregando..."
+                        : "Não informado")}
+                  </p>
                 </div>
               </div>
 
@@ -144,20 +170,26 @@ const Detalhe = () => {
                 <Lucide name="User" className="reset_lucide" />
                 <div>
                   <h3>Usuário:</h3>
-                  <p>{produto?.nomeUsuario || (produto?.usuarioID ? "Carregando..." : "Não informado")}</p>
+                  <p>
+                    {produto?.nomeUsuario ||
+                      (produto?.usuarioID ? "Carregando..." : "Não informado")}
+                  </p>
                 </div>
               </div>
             </div>
           </article>
 
           <div className="row">
+            <Link href="/historico" id={styles.historico} onClick={() => ""}>
+              <Lucide name="NotepadText" className="reset_lucide" />
+            </Link>
             <Link href="/home" className="btn2">
               Voltar
             </Link>
             <Button
               id={styles.button}
               children="Editar"
-              onClick={() => router.push(`/cadastro?id=${id}`)}
+              onClick={() => router.push(`/cProduto?id=${id}`)}
             />
           </div>
         </section>
