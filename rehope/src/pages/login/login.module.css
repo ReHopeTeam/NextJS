@@ -6,9 +6,18 @@
 
 #img {
   height: 100px;
+  filter: invert(20%) sepia(14%) saturate(1200%) hue-rotate(76deg) brightness(25%) contrast(105%);
+}
+
+:global(html.darkmode) #img {
+  filter: brightness(1);
 }
 
 #h1 {
+  color: var(--verde-fonte);
+}
+
+:global(html.darkmode) #h1 {
   color: white;
 }
 
