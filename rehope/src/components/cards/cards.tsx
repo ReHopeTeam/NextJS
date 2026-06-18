@@ -41,13 +41,13 @@ const Card = ({
             <div className="row no_gap to_column" id={styles.botoes}>
               <Button className={`${styles.btn_card} ${styles.excluir}`}>
                 <Lucide className="reset_lucide" name="Delete" />
-                Excluir
+                <p className="p white">Excluir</p>
               </Button>
 
-              <Button className={`${styles.btn_card} ${styles.editar}`}>
+              <Link href="/login" className={`${styles.btn_card} ${styles.editar}`}>
                 <Lucide className="reset_lucide" name="SquarePen" />
-                Editar
-              </Button>
+                <p className="p white">Editar</p>
+              </Link>
             </div>
           </>
         ) : (
@@ -69,13 +69,13 @@ const Card = ({
             <div className="row no_gap to_column">
               <Button className={`${styles.btn_card} ${styles.excluir}`}>
                 <Lucide className="reset_lucide icon_branco" name="Delete" />
-                Excluir
+                <p className="p white">Excluir</p>
               </Button>
 
-              <Button className={`${styles.btn_card} ${styles.editar}`}>
+              <Link href={`/cProduto?id=${produtoID}`} className={`${styles.btn_card} ${styles.editar}`}>
                 <Lucide className="reset_lucide icon_branco" name="SquarePen" />
-                Editar
-              </Button>
+                <p className="p white">Editar</p>
+              </Link>
             </div>
           </>
         )}

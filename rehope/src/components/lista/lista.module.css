@@ -1,5 +1,9 @@
-#filtros {
-  padding: 2% 15%;
+#lista {
+  gap: 40px;
+  width: 80%;
+  display: flex;
+  margin-top: 2.5vh;
+  flex-direction: column;
 }
 
 #paginacao {
@@ -22,7 +26,7 @@
   width: var(--height);
   height: var(--height);
   border-radius: var(--radius-md);
-  transition: transform 0.15s ease;
+  transition: transform 0.15s ease, opacity 0.2s ease;
 }
 
 #btn_padrao {

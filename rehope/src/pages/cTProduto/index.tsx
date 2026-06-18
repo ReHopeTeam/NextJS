@@ -4,27 +4,8 @@ import Header from "@/components/header/header";
 import Link from "next/link";
 import Lucide from "@/utils/lucide";
 import styles from "@/pages/cCategoria/cCategoria.module.css"
-import { useState } from "react";
-import { erro, notificacao } from "@/utils/toast";
-import { cadastrarLocalizacao } from "../api/genericService";
 
 const CadastroLocalizacao = () => {
-
-  const[localizacao, setLocalizacao] = useState<string>("");
-  
-  async function cadastrarLocalizacao(e: React.FormEvent<HTMLFormElement>)
-  {
-    e.preventDefault();
-    try
-    {
-      await cadastrarLocalizacao(localizacao);
-      notificacao("Cadastro realizado com sucesso!");
-    }
-    catch (error: any)
-    {
-      erro(error.message);
-    }
-  }
 
   return (
     <>
@@ -32,21 +13,19 @@ const CadastroLocalizacao = () => {
 
       <main className="min_height">
         <section className="container column" id={styles.width}>
-          <form className="form info2" onSubmit={cadastrarLocalizacao}>
-            <h1>Criar Localização</h1>
+          <form className="form info2">
+            <h1>Criar Tipo de Produto</h1>
 
             <div className="campo_form max_width">
-              <Lucide name="MapPin" className="lucide" />
+              <Lucide name="Type" className="lucide" />
               <input
                 type="text"
-                id="nomeLocalizacao"
+                id="nome"
                 placeholder=" "
                 className="input"
-                value={localizacao}
-                onChange={(e) => setLocalizacao(e.target.value)}
                 required
               />
-              <label htmlFor="nomeLocalizacao" className="label">
+              <label htmlFor="nome" className="label">
                 Nome
               </label>
             </div>

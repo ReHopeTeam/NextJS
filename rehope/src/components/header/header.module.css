@@ -33,17 +33,14 @@
 }
 
 #user_info {
+  border: 1px solid var(--destaque);
   min-width: 200px;
   height: 60px;
   color: var(--branco);
   padding: var(--padding-sm);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
-  background: linear-gradient(
-    135deg,
-    var(--verde-secundario),
-    var(--verde-primario)
-  );
+  background: color-mix(in srgb, var(--verde-primario), var(--verde-secundario));
   transition: box-shadow 0.2s ease;
 }
 
@@ -77,13 +74,23 @@
   }
 }
 
+@keyframes fadeOutOverlay {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
 .sidebar {
   position: fixed;
   top: 0;
   right: 0;
-  width: 280px;
+  width: 320px;
   height: 100vh;
-  background: var(--verde-primario);
+  background: var(--verde-primario);  
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -103,6 +110,7 @@
     transform: translateX(0);
   }
 }
+
 
 .menuLink {
   color: white;

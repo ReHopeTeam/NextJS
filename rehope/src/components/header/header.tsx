@@ -67,10 +67,24 @@ const Header = () => {
         </Link>
 
         <Link
+          href="/cLocalizacao"
+          className={styles.menuLink}
+        >
+          Cadastrar Localização
+        </Link>
+
+        <Link
           href="/cProduto"
           className={styles.menuLink}
         >
           Cadastrar Produto
+        </Link>
+
+        <Link
+          href="/cTProduto"
+          className={styles.menuLink}
+        >
+          Cadastrar Tipo
         </Link>
 
         <Link

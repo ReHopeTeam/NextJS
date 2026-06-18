@@ -2,14 +2,22 @@ import { useEffect, useState, useRef } from "react";
 import styles from "./lista.module.css";
 import Card from "@/components/cards/cards";
 import Lucide from "@/utils/lucide";
-import { listar } from "@/pages/api/mockService";
 import { erro } from "@/utils/toast";
+import { listarProduto } from "@/pages/api/genericService";
+import { desformatarPreco } from "@/utils/formatacao";
 
-type Produto = {
+interface Produto {
   produtoID: number;
-  nome: string;
+  nomeProduto: string;
   preco: string;
-  status: boolean; // Mantido o booleano que seus cards usam
+  descricao: string;
+  tamanho: string;
+  imagemUrl: string;
+  statusProduto: boolean;
+  codigo: number;
+  categoriaID: number;
+  localizacaoID: number;
+  usuarioID: string;
 };
 
 const LABELS_ORDENACAO: Record<string, string> = {
@@ -42,7 +50,7 @@ const Lista = () => {
   >("todos");
 
   useEffect(() => {
-    listarJogo();
+    listarProdutos();
   }, []);
 
   useEffect(() => {
@@ -58,36 +66,30 @@ const Lista = () => {
     return () => document.removeEventListener("mousedown", fecharAoClicarFora);
   }, []);
 
-  async function listarJogo() {
+  async function listarProdutos() {
     try {
-      const response = await listar();
+      const response = await listarProduto();
       setProduto(response);
     } catch (error: any) {
-      erro(error.message || "Erro ao carregar a lista.");
+      erro("Erro ao carregar a lista.");
     }
   }
 
   const itensPorPagina = 5;
 
-  const converterPreco = (precoStr: string): number => {
-    return parseFloat(
-      precoStr.replace("R$ ", "").replace(".", "").replace(",", "."),
-    );
-  };
-
   // ==========================================
   // FILTRAGEM COMBINADA (PESQUISA + STATUS)
   // ==========================================
   const produtosFiltrados = produto.filter((p) => {
-    const correspondePesquisa = p.nome
+    const correspondePesquisa = p.nomeProduto
       .toLowerCase()
       .includes(pesquisa.toLowerCase());
 
     // Filtra usando o valor booleano (p.ativo) do seu produto
     if (statusFiltro === "ativo")
-      return correspondePesquisa && p.status === true;
+      return correspondePesquisa && p.statusProduto === true;
     if (statusFiltro === "inativo")
-      return correspondePesquisa && p.status === false;
+      return correspondePesquisa && p.statusProduto === false;
     return correspondePesquisa; // "todos" exibe tudo
   });
 
@@ -95,16 +97,16 @@ const Lista = () => {
   const produtosOrdenados = [...produtosFiltrados];
   if (ordenacao === "menor") {
     produtosOrdenados.sort(
-      (a, b) => converterPreco(a.preco) - converterPreco(b.preco),
+      (a, b) => desformatarPreco(a.preco) - desformatarPreco(b.preco),
     );
   } else if (ordenacao === "maior") {
     produtosOrdenados.sort(
-      (a, b) => converterPreco(b.preco) - converterPreco(a.preco),
+      (a, b) => desformatarPreco(b.preco) - desformatarPreco(a.preco),
     );
   } else if (ordenacao === "alfabetica") {
-    produtosOrdenados.sort((a, b) => a.nome.localeCompare(b.nome));
+    produtosOrdenados.sort((a, b) => a.nomeProduto.localeCompare(b.nomeProduto));
   } else if (ordenacao === "alfabetica-contraria") {
-    produtosOrdenados.sort((a, b) => b.nome.localeCompare(a.nome));
+    produtosOrdenados.sort((a, b) => b.nomeProduto.localeCompare(a.nomeProduto));
   }
 
   // Paginação
@@ -156,7 +158,7 @@ const Lista = () => {
   const paginasVisiveis = obterIntervaloPaginas();
 
   return (
-    <section>
+    <div id={styles.lista}>
       <div className="sbs" id={styles.filtros}>
         {/* Input de Pesquisa */}
         <div className="campo_form">
@@ -248,8 +250,7 @@ const Lista = () => {
             id={styles.btn_inativo}
             onClick={() => handleMudarStatus("inativo")}
             style={{
-              opacity: statusFiltro === "inativo" ? 1 : 0.5,
-              transition: "opacity 0.2s ease",
+              opacity: statusFiltro === "inativo" ? 1 : 0.35,
             }}
           >
             <Lucide name="ShieldX" className="reset_lucide" />
@@ -260,8 +261,7 @@ const Lista = () => {
             id={styles.btn_ativo}
             onClick={() => handleMudarStatus("ativo")}
             style={{
-              opacity: statusFiltro === "ativo" ? 1 : 0.5,
-              transition: "opacity 0.2s ease",
+              opacity: statusFiltro === "ativo" ? 1 : 0.35,
             }}
           >
             <Lucide name="ShieldCheck" className="reset_lucide" />
@@ -272,8 +272,7 @@ const Lista = () => {
             id={styles.btn_padrao}
             onClick={() => handleMudarStatus("todos")}
             style={{
-              opacity: statusFiltro === "todos" ? 1 : 0.5,
-              transition: "opacity 0.2s ease",
+              opacity: statusFiltro === "todos" ? 1 : 0.35,
             }}
           >
             <Lucide name="ShieldEllipsis" className="reset_lucide" />
@@ -283,13 +282,17 @@ const Lista = () => {
 
       {/* Listagem de Cards */}
       <ul className="sbs">
-        {cardsExibidos.map((item, index) => (
-          <Card
-            key={item?.produtoID ?? `fantasma-${index}`}
-            fantasma={!item}
-            {...(item || {})} // Aqui o booleano `ativo` do item é repassado perfeitamente para o Card
-          />
-        ))}
+        {produtosFiltrados.length > 0 ? (
+          cardsExibidos.map((item, index) => (
+            <Card
+              key={item?.produtoID ?? `fantasma-${index}`}
+              fantasma={!item}
+              {...(item || {})}
+            />
+          ))
+        ) : (
+          <p className="info">Não foi possível encontrar seu produto...</p>
+        )}
       </ul>
 
       {/* Paginação */}
@@ -310,7 +313,7 @@ const Lista = () => {
               className="btn small_width"
               onClick={() => paginaAtual > 1 && setPaginaAtual(paginaAtual - 1)}
               style={{
-                opacity: paginaAtual === 1 ? 0.5 : 1,
+                opacity: paginaAtual === 1 ? 0.35 : 1,
                 cursor: paginaAtual === 1 ? "not-allowed" : "pointer",
               }}
             >
@@ -331,7 +334,7 @@ const Lista = () => {
                 paginaAtual < totalPaginas && setPaginaAtual(paginaAtual + 1)
               }
               style={{
-                opacity: paginaAtual === totalPaginas ? 0.5 : 1,
+                opacity: paginaAtual === totalPaginas ? 0.35 : 1,
                 cursor:
                   paginaAtual === totalPaginas ? "not-allowed" : "pointer",
               }}
@@ -354,7 +357,7 @@ const Lista = () => {
           </ul>
         </nav>
       )}
-    </section>
+    </div>
   );
 };
 

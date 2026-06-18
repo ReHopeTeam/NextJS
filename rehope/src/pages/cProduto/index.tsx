@@ -4,14 +4,10 @@ import Header from "@/components/header/header";
 import Lucide from "@/utils/lucide";
 import { ChangeEvent, useEffect, useState, useRef } from "react";
 import Link from "next/link";
+import { erro, notificacao } from "@/utils/toast";
+import { cadastrarProduto, editarProduto, listarProdutoPorId, ProdutoForm } from "../api/genericService";
+import { useRouter } from "next/router";
 
-type Produto = {
-  produtoID: number;
-  nome: string;
-  preco: string;
-};
-
-// --- CONFIGURAÇÕES DOS SELECTS CUSTOMIZADOS ---
 const CONFIG_SELECTS = {
   tipo: {
     label: "Tipo",
@@ -45,43 +41,81 @@ const CONFIG_SELECTS = {
       { value: "2", label: "Usuário 2" },
     ],
   },
-  tamanho: {
-    label: "Tamanho",
-    icone: "RulerDimensionLine" as const,
-    opcoes: [
-      { value: "1", label: "Tamanho 1" },
-      { value: "2", label: "Tamanho 2" },
-    ],
-  },
 };
 
 const CadastroProduto = () => {
-  const [preview, setPreview] = useState<string | null>(null);
+  const router = useRouter();
+  const { id } = router.query;
+  const telaEditar = !!id;
 
-  // Estados dos valores selecionados (simulando o select nativo)
+  // Estados dos inputs tradicionais
+  const [titulo, setTitulo] = useState("");
+  const [preco, setPreco] = useState("");
+  const [descricao, setDescricao] = useState("");
+  const [tamanho, setTamanho] = useState("");
+
+  // Estados para gerenciar a imagem
+  const [preview, setPreview] = useState<string | null>(null);
+  const [arquivoImagem, setArquivoImagem] = useState<File | null>(null);
+
   const [valoresSelect, setValoresSelect] = useState<Record<string, string>>({
     tipo: "",
     categoria: "",
     localizacao: "",
     usuario: "",
-    tamanho: "",
   });
 
-  // Estado para controlar qual select está aberto no momento
   const [selectAberto, setSelectAberto] = useState<Record<string, boolean>>({
     tipo: false,
     categoria: false,
     localizacao: false,
     usuario: false,
-    tamanho: false,
   });
 
-  // Referência do formulário para fechar qualquer select aberto ao clicar fora
   const formRef = useRef<HTMLFormElement>(null);
+
+  async function carregarInformacoes() {
+    if (!id) return;
+    try {
+      const produto = await listarProdutoPorId(id as string);
+
+      setTitulo(produto.nomeProduto ?? "");
+      setPreco(produto.preco != null ? String(produto.preco) : "");
+      setDescricao(produto.descricao ?? "");
+      setTamanho(produto.tamanho ?? "");
+
+      setValoresSelect({
+        // 👇 Corrigido aqui para usar o campo certo da tabela de Tipo
+        tipo: produto.tipoProdutoID != null ? String(produto.tipoProdutoID) : "",
+        categoria: produto.categoriaID != null ? String(produto.categoriaID) : "",
+        localizacao: produto.localizacaoID != null ? String(produto.localizacaoID) : "",
+        usuario: produto.usuarioID != null ? String(produto.usuarioID) : "",
+      });
+
+      if (produto.imagemUrl) {
+        setPreview(produto.imagemUrl);
+      }
+    } catch (error) {
+      erro("Erro ao carregar dados do produto");
+    }
+  }
+
+  // --- NOVO EFFECT: Monitora a URL e dispara o carregamento ---
+  useEffect(() => {
+    if (!router.isReady) return;
+
+    // Opcional: Adicione sua validação de autenticação aqui caso necessário
+
+    if (telaEditar) {
+      carregarInformacoes();
+    }
+  }, [router.isReady, id]);
+
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      setArquivoImagem(file);
       const imagemUrl = URL.createObjectURL(file);
       setPreview(imagemUrl);
     }
@@ -91,19 +125,20 @@ const CadastroProduto = () => {
     e.preventDefault();
     e.stopPropagation();
 
-    if (preview) {
+    // Só revoga se for uma URL gerada pelo ObjectURL (evita quebrar links externos ou base64)
+    if (preview && preview.startsWith("blob:")) {
       URL.revokeObjectURL(preview);
     }
     setPreview(null);
+    setArquivoImagem(null);
   };
 
   useEffect(() => {
     return () => {
-      if (preview) URL.revokeObjectURL(preview);
+      if (preview && preview.startsWith("blob:")) URL.revokeObjectURL(preview);
     };
   }, [preview]);
 
-  // Hook para fechar os selects ao clicar fora deles
   useEffect(() => {
     const fecharAoClicarFora = (event: MouseEvent) => {
       if (formRef.current && !formRef.current.contains(event.target as Node)) {
@@ -112,84 +147,96 @@ const CadastroProduto = () => {
           categoria: false,
           localizacao: false,
           usuario: false,
-          tamanho: false,
         });
       }
     };
-
     document.addEventListener("mousedown", fecharAoClicarFora);
     return () => document.removeEventListener("mousedown", fecharAoClicarFora);
   }, []);
 
-  // Alterna a abertura de um select específico e fecha os demais
+  async function salvarProduto(e: React.FormEvent) {
+  e.preventDefault();
+  try {
+    const dados: ProdutoForm = {
+      nomeProduto: titulo,
+      preco: preco,
+      descricao: descricao,
+      tamanho: tamanho,
+      imagem: arquivoImagem,
+      statusProduto: true,
+      codigo: 0,
+      categoriaID: Number(valoresSelect.categoria) || 0,
+      localizacaoID: Number(valoresSelect.localizacao) || 0,
+      usuarioID: valoresSelect.usuario,
+    };
+
+    if (!dados.categoriaID || !dados.localizacaoID || !dados.usuarioID) {
+      erro("Por favor, selecione todas as opções obrigatórias.");
+      return;
+    }
+
+    if (telaEditar) {
+      // 👇 CORRIGIDO: Passando o 'id' diretamente como String (Guid), sem envolver em Number()
+      await editarProduto(String(id), dados); 
+      notificacao("Produto editado com sucesso!");
+    } else {
+      await cadastrarProduto(dados);
+      notificacao("Produto cadastrado com sucesso!");
+    }
+
+    router.push("/home");
+  } catch (error: any) {
+    erro(error.message || "Erro ao salvar o produto.");
+  }
+}
+
   const alternarSelect = (campo: string) => {
     setSelectAberto((prev) => ({
       tipo: campo === "tipo" ? !prev.tipo : false,
       categoria: campo === "categoria" ? !prev.categoria : false,
       localizacao: campo === "localizacao" ? !prev.localizacao : false,
       usuario: campo === "usuario" ? !prev.usuario : false,
-      tamanho: campo === "tamanho" ? !prev.tamanho : false,
     }));
   };
 
-  // Trata a seleção da opção do dropdown
   const handleSelecionarOpcao = (campo: string, valor: string) => {
     setValoresSelect((prev) => ({ ...prev, [campo]: valor }));
     setSelectAberto((prev) => ({ ...prev, [campo]: false }));
   };
 
-  // Função auxiliar para renderizar cada select customizado repetindo o padrão
   const renderSelectCustomizado = (campo: keyof typeof CONFIG_SELECTS) => {
     const config = CONFIG_SELECTS[campo];
     const valorAtual = valoresSelect[campo];
     const aberto = selectAberto[campo];
-
-    // Encontra a label correspondente ao valor selecionado atualmente
-    const labelExibida =
-      config.opcoes.find((o) => o.value === valorAtual)?.label || "";
+    const labelExibida = config.opcoes.find((o) => o.value === valorAtual)?.label || "";
 
     return (
-      <div
-        className={`campo_select ${aberto ? "open" : ""} ${valorAtual ? "has-value" : ""}`}
-      >
+      <div className={`campo_select ${aberto ? "open" : ""} ${valorAtual ? "has-value" : ""}`}>
         <Lucide
           name={config.icone}
           className="lucide rotate"
           style={{
             transition: "transform 0.2s ease",
-            transform: aberto
-              ? "translateY(-50%) rotate(180deg)"
-              : "translateY(-50%)",
+            transform: aberto ? "translateY(-50%) rotate(180deg)" : "translateY(-50%)",
           }}
         />
-
         <div
           className="select"
           tabIndex={0}
           onClick={() => alternarSelect(campo)}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            cursor: "pointer",
-            paddingLeft: "50px",
-          }}
+          style={{ display: "flex", alignItems: "center", cursor: "pointer", paddingLeft: "50px" }}
         >
           <span>{labelExibida}</span>
         </div>
-
         <label className="label">{config.label}</label>
 
         {aberto && (
           <ul className="dropdown_options" style={{ display: "block" }}>
             <li onClick={() => handleSelecionarOpcao(campo, "")}>
-              <Lucide name="RectangleEllipsis" className="reset_lucide" />
-              Nenhum
+              <Lucide name="RectangleEllipsis" className="reset_lucide" /> Nenhum
             </li>
             {config.opcoes.map((opcao) => (
-              <li
-                key={opcao.value}
-                onClick={() => handleSelecionarOpcao(campo, opcao.value)}
-              >
+              <li key={opcao.value} onClick={() => handleSelecionarOpcao(campo, opcao.value)}>
                 {opcao.label}
               </li>
             ))}
@@ -204,59 +251,42 @@ const CadastroProduto = () => {
       <Header />
       <main className="min_height">
         <section className="container column">
-          <form className="form grid info" ref={formRef}>
+          {/* --- ALTERADO: O título muda dinamicamente --- */}
+          <h1 className="title2" style={{ alignSelf: "flex-start", marginBottom: "20px" }}>
+            {telaEditar ? "Editar" : "Cadastrar"} Produto
+          </h1>
+
+          <form className="form grid info" ref={formRef} onSubmit={salvarProduto} id="form-produto">
+
+            {/* Coluna 1 */}
             <div className="column full_height">
               <div className="campo_form">
                 <label htmlFor="upload-foto" className="input_upload">
                   {preview ? (
                     <div className="relative_pos full_size_preview">
-                      <img
-                        src={preview}
-                        alt="Preview"
-                        className="preview_img"
-                      />
-                      <button
-                        type="button"
-                        onClick={handleRemoveImage}
-                        className="btn_delete"
-                      >
-                        X
-                      </button>
+                      <img src={preview} alt="Preview" className="preview_img" />
+                      <button type="button" onClick={handleRemoveImage} className="btn_delete">X</button>
                     </div>
                   ) : (
                     <>
-                      <Lucide
-                        name="Upload"
-                        size={24}
-                        className="upload_lucide"
-                      />
+                      <Lucide name="Upload" size={24} className="upload_lucide" />
                       <span>Escolher Imagem</span>
                     </>
                   )}
                 </label>
+                {/* --- ALTERADO: Removido o 'required' se for tela de edição para permitir salvar sem reenviar a foto --- */}
                 <input
                   id="upload-foto"
                   type="file"
                   accept="image/*"
                   className="input_img"
+                  required={!telaEditar}
                   onChange={handleFileChange}
                 />
               </div>
-              <div className="campo_form">
-                <Lucide name="RectangleEllipsis" className="lucide" />
-                <input
-                  type="text"
-                  id="codigo"
-                  placeholder=" "
-                  className="input small"
-                  required
-                />
-                <label htmlFor="codigo" className="label">
-                  Código
-                </label>
-              </div>
             </div>
 
+            {/* Coluna 2 */}
             <div className="column full_height">
               <div className="campo_form">
                 <Lucide name="ALargeSmall" className="lucide" />
@@ -265,57 +295,67 @@ const CadastroProduto = () => {
                   id="titulo"
                   placeholder=" "
                   className="input"
+                  value={titulo}
+                  onChange={(e) => setTitulo(e.target.value)}
                   required
                 />
-                <label htmlFor="titulo" className="label">
-                  Título
-                </label>
+                <label htmlFor="titulo" className="label">Título</label>
               </div>
               <div className="campo_form">
                 <Lucide name="Tag" className="lucide" />
                 <input
-                  type="text"
+                  type="number"
+                  step="0.01"
+                  min="0"
                   id="preco"
                   placeholder=" "
                   className="input"
+                  value={preco}
+                  onChange={(e) => setPreco(e.target.value)}
                   required
                 />
-                <label htmlFor="preco" className="label">
-                  Preço
-                </label>
+                <label htmlFor="preco" className="label">Preço</label>
               </div>
               <div className="campo_form">
-                <Lucide
-                  name="MessageSquareText"
-                  className="lucide desc_lucide"
-                />
+                <Lucide name="MessageSquareText" className="lucide desc_lucide" />
                 <textarea
                   id="descricao"
                   placeholder=" "
                   className="textarea"
+                  value={descricao}
+                  onChange={(e) => setDescricao(e.target.value)}
                   required
                 />
-                <label htmlFor="descricao" className="label">
-                  Descrição
-                </label>
+                <label htmlFor="descricao" className="label">Descrição</label>
               </div>
             </div>
 
-            {/* Terceira coluna contendo todos os selects dinâmicos */}
+            {/* Coluna 3 */}
             <div className="column full_height">
               {renderSelectCustomizado("tipo")}
               {renderSelectCustomizado("categoria")}
               {renderSelectCustomizado("localizacao")}
               {renderSelectCustomizado("usuario")}
-              {renderSelectCustomizado("tamanho")}
+
+              <div className="campo_form">
+                <Lucide name="RulerDimensionLine" className="lucide" />
+                <input
+                  type="text"
+                  id="tamanho"
+                  placeholder=" "
+                  className="input"
+                  value={tamanho}
+                  onChange={(e) => setTamanho(e.target.value)}
+                  required
+                />
+                <label htmlFor="tamanho" className="label">Tamanho</label>
+              </div>
             </div>
           </form>
 
           <div className="row">
-            <Link href="/home" className="btn2">
-              Voltar
-            </Link>
-            <Button children="Salvar" />
+            <Link href="/home" className="btn2">Voltar</Link>
+            <Button children="Salvar" type="submit" form="form-produto" />
           </div>
         </section>
       </main>

@@ -25,7 +25,7 @@
   --preto: hsl(145, 100%, 5%);
 
   /* Cores auxiliares */
-  --verde-tema: hsl(150, 100%, 50%);
+  --verde-tema: hsl(150, 100%, 40%);
   --verde-vivo: hsl(125, 100%, 40%);
   --vermelho: hsl(340, 100%, 50%);
 
@@ -332,6 +332,7 @@ a {
 .input_upload,
 .select,
 .textarea {
+  z-index: 10;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -423,7 +424,7 @@ a {
   top: 0;
   font-size: 0.8rem;
   color: var(--verde-secundario);
-  background: var(--bg);
+  background: var(--surface);
   border: 1px solid var(--verde-secundario);
 }
 
@@ -562,6 +563,7 @@ a {
 .btn,
 .btn2,
 .btn_card {
+  z-index: 10;
   user-select: none;
   display: flex;
   align-items: center;
@@ -700,7 +702,7 @@ a {
 /* Grid Layout */
 .grid {
   display: grid;
-  grid-template-columns: 0.8fr 1fr 0.8fr;
+  grid-template-columns: repeat(3, 1fr);
   max-width: 1400px;
   gap: 20px;
 }
@@ -740,9 +742,9 @@ a {
 .info {
   width: 100%;
   padding: var(--padding-lg);
+  border: 2px solid color-mix(in srgb, var(--destaque), transparent);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
-  border: 2px solid transparent;
+  box-shadow: inset var(--shadow-sm);
   background: transparent;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
