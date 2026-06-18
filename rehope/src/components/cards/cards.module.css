@@ -44,22 +44,14 @@
 
 .excluir {
   box-shadow: none;
-  background: radial-gradient(
-    circle at 100% 0%,
-    hsl(350, 55%, 40%),
-    hsl(350, 55%, 20%)
-  );
+  background: hsl(350, 55%, 30%);
 
   gap: 0.5rem;
 }
 
 .editar {
   box-shadow: none;
-  background: radial-gradient(
-    circle at 0% 100%,
-    hsl(115, 35%, 40%),
-    hsl(125, 35%, 20%)
-  );
+  background: var(--verde-primario);
 
   display: flex;
   flex-direction: row-reverse;

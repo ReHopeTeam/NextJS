@@ -587,11 +587,7 @@ a {
 }
 
 .btn {
-  background: radial-gradient(
-    circle at 0% 100%,
-    var(--verde-secundario),
-    var(--verde-primario)
-  );
+  background: var(--verde-primario)
 }
 .btn * {
   color: var(--branco) !important;
@@ -745,31 +741,10 @@ a {
   width: 100%;
   padding: var(--padding-lg);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-  border: 2px solid transparent;
-  background:
-    linear-gradient(
-        to bottom,
-        var(--surface),
-        color-mix(in srgb, var(--surface) 100%, var(--verde-vivo) 10%)
-      )
-      padding-box,
-    linear-gradient(
-        135deg,
-        var(--verde-primario),
-        var(--verde-secundario),
-        var(--destaque)
-      )
-      border-box;
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
-.info:hover {
-  z-index: 2;
-  transform: translateY(-2px);
   box-shadow: var(--shadow-lg);
+  border: 2px solid transparent;
+  background: transparent;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 /* Sizing Utilities */

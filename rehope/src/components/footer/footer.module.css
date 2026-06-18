@@ -26,11 +26,6 @@
 #img {
   width: 7rem;
   filter: invert(20%) sepia(14%) saturate(1200%) hue-rotate(76deg) brightness(45%) contrast(105%);
-  transition: transform 0.2s ease;
-}
-
-#img:hover {
-  transform: translateY(-2px) scale(1.1);
 }
 
 :global(html.darkmode) #img {

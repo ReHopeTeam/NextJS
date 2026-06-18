@@ -1,8 +1,6 @@
 #header {
   min-height: 10vh;
-  background:
-    linear-gradient(90deg, var(--verde-secundario), var(--verde-primario)),
-    var(--verde-primario);
+  background: var(--verde-primario);
   clip-path: path(
     "M0 0H1920V90C1920 90 1440 130 1340 90C1240 50 1160 55 1080 75C1010 88 990 88 960.5 88C931 88 911 88 841 75C761 55 681 50 581 90C481 130 0 90 0 90V0Z"
   );
@@ -19,11 +17,6 @@
 
 #img {
   width: 14rem;
-  transition: transform 0.2s ease;
-}
-
-#img:hover {
-  transform: translateY(2px) scale(1.1);
 }
 
 #img_usuario {
@@ -90,9 +83,7 @@
   right: 0;
   width: 280px;
   height: 100vh;
-  background:
-    linear-gradient(90deg, var(--verde-secundario), var(--verde-primario)),
-    var(--verde-primario);
+  background: var(--verde-primario);
   display: flex;
   flex-direction: column;
   gap: 1rem;
