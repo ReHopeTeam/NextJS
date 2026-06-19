@@ -283,7 +283,7 @@ const Lista = () => {
               type="number"
               id="itensPorPagina"
               className="input"
-              min="5"
+              min="1"
               value={itensPorPagina}
               onChange={(e) => handleMudarItensPorPagina(e.target.value)}
               style={{ textAlign: "center", paddingLeft: "15px" }}

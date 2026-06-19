@@ -130,8 +130,7 @@ const Header = () => {
   return (
     <>
       <header id={styles.header} className="main_header">
-        <div className="container row">
-          <div className="row">
+        <div className="container row to_column2">
             <Link href="/home">
               <img
                 className="img"
@@ -140,7 +139,6 @@ const Header = () => {
                 alt="Logo do site"
               />
             </Link>
-          </div>
 
           <div id={styles.div}>
             <div className="row">
@@ -164,7 +162,7 @@ const Header = () => {
                 </Button>
               )}
             </div>
-            <TrocaTema />
+            <TrocaTema className={styles.troca_tema}/>
             <button
               type="button"
               className={styles.menuIcon}

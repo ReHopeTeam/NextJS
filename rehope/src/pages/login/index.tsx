@@ -80,12 +80,17 @@ const Login = () => {
         />
       </svg>
 
-      <div className="img_wrapper">
-        <img
-          src={imagens[imagemAtual]}
-          alt="Imagem do Bazar ReHope"
-          id={styles.login_img}
-        />
+      <div className={styles.img_wrapper}>
+        {imagens.map((imagem, index) => (
+          <img
+            key={imagem}
+            src={imagem}
+            alt="Imagem do Bazar ReHope"
+            className={`${styles.login_img} ${
+              index === imagemAtual ? styles.ativa : ""
+            }`}
+          />
+        ))}
       </div>
 
       <section id={styles.login_form} className="column">
