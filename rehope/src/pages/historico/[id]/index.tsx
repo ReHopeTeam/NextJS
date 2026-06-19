@@ -3,8 +3,9 @@ import Footer from "@/components/footer/footer";
 import Header from "@/components/header/header";
 import styles from "@/pages/historico/historico.module.css";
 import { useEffect, useState } from "react";
-import { listarLogProduto } from "../api/genericService";
 import { erro } from "@/utils/toast";
+import { listarLogProdutoPorId } from "@/pages/api/genericService";
+import { useRouter } from "next/router";
 
 type HistoricoAlteracao = {
   logID: number;
@@ -15,21 +16,20 @@ type HistoricoAlteracao = {
 };
 
 const Historico = () => {
-  const [logs, setLogs] = useState<HistoricoAlteracao[]>([]);
+  const router = useRouter(); 
+  const { id } = router.query;
 
+  const [logs, setLogs] = useState<HistoricoAlteracao[]>([]);
   const [paginaAtual, setPaginaAtual] = useState(1);
 
   const itensPorPagina = 5;
-
   const registros = logs ?? [];
 
   const indiceInicial = (paginaAtual - 1) * itensPorPagina;
   const indiceFinal = indiceInicial + itensPorPagina;
 
   const historicoPaginado = registros.slice(indiceInicial, indiceFinal);
-
   const totalPaginas = Math.ceil(registros.length / itensPorPagina);
-
   const maxBotoesVisiveis = 5;
 
   const obterIntervaloPaginas = () => {
@@ -38,7 +38,6 @@ const Historico = () => {
     }
 
     const metadeJulgada = Math.floor(maxBotoesVisiveis / 2);
-
     let inicio = paginaAtual - metadeJulgada;
     let fim = paginaAtual + metadeJulgada;
 
@@ -58,25 +57,41 @@ const Historico = () => {
   const paginasVisiveis = obterIntervaloPaginas();
 
   async function carregarHistoricoCompleto() {
+    if (!id) return;
+
     try {
-      const lista = await listarLogProduto();
-      setLogs(lista);
+      const lista: any[] = await listarLogProdutoPorId(String(id));
+
+      const listaFormatada: HistoricoAlteracao[] = lista.map((item) => ({
+        logID: item.logID ?? item.logId ?? item.id,
+        dataAlteracao: item.dataAlteracao,
+        nomeAnterior: item.nomeAnterior,
+        precoAnterior: Number(item.precoAnterior) || 0,
+        localizacaoAnterior:
+          item.localizacaoAnterior ??
+          item.localizacaoAnteriorID ??
+          item.localizacaoIDAnterior,
+      }));
+
+      setLogs(listaFormatada);
     } catch (error: any) {
-      erro("Erro ao carregar o histórico geral: " + error.message);
+      erro("Erro ao carregar o histórico: " + error.message);
       setLogs([]);
     }
   }
 
   useEffect(() => {
-    carregarHistoricoCompleto();
-  }, []);
+    if (router.isReady && id) {
+      carregarHistoricoCompleto();
+    }
+  }, [router.isReady, id]);
 
   return (
     <>
       <Header />
       <main className="min_height">
         <section className="container column">
-          <h1 className="h1">Histórico Geral</h1>
+          <h1 className="h1">Histórico do Produto</h1>
           <table className="table">
             <thead>
               <tr className="tr small_padding">

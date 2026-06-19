@@ -14,7 +14,7 @@ const CadastroTipoProduto = () => {
   async function handleCadastro(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     try {
-      await cadastrarTipoProduto({ nomeProduto: nomeTipo } as any);
+      await cadastrarTipoProduto({ nomeTipo: nomeTipo } as any);
 
       notificacao("Tipo de produto cadastrado com sucesso!");
       setNomeTipo("");
@@ -33,17 +33,17 @@ const CadastroTipoProduto = () => {
             <h1>Criar Tipo de Produto</h1>
 
             <div className="campo_form max_width">
-              <Lucide name="Type" className="lucide" />
+              <Lucide name="PackagePlus" className="lucide" />
               <input
                 type="text"
-                id="nome"
+                id="nomeTipo"
                 placeholder=" "
                 className="input"
                 value={nomeTipo}
                 onChange={(e) => setNomeTipo(e.target.value)}
                 required
               />
-              <label htmlFor="nome" className="label">
+              <label htmlFor="nomeTipo" className="label">
                 Nome
               </label>
             </div>
@@ -53,7 +53,7 @@ const CadastroTipoProduto = () => {
                 Voltar
               </Link>
 
-              <Button children="Salvar" />
+              <Button type="submit" children="Salvar" />
             </div>
           </form>
         </section>

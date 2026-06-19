@@ -15,19 +15,22 @@ export const erro = (msg: string) => toast.error(msg, defaultOptions);
 export const toastConfirmarExcluir = (aoConfirmar: () => void) => {
   toast(
     ({ closeToast }) => (
-      <div>
+      <div className="column">
         <p>Deseja realmente excluir?</p>
         <div className="sbs">
           <Button
-            className="btn"
+            className="btn2 small_height"
+            onClick={closeToast}
+            children="Cancelar"
+          />
+          <Button
+            className="btn small_height"
             onClick={() => {
               aoConfirmar();
               closeToast();
             }}
             children="Sim"
           />
-
-          <Button className="btn" onClick={closeToast} children="Cancelar" />
         </div>
       </div>
     ),

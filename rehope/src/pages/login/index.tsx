@@ -104,7 +104,7 @@ const Login = () => {
 
           {/* Campo de E-mail */}
           <div className="campo_form">
-            <Lucide name="User" className="lucide" />
+            <Lucide name="Mail" className="lucide" />
             <input
               type="email"
               id="email"

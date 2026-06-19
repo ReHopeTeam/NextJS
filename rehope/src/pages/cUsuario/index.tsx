@@ -40,7 +40,7 @@ const CadastroUsuario = () => {
             <h1>Criar Usuário</h1>
 
             <div className="campo_form max_width">
-              <Lucide name="User" className="lucide" />
+              <Lucide name="UserRoundPlus" className="lucide" />
               <input
                 type="text"
                 id="nome"
@@ -56,7 +56,7 @@ const CadastroUsuario = () => {
             </div>
 
             <div className="campo_form max_width">
-              <Lucide name="Mail" className="lucide" />
+              <Lucide name="MailPlus" className="lucide" />
               <input
                 type="email"
                 id="email"

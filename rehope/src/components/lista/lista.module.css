@@ -1,18 +1,29 @@
 #lista {
+  display: flex;
+  flex-direction: column;
   gap: 40px;
   width: 80%;
-  display: flex;
   margin-top: 2.5vh;
-  flex-direction: column;
+}
+
+#filtros {
+  width: 100%;
+}
+
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
 }
 
 #paginacao {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   justify-content: center;
   gap: 10px;
   padding: 2.5%;
-  flex-wrap: wrap;
   list-style: none;
 }
 
@@ -22,18 +33,24 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
   width: var(--height);
   height: var(--height);
+  cursor: pointer;
   border-radius: var(--radius-md);
   transition:
     transform 0.15s ease,
     opacity 0.2s ease;
 }
 
+#btn_padrao:hover,
+#btn_ativo:hover,
+#btn_inativo:hover {
+  transform: translateY(-2px);
+}
+
 #btn_padrao {
-  border: 2px solid var(--verde-fonte);
   background: color-mix(in srgb, var(--verde-fonte) 15%, transparent);
+  border: 2px solid var(--verde-fonte);
 }
 
 #btn_padrao svg {
@@ -41,8 +58,8 @@
 }
 
 #btn_ativo {
-  border: 2px solid var(--verde-vivo);
   background: color-mix(in srgb, var(--verde-vivo) 15%, transparent);
+  border: 2px solid var(--verde-vivo);
 }
 
 #btn_ativo svg {
@@ -50,16 +67,10 @@
 }
 
 #btn_inativo {
-  border: 2px solid var(--vermelho);
   background: color-mix(in srgb, var(--vermelho) 15%, transparent);
+  border: 2px solid var(--vermelho);
 }
 
 #btn_inativo svg {
   stroke: var(--vermelho);
-}
-
-#btn_padrao:hover,
-#btn_ativo:hover,
-#btn_inativo:hover {
-  transform: translateY(-2px);
 }

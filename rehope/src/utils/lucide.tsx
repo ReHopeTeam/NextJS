@@ -15,9 +15,9 @@ import {
   RectangleEllipsis,
   RulerDimensionLine,
   MapPin,
+  MapPinPlus,
   User,
   ALargeSmall,
-  Type,
   MessageSquareText,
   Grid2X2,
   Grid2X2Plus,
@@ -30,6 +30,14 @@ import {
   Menu,
   X,
   NotepadText,
+  HeartPlus,
+  UserRoundPlus,
+  History,
+  HouseHeart,
+  Package,
+  PackagePlus,
+  MailPlus,
+  CircleQuestionMark,
 } from "lucide-react";
 
 const icons = {
@@ -48,9 +56,9 @@ const icons = {
   RectangleEllipsis,
   RulerDimensionLine,
   MapPin,
+  MapPinPlus,
   User,
   ALargeSmall,
-  Type,
   MessageSquareText,
   Grid2X2,
   Grid2X2Plus,
@@ -63,6 +71,14 @@ const icons = {
   Menu,
   X,
   NotepadText,
+  HeartPlus,
+  UserRoundPlus,
+  History,
+  HouseHeart,
+  Package,
+  PackagePlus,
+  MailPlus,
+  CircleQuestionMark,
 };
 
 type IconName = keyof typeof icons;

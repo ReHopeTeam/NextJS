@@ -32,7 +32,7 @@ const CadastroLocalizacao = () => {
             <h1>Criar Localização</h1>
 
             <div className="campo_form max_width">
-              <Lucide name="MapPin" className="lucide" />
+              <Lucide name="MapPinPlus" className="lucide" />
               <input
                 type="text"
                 id="nomeLocalizacao"
@@ -52,7 +52,7 @@ const CadastroLocalizacao = () => {
                 Voltar
               </Link>
 
-              <Button children="Salvar" />
+              <Button type="submit" children="Salvar" />
             </div>
           </form>
         </section>

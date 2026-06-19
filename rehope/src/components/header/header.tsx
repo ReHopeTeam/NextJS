@@ -64,7 +64,7 @@ const Header = () => {
           className={styles.closeButton}
           onClick={handleFecharMenu}
         >
-          <Lucide name="X" className="lucide" />
+          <Lucide name="X" className="reset_lucide" />
         </button>
 
         <Link
@@ -72,35 +72,40 @@ const Header = () => {
           className={styles.menuLink}
           onClick={handleFecharMenu}
         >
-          Cadastrar Categoria
+          + Criar Categoria
+          <Lucide name="Grid2X2Plus" className="reset_lucide" />
         </Link>
         <Link
           href="/cLocalizacao"
           className={styles.menuLink}
           onClick={handleFecharMenu}
         >
-          Cadastrar Localização
+          + Criar Localização
+          <Lucide name="MapPinPlus" className="reset_lucide" />
         </Link>
         <Link
           href="/cProduto"
           className={styles.menuLink}
           onClick={handleFecharMenu}
         >
-          Cadastrar Produto
+          + Criar Produto
+          <Lucide name="HeartPlus" className="reset_lucide" />
         </Link>
         <Link
           href="/cTProduto"
           className={styles.menuLink}
           onClick={handleFecharMenu}
         >
-          Cadastrar Tipo
+          + Criar Tipo
+          <Lucide name="PackagePlus" className="reset_lucide" />
         </Link>
         <Link
           href="/cUsuario"
           className={styles.menuLink}
           onClick={handleFecharMenu}
         >
-          Cadastrar Usuário
+          + Criar Usuário
+          <Lucide name="UserRoundPlus" className="reset_lucide" />
         </Link>
         <Link
           href="/historico"
@@ -108,6 +113,7 @@ const Header = () => {
           onClick={handleFecharMenu}
         >
           Histórico
+          <Lucide name="History" className="reset_lucide" />
         </Link>
         <Link
           href="/home"
@@ -115,6 +121,7 @@ const Header = () => {
           onClick={handleFecharMenu}
         >
           Tela Inicial
+          <Lucide name="HouseHeart" className="reset_lucide" />
         </Link>
       </aside>
     </>
@@ -163,7 +170,7 @@ const Header = () => {
               className={styles.menuIcon}
               onClick={() => setMenuAberto(true)}
             >
-              <Lucide name="Menu" className="lucide" />
+              <Lucide name="Menu" className="reset_lucide" />
             </button>
           </div>
         </div>

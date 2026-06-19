@@ -1,6 +1,6 @@
 #footer {
-  min-height: 15vh;
   position: relative;
+  min-height: 15vh;
   background: linear-gradient(
     to top,
     color-mix(var(--bg), var(--destaque)),
@@ -46,10 +46,10 @@
   transition: transform 0.2s ease;
 }
 
-:global(html.darkmode) .social_icon {
-  filter: grayscale(1) brightness(2);
-}
-
 .social_icon:hover {
   transform: translateY(-2px) scale(1.1);
+}
+
+:global(html.darkmode) .social_icon {
+  filter: grayscale(1) brightness(2);
 }

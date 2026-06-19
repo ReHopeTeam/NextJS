@@ -12,13 +12,20 @@ interface Localizacao {
   nomeLocalizacao: string;
 }
 
+export interface LogProduto {
+  dataAlteracao: string;
+  nomeAnterior: string;
+  precoAnterior: number;
+  localizacaoIDAnterior: number;
+}
+
 export interface ProdutoList {
   produtoID: number;
   nomeProduto: string;
   preco: string;
   descricao: string;
   tamanho: string;
-  imagemUrl: string;
+  imagem: string;
   statusProduto: boolean;
   codigo: number;
   categoriaID: number;
@@ -38,6 +45,11 @@ export type ProdutoForm = {
   categoriaID: number;
   localizacaoID: number;
   usuarioID: string;
+};
+
+export interface TipoProduto {
+  tipoProdutoID: number;
+  nomeTipo: string;
 }
 
 interface Usuario {
@@ -89,13 +101,11 @@ export async function cadastrarProduto(dados: ProdutoForm) {
     const response = await api.post("Produto", formData);
     return response.data;
   } catch (error: any) {
-    throw new Error(
-      error.response?.data || "Erro inesperado.",
-    );
+    throw new Error(error.response?.data || "Erro inesperado.");
   }
 }
 
-export async function cadastrarTipoProduto(dados: ProdutoForm) {
+export async function cadastrarTipoProduto(dados: TipoProduto) {
   try {
     const response = await api.post("TipoProduto", dados);
     return response.data;
@@ -122,20 +132,27 @@ export async function cadastrarUsuario(dados: Usuario) {
 //? =============
 export async function listarCategoria() {
   try {
-    const response = await api.get("Categoria")
+    const response = await api.get("Categoria");
     return response.data;
-  }
-  catch (error: any) {
+  } catch (error: any) {
     throw new Error(error.response.data);
   }
 }
 
 export async function listarLocalizacao() {
   try {
-    const response = await api.get("Localizacao")
+    const response = await api.get("Localizacao");
     return response.data;
+  } catch (error: any) {
+    throw new Error(error.response.data);
   }
-  catch (error: any) {
+}
+
+export async function listarLogProduto() {
+  try {
+    const response = await api.get("LogProduto");
+    return response.data;
+  } catch (error: any) {
     throw new Error(error.response.data);
   }
 }
@@ -143,32 +160,26 @@ export async function listarLocalizacao() {
 export async function listarProduto() {
   try {
     const response = await api.get<ProdutoList[]>("Produto");
-
-    return response.data.map((produto: ProdutoList) => ({
-      ...produto,
-      imagemUrl: `${api.defaults.baseURL}${produto.imagemUrl}`,
-    }));
+    return response.data;
   } catch (error: any) {
-    throw new Error(error.response.data);
+    throw new Error(error.response?.data || "Erro ao listar");
   }
 }
 
 export async function listarTipoProduto() {
   try {
-    const response = await api.get("TipoProduto")
+    const response = await api.get("TipoProduto");
     return response.data;
-  }
-  catch (error: any) {
+  } catch (error: any) {
     throw new Error(error.response.data);
   }
 }
 
 export async function listarUsuario() {
   try {
-    const response = await api.get("Usuario")
+    const response = await api.get("Usuario");
     return response.data;
-  }
-  catch (error: any) {
+  } catch (error: any) {
     throw new Error(error.response.data);
   }
 }
@@ -185,34 +196,60 @@ export async function listarCategoriaPorId(id: number) {
   }
 }
 
+export async function listarLogProdutoPorId(produtoId: string) {
+  try {
+    const response = await api.get<LogProduto[]>(`LogProduto/produto/${produtoId}`);
+
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error.response?.data || "Erro ao listar histórico.");
+  }
+}
+
 export async function listarLocalizacaoPorId(id: number) {
   try {
     const response = await api.get<Localizacao>("Localizacao/" + id);
     return response.data;
   } catch (error: any) {
-    throw new Error(error.response?.data || "Erro ao buscar Localização por ID");
+    throw new Error(
+      error.response?.data || "Erro ao buscar Localização por ID",
+    );
   }
 }
 
 export async function listarProdutoPorId(id: string) {
   try {
-    const response = await api.get<ProdutoList>("Produto/" + id);
+    const response = await api.get<any>("Produto/" + id);
+
     const produto = {
       ...response.data,
-      imagemUrl: `${api.defaults.baseURL}${response.data.imagemUrl}`,
+
+      // Converte o Base64 vindo da API para uma URL que o <img> consegue renderizar.
+      // Se a API já devolver uma data URI (começando por 'data:' ou contendo 'base64,')
+      // usamos ela diretamente; caso contrário, prefixamos como JPEG base64.
+      imagemUrl: response.data.imagem
+        ? typeof response.data.imagem === "string" &&
+          (response.data.imagem.startsWith("data:") ||
+            response.data.imagem.includes("base64,"))
+          ? response.data.imagem
+          : `data:image/jpeg;base64,${response.data.imagem}`
+        : null,
     };
+
     return produto;
   } catch (error: any) {
-    throw new Error(error.response.data || "Erro ao buscar Produto por ID");
+    throw new Error(error.response?.data || "Erro ao buscar Produto por ID");
   }
 }
 
 export async function listarTipoProdutoPorId(id: number) {
   try {
-    const response = await api.get<ProdutoForm>("TipoProduto/" + id);
+    const response = await api.get<TipoProduto>("TipoProduto/" + id);
     return response.data;
   } catch (error: any) {
-    throw new Error(error.response?.data || "Erro ao buscar Tipo de Produto por ID");
+    throw new Error(
+      error.response?.data || "Erro ao buscar Tipo de Produto por ID",
+    );
   }
 }
 
@@ -278,7 +315,7 @@ export async function deletarProduto(produtoId: string) {
 
 export async function deletarTipoProduto(tipoProdutoId: number) {
   try {
-    await api.delete("tipoProdutoId/" + tipoProdutoId);
+    await api.delete("TipoProduto/" + tipoProdutoId);
   } catch (error: any) {
     throw new Error(error.response?.data || "Erro ao deletar Tipo de Produto.");
   }
@@ -286,7 +323,7 @@ export async function deletarTipoProduto(tipoProdutoId: number) {
 
 export async function deletarUsuario(usuarioId: string) {
   try {
-    await api.delete("usuarioId/" + usuarioId);
+    await api.delete("Usuario/" + usuarioId);
   } catch (error: any) {
     throw new Error(error.response?.data || "Erro ao deletar Usuário.");
   }

@@ -2,8 +2,8 @@ import { useEffect, useState, useRef } from "react";
 import styles from "./lista.module.css";
 import Card from "@/components/cards/cards";
 import Lucide from "@/utils/lucide";
-import { erro } from "@/utils/toast";
-import { listarProduto } from "@/pages/api/genericService";
+import { erro, notificacao, toastConfirmarExcluir } from "@/utils/toast";
+import { deletarProduto, listarProduto } from "@/pages/api/genericService";
 import { desformatarPreco } from "@/utils/formatacao";
 
 interface Produto {
@@ -12,7 +12,7 @@ interface Produto {
   preco: string;
   descricao: string;
   tamanho: string;
-  imagemUrl: string;
+  imagem: string;
   statusProduto: boolean;
   codigo: number;
   categoriaID: number;
@@ -75,6 +75,19 @@ const Lista = () => {
     } catch (error: any) {
       erro("Erro ao carregar a lista.");
     }
+  }
+
+  async function confirmarExcluir(produtoId: string) {
+    toastConfirmarExcluir(async () => {
+      try {
+        await deletarProduto(produtoId);
+        notificacao("Produto inativado com sucesso!");
+        await listarProdutos();
+      } catch (error: any) {
+        console.error("Erro detalhado da API:", error);
+        erro("Erro ao inativar o produto");
+      }
+    });
   }
 
   // ==========================================
@@ -173,92 +186,94 @@ const Lista = () => {
 
   return (
     <div id={styles.lista}>
-      <div className="sbs" id={styles.filtros}>
-        {/* Input de Pesquisa */}
-        <div className="campo_form">
-          <Lucide name="Search" className="lucide" />
-          <input
-            type="text"
-            id="pesquisa"
-            placeholder=" "
-            className="input"
-            value={pesquisa}
-            onChange={(e) => {
-              setPesquisa(e.target.value);
-              setPaginaAtual(1);
-            }}
-          />
-          <label htmlFor="pesquisa" className="label">
-            Pesquise seu produto...
-          </label>
-        </div>
-
-        {/* Select Customizado */}
-        <div
-          className={`campo_select ${selectAberto ? "open" : ""} ${ordenacao ? "has-value" : ""}`}
-          ref={selectRef}
-        >
-          <Lucide
-            name={ICONES_ORDENACAO[ordenacao]}
-            className="lucide rotate"
-            style={{
-              transition: "transform 0.2s ease",
-              transform: selectAberto
-                ? "translateY(-50%) rotate(180deg)"
-                : "translateY(-50%)",
-            }}
-          />
-          <div
-            className="select"
-            tabIndex={0}
-            onClick={() => setSelectAberto(!selectAberto)}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              cursor: "pointer",
-              paddingLeft: "50px",
-            }}
-          >
-            <span>{LABELS_ORDENACAO[ordenacao]}</span>
+      <div className="row to_column">
+        <div className="row to_column2" id={styles.filtros}>
+          {/* Input de Pesquisa */}
+          <div className="campo_form">
+            <Lucide name="Search" className="lucide" />
+            <input
+              type="text"
+              id="pesquisa"
+              placeholder=" "
+              className="input"
+              value={pesquisa}
+              onChange={(e) => {
+                setPesquisa(e.target.value);
+                setPaginaAtual(1);
+              }}
+            />
+            <label htmlFor="pesquisa" className="label">
+              Pesquise seu produto...
+            </label>
           </div>
-          <label className="label">Filtrar</label>
 
-          {selectAberto && (
-            <ul className="dropdown_options" style={{ display: "block" }}>
-              <li onClick={() => handleSelecionarOrdenacao("")}>
-                <Lucide name="RectangleEllipsis" className="reset_lucide" />{" "}
-                Nenhum
-              </li>
-              <li onClick={() => handleSelecionarOrdenacao("menor")}>
-                <Lucide
-                  name="ChartNoAxesColumnDecreasing"
-                  className="reset_lucide"
-                />{" "}
-                Menor Preço
-              </li>
-              <li onClick={() => handleSelecionarOrdenacao("maior")}>
-                <Lucide
-                  name="ChartNoAxesColumnIncreasing"
-                  className="reset_lucide"
-                />{" "}
-                Maior Preço
-              </li>
-              <li onClick={() => handleSelecionarOrdenacao("alfabetica")}>
-                <Lucide name="ArrowDownAZ" className="reset_lucide" /> A-Z
-              </li>
-              <li
-                onClick={() =>
-                  handleSelecionarOrdenacao("alfabetica-contraria")
-                }
-              >
-                <Lucide name="ArrowDownZA" className="reset_lucide" /> Z-A
-              </li>
-            </ul>
-          )}
+          {/* Select Customizado */}
+          <div
+            className={`campo_select ${selectAberto ? "open" : ""} ${ordenacao ? "has-value" : ""}`}
+            ref={selectRef}
+          >
+            <Lucide
+              name={ICONES_ORDENACAO[ordenacao]}
+              className="lucide rotate"
+              style={{
+                transition: "transform 0.2s ease",
+                transform: selectAberto
+                  ? "translateY(-50%) rotate(180deg)"
+                  : "translateY(-50%)",
+              }}
+            />
+            <div
+              className="select"
+              tabIndex={0}
+              onClick={() => setSelectAberto(!selectAberto)}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                cursor: "pointer",
+                paddingLeft: "50px",
+              }}
+            >
+              <span>{LABELS_ORDENACAO[ordenacao]}</span>
+            </div>
+            <label className="label">Filtrar</label>
+
+            {selectAberto && (
+              <ul className="dropdown_options" style={{ display: "block" }}>
+                <li onClick={() => handleSelecionarOrdenacao("")}>
+                  <Lucide name="RectangleEllipsis" className="reset_lucide" />{" "}
+                  Nenhum
+                </li>
+                <li onClick={() => handleSelecionarOrdenacao("menor")}>
+                  <Lucide
+                    name="ChartNoAxesColumnDecreasing"
+                    className="reset_lucide"
+                  />{" "}
+                  Menor Preço
+                </li>
+                <li onClick={() => handleSelecionarOrdenacao("maior")}>
+                  <Lucide
+                    name="ChartNoAxesColumnIncreasing"
+                    className="reset_lucide"
+                  />{" "}
+                  Maior Preço
+                </li>
+                <li onClick={() => handleSelecionarOrdenacao("alfabetica")}>
+                  <Lucide name="ArrowDownAZ" className="reset_lucide" /> A-Z
+                </li>
+                <li
+                  onClick={() =>
+                    handleSelecionarOrdenacao("alfabetica-contraria")
+                  }
+                >
+                  <Lucide name="ArrowDownZA" className="reset_lucide" /> Z-A
+                </li>
+              </ul>
+            )}
+          </div>
         </div>
 
         {/* Botões de Filtros e o Novo Input de Quantidade */}
-        <div className="row" style={{ alignItems: "center", gap: "1rem" }}>
+        <div className="row">
           {/* 3. Input Number para alterar dinamicamente a quantidade de itens por página */}
           <div
             className="campo_form"
@@ -268,7 +283,7 @@ const Lista = () => {
               type="number"
               id="itensPorPagina"
               className="input"
-              min="1"
+              min="5"
               value={itensPorPagina}
               onChange={(e) => handleMudarItensPorPagina(e.target.value)}
               style={{ textAlign: "center", paddingLeft: "15px" }}
@@ -315,13 +330,14 @@ const Lista = () => {
       </div>
 
       {/* Listagem de Cards */}
-      <ul className="sbs">
+      <ul className={`row ${styles.cards}`}>
         {produtosFiltrados.length > 0 ? (
           cardsExibidos.map((item, index) => (
             <Card
               key={item?.produtoID ?? `fantasma-${index}`}
               fantasma={!item}
               {...(item || {})}
+              onDelete={confirmarExcluir}
             />
           ))
         ) : (
