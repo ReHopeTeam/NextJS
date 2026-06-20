@@ -1,8 +1,8 @@
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import { Quicksand, Comfortaa } from "next/font/google";
-import { useRouter } from "next/router"; // 1. Importado o useRouter
-import { useEffect, useRef } from "react"; // 2. Adicionado o useRef
+import { useRouter } from "next/router";
+import { useEffect, useRef } from "react";
 import { ToastContainer } from "react-toastify";
 
 const quicksand = Quicksand({
@@ -18,12 +18,10 @@ const comfortaa = Comfortaa({
 });
 
 export default function App({ Component, pageProps }: AppProps) {
-  const router = useRouter(); // 3. Inicializado o roteador
+  const router = useRouter();
 
-  // 4. Referência para controlar a pausa/play da navegação
   const resumeNavigationRef = useRef<() => void>(null);
 
-  // SEU EFFECT ATUAL: Cuida do Tema Escuro
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
     const prefersDark = window.matchMedia(
@@ -38,12 +36,10 @@ export default function App({ Component, pageProps }: AppProps) {
     }
   }, []);
 
-  // NOVO EFFECT: Cuida da View Transition entre as telas
   useEffect(() => {
     const handleRouteChangeStart = () => {
       if (!document.startViewTransition) return;
 
-      // Cria a promessa que segura a renderização visual da nova tela
       const transitionPromise = new Promise<void>((resolve) => {
         resumeNavigationRef.current = resolve;
       });
@@ -53,7 +49,6 @@ export default function App({ Component, pageProps }: AppProps) {
 
     const handleRouteChangeComplete = () => {
       if (resumeNavigationRef.current) {
-        // Libera a promessa assim que o Next terminar de carregar os arquivos da nova página
         resumeNavigationRef.current();
         resumeNavigationRef.current = null;
       }

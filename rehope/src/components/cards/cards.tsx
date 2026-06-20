@@ -8,7 +8,7 @@ type CardProps = {
   produtoID: number;
   nomeProduto: string;
   preco: string;
-  imagem: string | null;
+  imagem: string | null | any; // 'any' temporário para evitar quebra caso o Pai mande errado
   fantasma?: boolean;
   onDelete: (produtoId: number) => void;
 };
@@ -21,84 +21,83 @@ const Card = ({
   fantasma = false,
   onDelete,
 }: CardProps) => {
+  
+  // Tratamento limpo sabendo como a sua API C# funciona
+  const srcImagemReal = (() => {
+    // 1. Se não houver imagem (null, undefined ou vazio), usa a padrão
+    if (!imagem) return "/imgs/ImagemDoLogin.png";
+
+    // 2. Se o componente Pai passou o objeto inteiro do produto por engano
+    if (typeof imagem === "object") return "/imgs/ImagemDoLogin.png";
+
+    // 3. Se for uma string válida
+    if (typeof imagem === "string") {
+      // Se já for link ou já tiver base64 formatado
+      if (imagem.startsWith("http") || imagem.startsWith("/")) return imagem;
+      if (imagem.startsWith("data:") || imagem.includes("base64,")) return imagem;
+
+      // Como a sua API em C# retorna a Base64 crua, nós adicionamos o prefixo aqui:
+      return `data:image/jpeg;base64,${imagem}`;
+    }
+
+    return "/imgs/ImagemDoLogin.png";
+  })();
+
+  const config = {
+    id: !fantasma ? styles.card : undefined,
+    className: fantasma ? styles.cardFantasma : "",
+    imagemSrc: fantasma ? "/imgs/CardFantasma.png" : srcImagemReal,
+    imagemAlt: fantasma ? "Produto fantasma" : nomeProduto,
+    titulo: fantasma ? "Preço" : formatarPreco(Number(preco)),
+    tag: fantasma ? "CircleQuestionMark" : undefined,
+    linkEditar: fantasma ? "/login" : `/cProduto?id=${produtoID}`,
+    onExcluir: fantasma ? undefined : () => onDelete(produtoID),
+  };
+
   return (
     <article className="column">
-      <li
-        id={!fantasma ? styles.card : undefined}
-        className={fantasma ? styles.cardFantasma : ""}
-      >
-        {fantasma ? (
-          <>
-            <div className="fit_content">
-              <img
-                className="img"
-                id={styles.img}
-                src="/imgs/CardFantasma.png"
-                alt="Produto fantasma segurando lugar para o produto real"
-              />
-              <span className="title dark">
+      <li id={config.id} className={config.className}>
+        <div className={`${styles.imagemContainer} fit_content`}>
+          {!fantasma ? (
+            <Link href={`/detalhe/${produtoID}`}>
+              <img className="img" id={styles.img} src={config.imagemSrc} alt={config.imagemAlt} />
+            </Link>
+          ) : (
+            <img className="img" id={styles.img} src={config.imagemSrc} alt={config.imagemAlt} />
+          )}
+
+          <span className={`${styles.tituloProduto} title dark`}>
+            {fantasma ? (
+              <>
                 <Lucide name="CircleQuestionMark" className="reset_lucide" />
-              </span>
-            </div>
+                <Lucide name="CircleQuestionMark" className="reset_lucide" />
+                <Lucide name="CircleQuestionMark" className="reset_lucide" />
+              </>
+            ) : (
+              nomeProduto
+            )}
+          </span>
+        </div>
 
-            <h3 className="title">Preço</h3>
+        <h3 className="title">{config.titulo}</h3>
 
-            <div className="row no_gap to_column" id={styles.botoes}>
-              <Button className={`${styles.btn_card} ${styles.excluir}`}>
-                <Lucide name="Delete" className="reset_lucide" />
-                <p className="p white">Excluir</p>
-              </Button>
+        <div className={`row no_gap to_column2 ${styles.botoes}`} id={fantasma ? styles.botoes : undefined}>
+          <Button 
+            className={`${styles.btn_card} ${styles.excluir}`} 
+            onClick={config.onExcluir}
+          >
+            <Lucide name="Delete" className="reset_lucide icon_branco" />
+            <p className="p white">Excluir</p>
+          </Button>
 
-              <Link
-                href="/login"
-                className={`${styles.btn_card} ${styles.editar}`}
-              >
-                <Lucide name="SquarePen" className="reset_lucide" />
-                <p className="p white">Editar</p>
-              </Link>
-            </div>
-          </>
-        ) : (
-          <>
-            <div className="fit_content">
-              <Link href={`/detalhe/${produtoID}`}>
-                <img
-                  className="img"
-                  id={styles.img}
-                  src={
-                    !imagem
-                      ? "/imgs/ImagemDoLogin.png"
-                      : imagem.startsWith("http") || imagem.startsWith("/")
-                        ? imagem
-                        : `data:image/jpeg;base64,${imagem}`
-                  }
-                  alt={nomeProduto}
-                />
-              </Link>
-              <span className="title dark">{nomeProduto}</span>
-            </div>
-
-            <h3 className="title">{formatarPreco(Number(preco))}</h3>
-
-            <div className="row no_gap to_column">
-              <Button
-                className={`${styles.btn_card} ${styles.excluir}`}
-                onClick={() => onDelete(produtoID)}
-              >
-                <Lucide name="Delete" className="reset_lucide icon_branco" />
-                <p className="p white">Excluir</p>
-              </Button>
-
-              <Link
-                href={`/cProduto?id=${produtoID}`}
-                className={`btn ${styles.btn_card} ${styles.editar}`}
-              >
-                <Lucide name="SquarePen" className="reset_lucide icon_branco" />
-                <p className="p white">Editar</p>
-              </Link>
-            </div>
-          </>
-        )}
+          <Link
+            href={config.linkEditar}
+            className={`btn ${styles.btn_card} ${styles.editar}`}
+          >
+            <Lucide name="SquarePen" className="reset_lucide icon_branco" />
+            <p className="p white">Editar</p>
+          </Link>
+        </div>
       </li>
     </article>
   );

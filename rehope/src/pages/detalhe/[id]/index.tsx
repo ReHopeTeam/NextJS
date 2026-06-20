@@ -93,22 +93,21 @@ const Detalhe = () => {
       <main className="min_height">
         <section className="container column">
           <article className="grid info">
-            <div className="column start">
+            <div className="column">
               <div className={styles.imgContainer}>
                 <img
                   id={styles.img}
                   src={
                     !produto || !produto.imagem
-                      ? "/imgs/ImagemDoLogin.png"
+                      ? "/imgs/CardFantasma.png"
                       : produto.imagem.startsWith("http") ||
-                          produto.imagem.startsWith("/")
+                        produto.imagem.startsWith("/")
                         ? produto.imagem
                         : `data:image/jpeg;base64,${produto.imagem}`
                   }
                   alt={produto?.nomeProduto || "Imagem do produto"}
-                  className={`img small_radius ${
-                    produto?.statusProduto ? styles.ativoImg : styles.inativoImg
-                  }`}
+                  className={`img small_radius ${produto?.statusProduto ? styles.ativoImg : styles.inativoImg
+                    }`}
                 />
 
                 <h3
@@ -133,62 +132,59 @@ const Detalhe = () => {
               <p>{produto?.descricao || "Carregando..."}</p>
             </div>
 
-            <div className="to_row">
-              <div className="column start">
-                <div className="row">
-                  <Lucide name="Package" className="reset_lucide" />
-                  <div className="column start small_gap grid_to_row">
-                    <h3>Tipo:</h3>
-                    <p>{produto?.tipoProdutoID || "Não informado"}</p>
-                  </div>
-                </div>
-
-                <div className="row">
-                  <Lucide name="Grid2X2" className="reset_lucide" />
-                  <div className="column start small_gap grid_to_row">
-                    <h3>Categoria:</h3>
-                    <p>
-                      {produto?.nomeCategoria ||
-                        (produto?.categoriaID
-                          ? "Carregando..."
-                          : "Não informado")}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="row">
-                  <Lucide name="MapPin" className="reset_lucide" />
-                  <div className="column start small_gap grid_to_row">
-                    <h3>Localização:</h3>
-                    <p>
-                      {produto?.nomeLocalizacao ||
-                        (produto?.localizacaoID
-                          ? "Carregando..."
-                          : "Não informado")}
-                    </p>
-                  </div>
+            <div className="column start">
+              <div className="row">
+                <Lucide name="Package" className="reset_lucide" />
+                <div className="column start small_gap grid_to_row">
+                  <h3>Tipo:</h3>
+                  <p>{produto?.tipoProdutoID || "Não informado"}</p>
                 </div>
               </div>
-              <div className="column start">
-                <div className="row">
-                  <Lucide name="RulerDimensionLine" className="reset_lucide" />
-                  <div className="column start small_gap grid_to_row">
-                    <h3>Tamanho:</h3>
-                    <p>{produto?.tamanho || "Não informado"}</p>
-                  </div>
-                </div>
 
-                <div className="row">
-                  <Lucide name="User" className="reset_lucide" />
-                  <div className="column start small_gap grid_to_row">
-                    <h3>Usuário:</h3>
-                    <p>
-                      {produto?.nomeUsuario ||
-                        (produto?.usuarioID
-                          ? "Carregando..."
-                          : "Não informado")}
-                    </p>
-                  </div>
+              <div className="row">
+                <Lucide name="Grid2X2" className="reset_lucide" />
+                <div className="column start small_gap grid_to_row">
+                  <h3>Categoria:</h3>
+                  <p>
+                    {produto?.nomeCategoria ||
+                      (produto?.categoriaID
+                        ? "Carregando..."
+                        : "Não informado")}
+                  </p>
+                </div>
+              </div>
+
+              <div className="row">
+                <Lucide name="MapPin" className="reset_lucide" />
+                <div className="column start small_gap grid_to_row">
+                  <h3>Localização:</h3>
+                  <p>
+                    {produto?.nomeLocalizacao ||
+                      (produto?.localizacaoID
+                        ? "Carregando..."
+                        : "Não informado")}
+                  </p>
+                </div>
+              </div>
+              <div className="row">
+                <Lucide name="RulerDimensionLine" className="reset_lucide" />
+                <div className="column start small_gap grid_to_row">
+                  <h3>Tamanho:</h3>
+                  <p>{produto?.tamanho || "Não informado"}</p>
+                </div>
+              </div>
+
+              <div className="row">
+                <Lucide name="User" className="reset_lucide" />
+                <div className="column start small_gap grid_to_row">
+                  <h3>Usuário:</h3>
+                  <p>
+
+                    {produto?.nomeUsuario ||
+                      (produto?.usuarioID
+                        ? "Carregando..."
+                        : "Não informado")}
+                  </p>
                 </div>
               </div>
             </div>

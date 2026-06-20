@@ -1,8 +1,8 @@
+/* 1. ESTRUTURA DO HEADER */
 #header {
   min-height: 10vh;
   background: var(--verde-primario);
-  clip-path: path("M0 0H1920V90C1920 90 1440 130 1340 90C1240 50 1160 55 1080 75C1010 88 990 88 960.5 88C931 88 911 88 841 75C761 55 681 50 581 90C481 130 0 90 0 90V0Z"
-    );
+  clip-path: path("M0 0H1920V90C1920 90 1440 130 1340 90C1240 50 1160 55 1080 75C1010 88 990 88 960.5 88C931 88 911 88 841 75C761 55 681 50 581 90C481 130 0 90 0 90V0Z");
 }
 
 #header::after {
@@ -35,9 +35,7 @@
   height: 60px;
   padding: var(--padding-sm);
   color: var(--branco);
-  background: color-mix(in srgb,
-      var(--verde-primario),
-      var(--verde-secundario));
+  background: color-mix(in srgb, var(--verde-primario), var(--verde-secundario));
   border: 1px solid var(--destaque);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
@@ -50,11 +48,11 @@
   box-shadow: var(--shadow-md);
 }
 
-#user_info h4,
-#user_info p {
+#user_info :is(h4, p) {
   color: white;
 }
 
+/* 2. COMPONENTES (OVERLAY & SIDEBAR) */
 .overlay {
   position: fixed;
   inset: 0;
@@ -109,27 +107,6 @@
   background: rgba(255, 255, 255, 0.1);
 }
 
-.menuIcon :global(.lucide) {
-  position: static;
-  top: auto;
-  left: auto;
-  width: 32px;
-  height: 32px;
-  margin-right: 0;
-  pointer-events: auto;
-  cursor: pointer;
-  stroke: var(--branco);
-  transform: none;
-  transition:
-    transform 0.2s ease,
-    stroke 0.2s ease;
-}
-
-.menuIcon:hover :global(.lucide) {
-  stroke: var(--verde-tema);
-  transform: scale(1.1);
-}
-
 .closeButton {
   position: absolute;
   top: 1.5rem;
@@ -150,9 +127,7 @@
   height: 2rem;
   stroke: var(--branco);
   transform: none;
-  transition:
-    transform 0.1s ease,
-    stroke 0.1s ease;
+  transition: transform 0.1s ease, stroke 0.1s ease;
 }
 
 .closeButton:hover :global(.lucide) {
@@ -160,6 +135,7 @@
   transform: scale(1.1);
 }
 
+/* 4. ANIMAÇÕES */
 @keyframes fadeInOverlay {
   from {
     opacity: 0;
@@ -200,36 +176,89 @@
   }
 }
 
-@media (max-width: 640px) {
+:global(html) .headerIcon path {
+  stroke: var(--branco);
+}
+
+/* 5. MEDIA QUERIES */
+@media (max-width: 1080px) {
   #header {
-    top: 0;
-    z-index: 1000;
     width: 100%;
-    position: fixed;
-    background: linear-gradient(to bottom,
-        color-mix(var(--bg), var(--destaque)),
-        transparent);
+    background: var(--verde-primario);
     clip-path: none;
   }
 
-  #header::after{
+  #header::after {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  :global(html) .headerIcon path {
+    stroke: var(--verde-fonte);
+  }
+
+  :global(html) #img {
+    filter: invert(1);
+  }
+
+  :global(html.darkmode) #img {
+    filter: none;
+  }
+
+  #header {
+    position: fixed;
+    top: 0;
+    z-index: 1000;
+    width: 100%;
+    background: linear-gradient(to bottom, color-mix(in srgb, var(--bg), var(--destaque) 75%), transparent);
+    clip-path: none;
+  }
+
+  #header::after {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  #header {
+    position: fixed;
+    top: 0;
+    z-index: 1000;
+    width: 100%;
+    background: linear-gradient(to bottom, color-mix(in srgb, var(--bg), var(--destaque) 75%), transparent);
+    clip-path: none;
+  }
+
+  #header::after {
+    display: none;
+  }
+
+  #info_header {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+  }
+
+  #user_info {
+    height: 30px;
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+  }
+
+  #user_info p {
     display: none;
   }
 
   .sidebar {
     height: fit-content;
-    width: 60vw;
-    border-radius: 0 0 0 12rem;
+    width: 50vw;
+    min-width: 320px;
+    border-radius: 25% 0 0 12rem;
   }
 
-  .menuIcon {
-    position: absolute;
-    top: 30px;
-    right: 20px;
-    z-index: 100;
-  }
-
-  .troca_tema {
+  .trocaTema {
     position: absolute;
     left: 20px;
     top: 20px;

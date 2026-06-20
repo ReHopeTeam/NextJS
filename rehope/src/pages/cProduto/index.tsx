@@ -7,13 +7,17 @@ import Link from "next/link";
 import { erro, notificacao } from "@/utils/toast";
 import {
   cadastrarProduto,
+  Categoria,
   editarProduto,
   listarCategoria,
   listarLocalizacao,
   listarProdutoPorId,
   listarTipoProduto,
   listarUsuario,
+  Localizacao,
   ProdutoForm,
+  TipoProduto,
+  Usuario,
 } from "../api/genericService";
 import { useRouter } from "next/router";
 
@@ -41,10 +45,13 @@ const CadastroProduto = () => {
   const [arquivoImagem, setArquivoImagem] = useState<File | null>(null);
 
   // Estados para armazenar as listas dinâmicas que vêm da API
-  const [listaTipos, setListaTipos] = useState<any[]>([]);
-  const [listaCategorias, setListaCategorias] = useState<any[]>([]);
-  const [listaLocalizacoes, setListaLocalizacoes] = useState<any[]>([]);
-  const [listaUsuarios, setListaUsuarios] = useState<any[]>([]);
+  const [listaTipos, setListaTipos] = useState<TipoProduto[]>([]);
+  const [listaLocalizacoes, setListaLocalizacoes] = useState<Localizacao[]>([]);
+  const [listaUsuarios, setListaUsuarios] = useState<Usuario[]>([]);
+  const [listaCategorias, setListaCategorias] = useState<Categoria[]>([]);
+
+  // Estado para filtrar categorias e só puxar de acordo com o "Tipo"
+  const [categoriasFiltradas, setCategoriasFiltradas] = useState<Categoria[]>([]);
 
   const [valoresSelect, setValoresSelect] = useState<Record<string, string>>({
     tipo: "",
@@ -67,7 +74,8 @@ const CadastroProduto = () => {
     if (
       url.startsWith("blob:") ||
       url.startsWith("http://") ||
-      url.startsWith("https://")
+      url.startsWith("https://") ||
+      url.startsWith("data:")
     ) {
       return url;
     }
@@ -84,16 +92,18 @@ const CadastroProduto = () => {
       setTitulo(produto.nomeProduto || "");
       setPreco(produto.preco || "");
       setDescricao(produto.descricao || "");
-      setTamanho(produto.tamanho || "");
+      setTamanho(produto.tamanho || (produto as any).Tamanho || "");
+
+      const tipoSeguro = produto.tipoProdutoID ?? (produto as any).tipoProdutoId;
+      const categoriaSegura = produto.categoriaID ?? (produto as any).categoriaId;
+      const localizacaoSegura = produto.localizacaoID ?? (produto as any).localizacaoId;
+      const usuarioSeguro = produto.usuarioID ?? (produto as any).usuarioId;
 
       setValoresSelect({
-        tipo:
-          produto.tipoProdutoID != null ? String(produto.tipoProdutoID) : "",
-        categoria:
-          produto.categoriaID != null ? String(produto.categoriaID) : "",
-        localizacao:
-          produto.localizacaoID != null ? String(produto.localizacaoID) : "",
-        usuario: produto.usuarioID != null ? String(produto.usuarioID) : "",
+        tipo: tipoSeguro != null ? String(tipoSeguro) : "",
+        categoria: categoriaSegura != null ? String(categoriaSegura) : "",
+        localizacao: localizacaoSegura != null ? String(localizacaoSegura) : "",
+        usuario: usuarioSeguro != null ? String(usuarioSeguro) : "",
       });
 
       if (produto.imagemUrl) {
@@ -103,6 +113,17 @@ const CadastroProduto = () => {
       erro("Erro ao carregar dados do produto");
     }
   }
+
+  useEffect(() => {
+    if (!valoresSelect.tipo || listaCategorias.length === 0) return;
+
+    const categorias = listaCategorias.filter(
+      (categoria) =>
+        categoria.tipoProdutoID === Number(valoresSelect.tipo)
+    );
+
+    setCategoriasFiltradas(categorias);
+  }, [valoresSelect.tipo, listaCategorias]);
 
   useEffect(() => {
     if (!router.isReady) return;
@@ -177,6 +198,12 @@ const CadastroProduto = () => {
 
   async function salvarProduto(e: React.FormEvent) {
     e.preventDefault();
+
+    if (telaEditar && !id) {
+      erro("ID do produto não encontrado para edição.");
+      return;
+    }
+
     try {
       const dados: any = {
         nomeProduto: titulo,
@@ -228,8 +255,22 @@ const CadastroProduto = () => {
   };
 
   const handleSelecionarOpcao = (campo: string, valor: string) => {
-    setValoresSelect((prev) => ({ ...prev, [campo]: valor }));
-    setSelectAberto((prev) => ({ ...prev, [campo]: false }));
+    setValoresSelect((prev) => {
+      const novosValores = { ...prev, [campo]: valor, };
+
+      if (campo === "tipo") {
+        const categorias = listaCategorias.filter(
+          (categoria) => categoria.tipoProdutoID === Number(valor)
+        );
+
+        setCategoriasFiltradas(categorias);
+        novosValores.categoria = "";
+      }
+
+      return novosValores;
+    });
+
+    setSelectAberto((prev) => ({ ...prev, [campo]: false, }));
   };
 
   // Renderizador dinâmico que mapeia as listas corretas vindas do backend
@@ -251,7 +292,7 @@ const CadastroProduto = () => {
           item.tipoId ?? item.tipoProdutoID ?? item.tipoProdutoId ?? item.id,
         );
     } else if (campo === "categoria") {
-      listaAlvo = listaCategorias;
+      listaAlvo = categoriasFiltradas;
       extrairNome = (item) => item.nomeCategoria || "";
       extrairId = (item) =>
         String(item.categoriaId ?? item.categoriaID ?? item.id);
@@ -329,9 +370,45 @@ const CadastroProduto = () => {
     <>
       <Header />
       <main className="min_height">
+        <svg
+          width="265"
+          height="592"
+          viewBox="0 0 265 592"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className="fixed path2"
+          style={{ left: "0", top: "240" }}
+        >
+          <path
+            d="M-1.86295 104.196C123.047 137.918 143.137 -39.8031 202.637 
+            30.6968C262.137 101.197 148.637 111.197 132.137 202.697C115.637 
+            294.197 208.638 265.196 242.121 336.696C275.605 408.195 198.138 
+            502.197 122.138 484.696C46.1375 467.195 -32 577.619 -32 577.619"
+            strokeWidth="20"
+            strokeLinecap="round"
+          />
+        </svg>
+
+        <svg
+          width="265"
+          height="592"
+          viewBox="0 0 265 592"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className="fixed path2"
+          style={{ right: "-100", top: "90" }}
+        >
+          <path
+            d="M173.295 409.198C173.295 409.198 69.7944 381.967 57.7955 328.197C45.3221 
+            272.301 118.796 295.197 135.296 203.697C151.796 112.197 55.2792 221.197 21.7954 
+            149.697C-11.6883 78.1978 31.242 34.2975 86.2959 13.6974C129.816 -2.58704 202.294 40.1974 202.294 40.1974"
+            strokeWidth="20"
+            strokeLinecap="round"
+          />
+        </svg>
         <section className="container column">
           <h1 className="title2">
-            {telaEditar ? "Editar" : "Criar"} Produto
+            {telaEditar ? "Editar" : "Cadastrar"} Produto
           </h1>
 
           <form
@@ -342,7 +419,7 @@ const CadastroProduto = () => {
           >
             {/* Coluna 1 */}
             <div className="column full_height">
-              <div className="campo_form">
+              <div className="campo_img">
                 <label htmlFor="upload-foto" className="input_upload">
                   {preview ? (
                     <div className="relative_pos full_size_preview">
@@ -401,9 +478,7 @@ const CadastroProduto = () => {
               <div className="campo_form">
                 <Lucide name="Tag" className="lucide" />
                 <input
-                  type="number"
-                  step="0.01"
-                  min="0"
+                  type="text"
                   id="preco"
                   placeholder=" "
                   className="input"

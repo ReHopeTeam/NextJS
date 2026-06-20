@@ -12,11 +12,11 @@ type HistoricoAlteracao = {
   dataAlteracao: string;
   nomeAnterior: string;
   precoAnterior: number;
-  localizacaoAnterior: string;
+  localizacaoIDAnterior: string;
 };
 
-const Historico = () => {
-  const router = useRouter(); 
+const HistoricoPorID = () => {
+  const router = useRouter();
   const { id } = router.query;
 
   const [logs, setLogs] = useState<HistoricoAlteracao[]>([]);
@@ -67,7 +67,7 @@ const Historico = () => {
         dataAlteracao: item.dataAlteracao,
         nomeAnterior: item.nomeAnterior,
         precoAnterior: Number(item.precoAnterior) || 0,
-        localizacaoAnterior:
+        localizacaoIDAnterior:
           item.localizacaoAnterior ??
           item.localizacaoAnteriorID ??
           item.localizacaoIDAnterior,
@@ -101,95 +101,88 @@ const Historico = () => {
                 <th>Local Anterior</th>
               </tr>
             </thead>
-            <tbody className="line"></tbody>
-            <tfoot className="column">
+            <tbody className="line column">
               {historicoPaginado.map((item) => (
                 <DataTable
                   key={item.logID}
                   dataAlteracao={item.dataAlteracao}
                   nomeAnterior={item.nomeAnterior}
                   precoAnterior={item.precoAnterior}
-                  localizacaoIDAnterior={item.localizacaoAnterior}
+                  localizacaoAnterior={item.localizacaoIDAnterior}
                 />
               ))}
-
-              {totalPaginas > 1 && (
-                <nav>
-                  <ul id={styles.paginacao}>
-                    <li
-                      className="btn small_width"
-                      onClick={() => paginaAtual > 1 && setPaginaAtual(1)}
-                      style={{
-                        opacity: paginaAtual === 1 ? 0.25 : 1,
-                        cursor: paginaAtual === 1 ? "not-allowed" : "pointer",
-                      }}
-                    >
-                      {"<<"}
-                    </li>
-
-                    <li
-                      className="btn small_width"
-                      onClick={() =>
-                        paginaAtual > 1 && setPaginaAtual(paginaAtual - 1)
-                      }
-                      style={{
-                        opacity: paginaAtual === 1 ? 0.5 : 1,
-                        cursor: paginaAtual === 1 ? "not-allowed" : "pointer",
-                      }}
-                    >
-                      {"<"}
-                    </li>
-
-                    {paginasVisiveis.map((pagina) => (
-                      <li
-                        key={pagina}
-                        onClick={() => setPaginaAtual(pagina)}
-                        className={`${
-                          paginaAtual === pagina ? "btn" : "btn2"
-                        } small_width`}
-                      >
-                        {pagina}
-                      </li>
-                    ))}
-
-                    <li
-                      className="btn small_width"
-                      onClick={() =>
-                        paginaAtual < totalPaginas &&
-                        setPaginaAtual(paginaAtual + 1)
-                      }
-                      style={{
-                        opacity: paginaAtual === totalPaginas ? 0.5 : 1,
-                        cursor:
-                          paginaAtual === totalPaginas
-                            ? "not-allowed"
-                            : "pointer",
-                      }}
-                    >
-                      {">"}
-                    </li>
-
-                    <li
-                      className="btn small_width"
-                      onClick={() =>
-                        paginaAtual < totalPaginas &&
-                        setPaginaAtual(totalPaginas)
-                      }
-                      style={{
-                        opacity: paginaAtual === totalPaginas ? 0.25 : 1,
-                        cursor:
-                          paginaAtual === totalPaginas
-                            ? "not-allowed"
-                            : "pointer",
-                      }}
-                    >
-                      {">>"}
-                    </li>
-                  </ul>
-                </nav>
-              )}
-            </tfoot>
+            </tbody>
           </table>
+
+          {totalPaginas > 1 && (
+            <nav>
+              <ul id={styles.paginacao}>
+                <li
+                  className="btn small_width"
+                  onClick={() => paginaAtual > 1 && setPaginaAtual(1)}
+                  style={{
+                    opacity: paginaAtual === 1 ? 0.25 : 1,
+                    cursor: paginaAtual === 1 ? "not-allowed" : "pointer",
+                  }}
+                >
+                  {"<<"}
+                </li>
+
+                <li
+                  className="btn small_width"
+                  onClick={() =>
+                    paginaAtual > 1 && setPaginaAtual(paginaAtual - 1)
+                  }
+                  style={{
+                    opacity: paginaAtual === 1 ? 0.5 : 1,
+                    cursor: paginaAtual === 1 ? "not-allowed" : "pointer",
+                  }}
+                >
+                  {"<"}
+                </li>
+
+                {paginasVisiveis.map((pagina) => (
+                  <li
+                    key={pagina}
+                    onClick={() => setPaginaAtual(pagina)}
+                    className={`${paginaAtual === pagina ? "btn" : "btn2"
+                      } small_width`}
+                  >
+                    {pagina}
+                  </li>
+                ))}
+
+                <li
+                  className="btn small_width"
+                  onClick={() =>
+                    paginaAtual < totalPaginas &&
+                    setPaginaAtual(paginaAtual + 1)
+                  }
+                  style={{
+                    opacity: paginaAtual === totalPaginas ? 0.5 : 1,
+                    cursor:
+                      paginaAtual === totalPaginas ? "not-allowed" : "pointer",
+                  }}
+                >
+                  {">"}
+                </li>
+
+                <li
+                  className="btn small_width"
+                  onClick={() =>
+                    paginaAtual < totalPaginas && setPaginaAtual(totalPaginas)
+                  }
+                  style={{
+                    opacity: paginaAtual === totalPaginas ? 0.25 : 1,
+                    cursor:
+                      paginaAtual === totalPaginas ? "not-allowed" : "pointer",
+                  }}
+                >
+                  {">>"}
+                </li>
+              </ul>
+            </nav>
+          )}
         </section>
       </main>
       <Footer />
@@ -197,4 +190,4 @@ const Historico = () => {
   );
 };
 
-export default Historico;
+export default HistoricoPorID;

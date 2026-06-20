@@ -62,3 +62,9 @@
 #historico svg {
   stroke: var(--verde-fonte);
 }
+
+@media (max-width: 768px) {
+  #img {
+    width: 50%;
+  }
+}

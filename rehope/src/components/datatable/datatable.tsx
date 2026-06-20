@@ -4,21 +4,21 @@ type Dados = {
   dataAlteracao: string;
   nomeAnterior: string;
   precoAnterior: number;
-  localizacaoIDAnterior: string;
+  localizacaoAnterior: string;
 };
 
 const DataTable = ({
   dataAlteracao,
   nomeAnterior,
   precoAnterior,
-  localizacaoIDAnterior,
+  localizacaoAnterior,
 }: Dados) => {
   return (
     <tr className="tr info">
       <td>{dataAlteracao}</td>
       <td>{nomeAnterior}</td>
       <td>{formatarPreco(precoAnterior)}</td>
-      <td>{localizacaoIDAnterior}</td>
+      <td>{localizacaoAnterior}</td>
     </tr>
   );
 };

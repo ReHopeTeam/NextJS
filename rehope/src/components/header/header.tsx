@@ -84,14 +84,6 @@ const Header = () => {
           <Lucide name="MapPinPlus" className="reset_lucide" />
         </Link>
         <Link
-          href="/cProduto"
-          className={styles.menuLink}
-          onClick={handleFecharMenu}
-        >
-          + Criar Produto
-          <Lucide name="HeartPlus" className="reset_lucide" />
-        </Link>
-        <Link
           href="/cTProduto"
           className={styles.menuLink}
           onClick={handleFecharMenu}
@@ -100,11 +92,19 @@ const Header = () => {
           <Lucide name="PackagePlus" className="reset_lucide" />
         </Link>
         <Link
+          href="/cProduto"
+          className={styles.menuLink}
+          onClick={handleFecharMenu}
+        >
+          + Cadastrar Produto
+          <Lucide name="HeartPlus" className="reset_lucide" />
+        </Link>
+        <Link
           href="/cUsuario"
           className={styles.menuLink}
           onClick={handleFecharMenu}
         >
-          + Criar Usuário
+          + Cadastrar Usuário
           <Lucide name="UserRoundPlus" className="reset_lucide" />
         </Link>
         <Link
@@ -129,46 +129,44 @@ const Header = () => {
 
   return (
     <>
-      <header id={styles.header} className="main_header">
-        <div className="container row to_column2">
-            <Link href="/home">
-              <img
-                className="img"
-                id={styles.img}
-                src="/imgs/Logo.svg"
-                alt="Logo do site"
-              />
-            </Link>
+      <header className="main_header" id={styles.header}>
+        <div className="container row" id={styles.info_header}>
+          <Link href="/home">
+            <img
+              className="img"
+              id={styles.img}
+              src="/imgs/Logo.svg"
+              alt="Logo do site"
+            />
+          </Link>
 
           <div id={styles.div}>
             <div className="row">
-              {usuario ? (
-                <Button
-                  className="column no_gap"
-                  id={styles.user_info}
-                  onClick={handleLogout}
-                >
-                  <h4 className="h4">{usuario.nome}</h4>
-                  <p className="p">{usuario.email}</p>
-                </Button>
-              ) : (
-                <Button
-                  className="column no_gap"
-                  id={styles.user_info}
-                  onClick={handleLogout}
-                >
-                  <h4 className="h4">Nome</h4>
-                  <p className="p">email@email.com</p>
-                </Button>
-              )}
+              <Button
+                className="column no_gap"
+                id={styles.user_info}
+                onClick={handleLogout}
+              >
+                {usuario ? (
+                  <>
+                    <h4 className="h4">{usuario.nome}</h4>
+                    <p className="p">{usuario.email}</p>
+                  </>
+                ) : (
+                  <>
+                    <h4 className="h4">Nome</h4>
+                    <p className="p">email@email.com</p>
+                  </>
+                )}
+              </Button>
             </div>
-            <TrocaTema className={styles.troca_tema}/>
+            <TrocaTema className={`${styles.trocaTema} ${styles.headerIcon}`} />
             <button
               type="button"
-              className={styles.menuIcon}
+              className={`menuIcon ${styles.headerIcon}`}
               onClick={() => setMenuAberto(true)}
             >
-              <Lucide name="Menu" className="reset_lucide" />
+              <Lucide name="Menu" />
             </button>
           </div>
         </div>

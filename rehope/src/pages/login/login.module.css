@@ -1,6 +1,6 @@
 #login {
   display: grid;
-  grid-template-columns: 1fr minmax(240px, 30vw);
+  grid-template-columns: 1fr minmax(300px, 30vw);
   height: 100vh;
 }
 
@@ -17,6 +17,11 @@
     color-mix(in srgb, var(--verde-fonte), var(--preto));
 }
 
+.login_svg {
+  position: fixed;
+  z-index: 2;
+}
+
 #img {
   height: 100px;
   filter: invert(20%) sepia(14%) saturate(1200%) hue-rotate(76deg)
@@ -29,10 +34,6 @@
 
 #h1 {
   color: var(--verde-fonte);
-}
-
-:global(html.darkmode) #h1 {
-  color: white;
 }
 
 #tema_btn {
@@ -50,15 +51,27 @@
 .login_img {
   position: absolute;
   inset: 0;
-
   width: 100%;
   height: 100%;
   object-fit: cover;
-
   opacity: 0;
   transition: opacity 1s ease-in-out;
 }
 
 .ativa {
   opacity: 1;
+}
+
+@media (max-width: 768px) {
+  #login {
+    grid-template-columns: 1fr;
+  }
+
+  .img_wrapper{
+    display: none;
+  }
+
+  .login_svg {
+    opacity: 0.1;
+  }
 }
