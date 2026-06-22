@@ -38,7 +38,6 @@ export interface ProdutoList {
   tipoProdutoID: number;
 }
 
-// Interface estendida para o produto carregado por ID (com o preview tratado)
 export interface ProdutoDetalhe extends ProdutoList {
   imagemUrl: string | null;
 }
@@ -58,8 +57,10 @@ export type ProdutoForm = {
 };
 
 export interface TipoProduto {
-  tipoProdutoID: number;
+  tipoId: number;
   nomeTipo: string;
+  categoriaId: number;
+  nomeCategoria: string;
 }
 
 export interface Usuario {
@@ -78,7 +79,8 @@ export async function cadastrarCategoria(dados: Categoria): Promise<any> {
     const response = await api.post("Categoria", dados);
     return response.data;
   } catch (error: any) {
-    const mensagemErro = error.response?.data?.message || error.response?.data || "Erro na API";
+    const mensagemErro =
+      error.response?.data?.message || error.response?.data || "Erro na API";
     throw new Error(mensagemErro);
   }
 }
@@ -88,7 +90,8 @@ export async function cadastrarLocalizacao(dados: Localizacao): Promise<any> {
     const response = await api.post("Localizacao", dados);
     return response.data;
   } catch (error: any) {
-    const mensagemErro = error.response?.data?.message || error.response?.data || "Erro na API";
+    const mensagemErro =
+      error.response?.data?.message || error.response?.data || "Erro na API";
     throw new Error(mensagemErro);
   }
 }
@@ -96,22 +99,27 @@ export async function cadastrarLocalizacao(dados: Localizacao): Promise<any> {
 export async function cadastrarProduto(dados: ProdutoForm): Promise<any> {
   try {
     const formData = new FormData();
-    formData.append("nomeProduto", dados.nomeProduto);
-    formData.append("preco", dados.preco);
-    formData.append("descricao", dados.descricao);
-    formData.append("tamanho", dados.tamanho);
+    formData.append("NomeProduto", dados.nomeProduto);
+    formData.append("Preco", dados.preco);
+    formData.append("Descricao", dados.descricao || "");
+    formData.append("Tamanho", dados.tamanho);
+    formData.append("Codigo", String(dados.codigo ?? 0));
+
     if (dados.imagem) {
-      formData.append("imagem", dados.imagem);
+      formData.append("Imagem", dados.imagem);
     }
-    formData.append("categoriaID", dados.categoriaID.toString());
-    formData.append("localizacaoID", dados.localizacaoID.toString());
-    formData.append("usuarioID", dados.usuarioID);
-    formData.append("tipoProdutoID", dados.tipoProdutoID.toString());
+
+    formData.append("CategoriaID", dados.categoriaID.toString());
+    formData.append("LocalizacaoID", dados.localizacaoID.toString());
+    formData.append("UsuarioID", dados.usuarioID);
+    formData.append("TipoProdutoID", dados.tipoProdutoID.toString());
 
     const response = await api.post("Produto", formData);
     return response.data;
   } catch (error: any) {
-    throw new Error(error.response?.data || "Erro inesperado ao cadastrar produto.");
+    throw new Error(
+      error.response?.data || "Erro inesperado ao cadastrar produto.",
+    );
   }
 }
 
@@ -120,7 +128,8 @@ export async function cadastrarTipoProduto(dados: TipoProduto): Promise<any> {
     const response = await api.post("TipoProduto", dados);
     return response.data;
   } catch (error: any) {
-    const mensagemErro = error.response?.data?.message || error.response?.data || "Erro na API";
+    const mensagemErro =
+      error.response?.data?.message || error.response?.data || "Erro na API";
     throw new Error(mensagemErro);
   }
 }
@@ -130,7 +139,8 @@ export async function cadastrarUsuario(dados: Usuario): Promise<any> {
     const response = await api.post("Usuario", dados);
     return response.data;
   } catch (error: any) {
-    const mensagemErro = error.response?.data?.message || error.response?.data || "Erro na API";
+    const mensagemErro =
+      error.response?.data?.message || error.response?.data || "Erro na API";
     throw new Error(mensagemErro);
   }
 }
@@ -204,9 +214,11 @@ export async function listarCategoriaPorId(id: number): Promise<Categoria> {
   }
 }
 
-export async function listarLogProdutoPorId(produtoId: string): Promise<LogProduto[]> {
+export async function listarLogProdutoPorId(
+  produtoId: string,
+): Promise<LogProduto[]> {
   try {
-    const response = await api.get<LogProduto[]>(`LogProduto/produto/${produtoId}`);
+    const response = await api.get<LogProduto[]>(`LogProduto/${produtoId}`);
     return response.data;
   } catch (error: any) {
     throw new Error(error.response?.data || "Erro ao listar histórico.");
@@ -218,7 +230,9 @@ export async function listarLocalizacaoPorId(id: number): Promise<Localizacao> {
     const response = await api.get<Localizacao>("Localizacao/" + id);
     return response.data;
   } catch (error: any) {
-    throw new Error(error.response?.data || "Erro ao buscar Localização por ID");
+    throw new Error(
+      error.response?.data || "Erro ao buscar Localização por ID",
+    );
   }
 }
 
@@ -226,13 +240,14 @@ export async function listarProdutoPorId(id: string): Promise<ProdutoDetalhe> {
   try {
     const response = await api.get<ProdutoList>("Produto/" + id);
 
+    const base64Crua = response.data.imagem;
+
     const produto: ProdutoDetalhe = {
       ...response.data,
-      imagemUrl: response.data.imagem
-        ? typeof response.data.imagem === "string" &&
-          (response.data.imagem.startsWith("data:") || response.data.imagem.includes("base64,"))
-          ? response.data.imagem
-          : `data:image/jpeg;base64,${response.data.imagem}`
+      imagemUrl: base64Crua
+        ? base64Crua.startsWith("data:")
+          ? base64Crua
+          : `data:image/jpeg;base64,${base64Crua}`
         : null,
     };
 
@@ -247,7 +262,9 @@ export async function listarTipoProdutoPorId(id: number): Promise<TipoProduto> {
     const response = await api.get<TipoProduto>("TipoProduto/" + id);
     return response.data;
   } catch (error: any) {
-    throw new Error(error.response?.data || "Erro ao buscar Tipo de Produto por ID");
+    throw new Error(
+      error.response?.data || "Erro ao buscar Tipo de Produto por ID",
+    );
   }
 }
 
@@ -265,47 +282,31 @@ export async function listarUsuarioPorId(id: string): Promise<Usuario> {
 //? ===============
 export async function editarProduto(
   produtoId: string,
-  dados: ProdutoForm
+  dados: ProdutoForm,
 ): Promise<any> {
   try {
     const formData = new FormData();
 
+    formData.append("ProdutoID", produtoId);
     formData.append("NomeProduto", dados.nomeProduto);
-    formData.append("Preco", dados.preco);
+    formData.append("Preco", String(dados.preco));
     formData.append("Descricao", dados.descricao);
     formData.append("Codigo", String(dados.codigo ?? 0));
     formData.append("Tamanho", dados.tamanho);
+    formData.append("StatusProduto", String(dados.statusProduto ?? true));
 
-    formData.append(
-      "StatusProduto",
-      String(dados.statusProduto ?? true)
-    );
-
-    formData.append(
-      "CategoriaID",
-      String(dados.categoriaID)
-    );
-
-    formData.append(
-      "LocalizacaoID",
-      String(dados.localizacaoID)
-    );
-
-    if (dados.imagem) {
+    formData.append("CategoriaID", String(dados.categoriaID || 0));
+    formData.append("LocalizacaoID", String(dados.localizacaoID || 0));
+    formData.append("UsuarioID", dados.usuarioID || "");
+    formData.append("TipoProdutoID", String(dados.tipoProdutoID || 0));
+    if (dados.imagem instanceof File) {
       formData.append("Imagem", dados.imagem);
     }
 
-    const response = await api.put(
-      `/Produto/${produtoId}`,
-      formData
-    );
-
+    const response = await api.put(`Produto/${produtoId}`, formData);
     return response.data;
   } catch (error: any) {
-    throw new Error(
-      error.response?.data ||
-      "Erro inesperado ao editar produto."
-    );
+    throw new Error(error.response?.data || "Erro ao editar Produto.");
   }
 }
 
@@ -340,7 +341,12 @@ export async function deletarTipoProduto(tipoProdutoId: number): Promise<void> {
   try {
     await api.delete("TipoProduto/" + tipoProdutoId);
   } catch (error: any) {
-    throw new Error(error.response?.data || "Erro ao deletar Tipo de Produto.");
+    const mensagemErro =
+      error.response?.data?.message ||
+      error.response?.data ||
+      "Erro ao deletar Tipo de Produto.";
+
+    throw new Error(mensagemErro);
   }
 }
 

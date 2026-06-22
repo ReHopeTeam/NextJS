@@ -1,3 +1,6 @@
+/*? ========== */
+/*?   Footer   */
+/*? ========== */
 #footer {
   position: relative;
   min-height: 15vh;
@@ -24,6 +27,9 @@
   );
 }
 
+/*? =========== */
+/*?   Imagens   */
+/*? =========== */
 #img {
   width: 7rem;
   filter: invert(20%) sepia(14%) saturate(1200%) hue-rotate(76deg)
@@ -34,6 +40,9 @@
   filter: brightness(2);
 }
 
+/*? ================= */
+/*?   Redes Sociais   */
+/*? ================= */
 .social_link {
   display: inline-block;
 }

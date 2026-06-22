@@ -1,3 +1,6 @@
+/*? ====================== */
+/*?   Listagem e Filtros   */
+/*? ====================== */
 #lista {
   display: flex;
   flex-direction: column;
@@ -17,16 +20,9 @@
   gap: 20px;
 }
 
-#paginacao {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
-  padding: 2.5%;
-  list-style: none;
-}
-
+/*? ======================= */
+/*?   Botões de Paginação   */
+/*? ======================= */
 #btn_padrao,
 #btn_ativo,
 #btn_inativo {
@@ -73,4 +69,65 @@
 
 #btn_inativo svg {
   stroke: var(--vermelho);
+}
+
+/* Esconde completamente o botão nativo do navegador */
+.input[type="number"]::-webkit-inner-spin-button,
+.input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+/* Container das setas customizadas */
+.spin_controles {
+  position: absolute;
+  right: 2px;
+  top: 2px;
+  height: calc(100% - 4px);
+  width: 26px;
+  display: flex;
+  flex-direction: column;
+  z-index: 101; /* Fica acima do input */
+  border-left: 1px solid var(--border-input);
+}
+
+/* Cada botão individual (Cima / Baixo) */
+.spin_btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50%;
+  width: 100%;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  padding: 0;
+  transition: background 0.15s ease;
+}
+
+/* Estilo individual para os ícones dentro deles */
+.spin_btn :global(.reset_lucide) {
+  stroke: var(--verde-secundario);
+}
+
+/* Efeito hover individual e refinado */
+.spin_btn:hover {
+  background: color-mix(in srgb, var(--verde-secundario) 15%, transparent);
+}
+
+.spin_btn:hover :global(.reset_lucide) {
+  stroke: var(--verde-vivo);
+}
+
+/* Arredonda os cantos correspondentes ao input */
+.spin_btn:first-child {
+  border-top-right-radius: var(--radius-md);
+}
+.spin_btn:last-child {
+  border-bottom-right-radius: var(--radius-md);
+  border-top: 1px solid color-mix(in srgb, var(--border-input) 50%, transparent);
 }

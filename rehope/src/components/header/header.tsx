@@ -68,6 +68,14 @@ const Header = () => {
         </button>
 
         <Link
+          href="/login"
+          className={styles.menuLink}
+          onClick={handleFecharMenu}
+        >
+          Login
+          <Lucide name="LogIn" className="reset_lucide" />
+        </Link>
+        <Link
           href="/cCategoria"
           className={styles.menuLink}
           onClick={handleFecharMenu}
@@ -112,7 +120,7 @@ const Header = () => {
           className={styles.menuLink}
           onClick={handleFecharMenu}
         >
-          Histórico
+          Histórico Geral
           <Lucide name="History" className="reset_lucide" />
         </Link>
         <Link

@@ -1,10 +1,10 @@
 import DataTable from "@/components/datatable/datatable";
 import Footer from "@/components/footer/footer";
 import Header from "@/components/header/header";
-import styles from "@/pages/historico/historico.module.css";
 import { useEffect, useState } from "react";
-import { listarLogProduto } from "../api/genericService";
+import { listarLogProduto, listarLocalizacao } from "../api/genericService";
 import { erro } from "@/utils/toast";
+import Link from "next/link";
 
 type HistoricoAlteracao = {
   logID: number;
@@ -16,20 +16,16 @@ type HistoricoAlteracao = {
 
 const Historico = () => {
   const [logs, setLogs] = useState<HistoricoAlteracao[]>([]);
+  const registros = logs ?? [];
 
   const [paginaAtual, setPaginaAtual] = useState(1);
-
   const itensPorPagina = 5;
-
-  const registros = logs ?? [];
 
   const indiceInicial = (paginaAtual - 1) * itensPorPagina;
   const indiceFinal = indiceInicial + itensPorPagina;
 
   const historicoPaginado = registros.slice(indiceInicial, indiceFinal);
-
   const totalPaginas = Math.ceil(registros.length / itensPorPagina);
-
   const maxBotoesVisiveis = 5;
 
   const obterIntervaloPaginas = () => {
@@ -58,23 +54,36 @@ const Historico = () => {
   const paginasVisiveis = obterIntervaloPaginas();
 
   async function carregarHistoricoCompleto() {
-  try {
-    const lista = await listarLogProduto();
-    
-    const logsFormatados: HistoricoAlteracao[] = lista.map((item, index) => ({
-      logID: index, 
-      dataAlteracao: item.dataAlteracao,
-      nomeAnterior: item.nomeAnterior,
-      precoAnterior: item.precoAnterior,
-      localizacaoAnterior: `ID da Localização: ${item.localizacaoIDAnterior}`, 
-    }));
+    try {
+      const [listaLogs, listaLocalizacoes] = await Promise.all([
+        listarLogProduto(),
+        listarLocalizacao(),
+      ]);
 
-    setLogs(logsFormatados);
-  } catch (error: any) {
-    erro("Erro ao carregar o histórico geral: " + error.message);
-    setLogs([]);
+      const logsFormatados: HistoricoAlteracao[] = listaLogs.map(
+        (item, index) => {
+          const localizacao = listaLocalizacoes.find(
+            (loc) => loc.localizacaoID === item.localizacaoIDAnterior,
+          );
+
+          return {
+            logID: index,
+            dataAlteracao: item.dataAlteracao,
+            nomeAnterior: item.nomeAnterior,
+            precoAnterior: item.precoAnterior,
+            localizacaoAnterior:
+              localizacao?.nomeLocalizacao ??
+              `ID ${item.localizacaoIDAnterior}`,
+          };
+        },
+      );
+
+      setLogs(logsFormatados);
+    } catch (error: any) {
+      erro("Erro ao carregar o histórico geral: " + error.message);
+      setLogs([]);
+    }
   }
-}
 
   useEffect(() => {
     carregarHistoricoCompleto();
@@ -84,7 +93,7 @@ const Historico = () => {
     <>
       <Header />
       <main className="min_height">
-        <section className="container column">
+        <section className="container column space_between">
           <h1 className="h1">Histórico Geral</h1>
           <table className="table">
             <thead>
@@ -102,81 +111,92 @@ const Historico = () => {
                   dataAlteracao={item.dataAlteracao}
                   nomeAnterior={item.nomeAnterior}
                   precoAnterior={item.precoAnterior}
-                  localizacaoAnterior={item.localizacaoAnterior}
+                  nomeLocalizacaoAnterior={item.localizacaoAnterior}
                 />
               ))}
             </tbody>
           </table>
 
-          {totalPaginas > 1 && (
-            <nav>
-              <ul id={styles.paginacao}>
-                <li
-                  className="btn small_width"
-                  onClick={() => paginaAtual > 1 && setPaginaAtual(1)}
-                  style={{
-                    opacity: paginaAtual === 1 ? 0.25 : 1,
-                    cursor: paginaAtual === 1 ? "not-allowed" : "pointer",
-                  }}
-                >
-                  {"<<"}
-                </li>
-
-                <li
-                  className="btn small_width"
-                  onClick={() =>
-                    paginaAtual > 1 && setPaginaAtual(paginaAtual - 1)
-                  }
-                  style={{
-                    opacity: paginaAtual === 1 ? 0.5 : 1,
-                    cursor: paginaAtual === 1 ? "not-allowed" : "pointer",
-                  }}
-                >
-                  {"<"}
-                </li>
-
-                {paginasVisiveis.map((pagina) => (
+          {totalPaginas > 1 ? (
+            <div className="row">
+              <Link href={`/home`} className="btn2">
+                Voltar
+              </Link>
+              <nav>
+                <ul className="paginacao">
                   <li
-                    key={pagina}
-                    onClick={() => setPaginaAtual(pagina)}
-                    className={`${
-                      paginaAtual === pagina ? "btn" : "btn2"
-                    } small_width`}
+                    className="btn small_width"
+                    onClick={() => paginaAtual > 1 && setPaginaAtual(1)}
+                    style={{
+                      opacity: paginaAtual === 1 ? 0.25 : 1,
+                      cursor: paginaAtual === 1 ? "not-allowed" : "pointer",
+                    }}
                   >
-                    {pagina}
+                    {"<<"}
                   </li>
-                ))}
 
-                <li
-                  className="btn small_width"
-                  onClick={() =>
-                    paginaAtual < totalPaginas &&
-                    setPaginaAtual(paginaAtual + 1)
-                  }
-                  style={{
-                    opacity: paginaAtual === totalPaginas ? 0.5 : 1,
-                    cursor:
-                      paginaAtual === totalPaginas ? "not-allowed" : "pointer",
-                  }}
-                >
-                  {">"}
-                </li>
+                  <li
+                    className="btn small_width"
+                    onClick={() =>
+                      paginaAtual > 1 && setPaginaAtual(paginaAtual - 1)
+                    }
+                    style={{
+                      opacity: paginaAtual === 1 ? 0.5 : 1,
+                      cursor: paginaAtual === 1 ? "not-allowed" : "pointer",
+                    }}
+                  >
+                    {"<"}
+                  </li>
 
-                <li
-                  className="btn small_width"
-                  onClick={() =>
-                    paginaAtual < totalPaginas && setPaginaAtual(totalPaginas)
-                  }
-                  style={{
-                    opacity: paginaAtual === totalPaginas ? 0.25 : 1,
-                    cursor:
-                      paginaAtual === totalPaginas ? "not-allowed" : "pointer",
-                  }}
-                >
-                  {">>"}
-                </li>
-              </ul>
-            </nav>
+                  {paginasVisiveis.map((pagina) => (
+                    <li
+                      key={pagina}
+                      onClick={() => setPaginaAtual(pagina)}
+                      className={`${paginaAtual === pagina ? "btn" : "btn2"} small_width`}
+                    >
+                      {pagina}
+                    </li>
+                  ))}
+
+                  <li
+                    className="btn small_width"
+                    onClick={() =>
+                      paginaAtual < totalPaginas &&
+                      setPaginaAtual(paginaAtual + 1)
+                    }
+                    style={{
+                      opacity: paginaAtual === totalPaginas ? 0.5 : 1,
+                      cursor:
+                        paginaAtual === totalPaginas
+                          ? "not-allowed"
+                          : "pointer",
+                    }}
+                  >
+                    {">"}
+                  </li>
+
+                  <li
+                    className="btn small_width"
+                    onClick={() =>
+                      paginaAtual < totalPaginas && setPaginaAtual(totalPaginas)
+                    }
+                    style={{
+                      opacity: paginaAtual === totalPaginas ? 0.25 : 1,
+                      cursor:
+                        paginaAtual === totalPaginas
+                          ? "not-allowed"
+                          : "pointer",
+                    }}
+                  >
+                    {">>"}
+                  </li>
+                </ul>
+              </nav>
+            </div>
+          ) : (
+            <Link href={`/home`} className="btn2">
+              Voltar
+            </Link>
           )}
         </section>
       </main>

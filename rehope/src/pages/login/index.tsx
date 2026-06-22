@@ -1,13 +1,20 @@
 import styles from "./login.module.css";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
-import { login } from "../api/authService";
+import { login, logout, obterUsuarioAutenticado } from "../api/authService";
 import { erro, notificacao } from "@/utils/toast";
 import Lucide from "@/utils/lucide";
 import Button from "@/components/button/button";
 import { TrocaTema } from "@/utils/trocaTema";
+import Link from "next/link";
+
+interface Token {
+  nome: string;
+}
 
 const Login = () => {
+  const [usuario, setUsuario] = useState<Token | null>(null);
+  const [estaAutenticado, setEstaAutenticado] = useState(false);
   const [email, setEmail] = useState<string>("");
   const [senha, setSenha] = useState<string>("");
   const [ativo, setAtivo] = useState<boolean>(false);
@@ -20,11 +27,31 @@ const Login = () => {
 
   const [imagemAtual, setImagemAtual] = useState(0);
 
+  const handleLogout = async () => {
+    await logout();
+    setUsuario(null);
+    setEstaAutenticado(false);
+    router.push("/login");
+  };
+
   useEffect(() => {
     const interval = setInterval(() => {
       setImagemAtual((prev) => (prev + 1) % imagens.length);
-    }, 3000);
+    }, 10000);
+
     return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const dados = obterUsuarioAutenticado();
+
+    if (dados) {
+      setUsuario(dados);
+      setEstaAutenticado(true);
+    } else {
+      setEstaAutenticado(false);
+      setUsuario(null);
+    }
   }, []);
 
   const router = useRouter();
@@ -98,14 +125,16 @@ const Login = () => {
           <TrocaTema />
         </div>
 
-        <form className="form" onSubmit={autenticar}>
+        <form className="form" id={styles.form} onSubmit={autenticar}>
           <img
             className="img"
             id={styles.img}
             src="/imgs/LogoBranca.svg"
             alt="Logo do site"
           />
-          <h1 className="h1" id={styles.h1}>Login</h1>
+          <h1 className="h1" id={styles.h1}>
+            Login
+          </h1>
 
           {/* Campo de E-mail */}
           <div className="campo_form">
@@ -155,6 +184,22 @@ const Login = () => {
           <Button type="submit" className="btn">
             Entrar
           </Button>
+          {estaAutenticado && (
+            <div className="column" id={styles.voltar}>
+              <p className="p">
+                Você já está logado como{" "}
+                <span className="p">{usuario?.nome}</span>
+                <br />
+                Deseja voltar para tela principal?
+              </p>
+              <div className="row">
+                <Link href="/home" className="btn2">
+                  Voltar
+                </Link>
+                <Button onClick={handleLogout}>Logout</Button>
+              </div>
+            </div>
+          )}
         </form>
       </section>
     </main>

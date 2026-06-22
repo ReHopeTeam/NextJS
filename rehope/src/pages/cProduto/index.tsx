@@ -21,9 +21,6 @@ import {
 } from "../api/genericService";
 import { useRouter } from "next/router";
 
-const API_BASE_URL = "http://localhost:7299";
-
-// Configurações visuais fixas de cada select
 const METADADOS_SELECTS = {
   tipo: { label: "Tipo", icone: "Package" as const },
   categoria: { label: "Categoria", icone: "Grid2X2" as const },
@@ -44,14 +41,13 @@ const CadastroProduto = () => {
   const [preview, setPreview] = useState<string | null>(null);
   const [arquivoImagem, setArquivoImagem] = useState<File | null>(null);
 
-  // Estados para armazenar as listas dinâmicas que vêm da API
   const [listaTipos, setListaTipos] = useState<TipoProduto[]>([]);
   const [listaLocalizacoes, setListaLocalizacoes] = useState<Localizacao[]>([]);
   const [listaUsuarios, setListaUsuarios] = useState<Usuario[]>([]);
   const [listaCategorias, setListaCategorias] = useState<Categoria[]>([]);
-
-  // Estado para filtrar categorias e só puxar de acordo com o "Tipo"
-  const [categoriasFiltradas, setCategoriasFiltradas] = useState<Categoria[]>([]);
+  const [categoriasFiltradas, setCategoriasFiltradas] = useState<Categoria[]>(
+    [],
+  );
 
   const [valoresSelect, setValoresSelect] = useState<Record<string, string>>({
     tipo: "",
@@ -71,18 +67,12 @@ const CadastroProduto = () => {
 
   const renderizarPreview = (url: string | null) => {
     if (!url) return "";
-    if (
-      url.startsWith("blob:") ||
-      url.startsWith("http://") ||
-      url.startsWith("https://") ||
-      url.startsWith("data:")
-    ) {
+    if (url.startsWith("blob:")) {
       return url;
     }
-    return `${API_BASE_URL}/${url.replace(/^\//, "")}`;
+    return url.startsWith("data:") ? url : `data:image/jpeg;base64,${url}`;
   };
 
-  // Carrega os dados do produto caso seja tela de Edição
   async function carregarInformacoes() {
     if (!id) return;
 
@@ -94,9 +84,12 @@ const CadastroProduto = () => {
       setDescricao(produto.descricao || "");
       setTamanho(produto.tamanho || (produto as any).Tamanho || "");
 
-      const tipoSeguro = produto.tipoProdutoID ?? (produto as any).tipoProdutoId;
-      const categoriaSegura = produto.categoriaID ?? (produto as any).categoriaId;
-      const localizacaoSegura = produto.localizacaoID ?? (produto as any).localizacaoId;
+      const tipoSeguro =
+        produto.tipoProdutoID ?? (produto as any).tipoProdutoId;
+      const categoriaSegura =
+        produto.categoriaID ?? (produto as any).categoriaId;
+      const localizacaoSegura =
+        produto.localizacaoID ?? (produto as any).localizacaoId;
       const usuarioSeguro = produto.usuarioID ?? (produto as any).usuarioId;
 
       setValoresSelect({
@@ -106,7 +99,9 @@ const CadastroProduto = () => {
         usuario: usuarioSeguro != null ? String(usuarioSeguro) : "",
       });
 
-      if (produto.imagemUrl) {
+      if (produto.imagem) {
+        setPreview(produto.imagem);
+      } else if (produto.imagemUrl) {
         setPreview(produto.imagemUrl);
       }
     } catch (error) {
@@ -114,23 +109,27 @@ const CadastroProduto = () => {
     }
   }
 
+  // Hook unificado para filtrar as categorias baseadas no Tipo selecionado
   useEffect(() => {
-    if (!valoresSelect.tipo || listaCategorias.length === 0) return;
+    if (!valoresSelect.tipo || listaCategorias.length === 0) {
+      setCategoriasFiltradas([]);
+      return;
+    }
 
     const categorias = listaCategorias.filter(
-      (categoria) =>
-        categoria.tipoProdutoID === Number(valoresSelect.tipo)
+      (categoria) => categoria.tipoProdutoID === Number(valoresSelect.tipo),
     );
 
     setCategoriasFiltradas(categorias);
   }, [valoresSelect.tipo, listaCategorias]);
 
+  // Dispara a busca do produto quando o Router está pronto
   useEffect(() => {
     if (!router.isReady) return;
-    if (telaEditar) {
+    if (telaEditar && listaCategorias.length > 0) {
       carregarInformacoes();
     }
-  }, [router.isReady, id]);
+  }, [router.isReady, id, listaCategorias.length]);
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -158,7 +157,6 @@ const CadastroProduto = () => {
     };
   }, [preview]);
 
-  // Carrega todos os selects da API dinamicamente ao abrir a tela
   useEffect(() => {
     async function carregarCombos() {
       try {
@@ -205,22 +203,18 @@ const CadastroProduto = () => {
     }
 
     try {
-      const dados: any = {
+      const dados: ProdutoForm = {
         nomeProduto: titulo,
         preco: preco,
         descricao: descricao,
         tamanho: tamanho,
         statusProduto: true,
-        codigo: 0,
         categoriaID: Number(valoresSelect.categoria) || 0,
         localizacaoID: Number(valoresSelect.localizacao) || 0,
         usuarioID: valoresSelect.usuario,
         tipoProdutoID: Number(valoresSelect.tipo) || 0,
+        imagem: arquivoImagem,
       };
-
-      if (arquivoImagem) {
-        dados.imagem = arquivoImagem;
-      }
 
       if (
         !dados.categoriaID ||
@@ -256,30 +250,23 @@ const CadastroProduto = () => {
 
   const handleSelecionarOpcao = (campo: string, valor: string) => {
     setValoresSelect((prev) => {
-      const novosValores = { ...prev, [campo]: valor, };
+      const novosValores = { ...prev, [campo]: valor };
 
       if (campo === "tipo") {
-        const categorias = listaCategorias.filter(
-          (categoria) => categoria.tipoProdutoID === Number(valor)
-        );
-
-        setCategoriasFiltradas(categorias);
         novosValores.categoria = "";
       }
 
       return novosValores;
     });
 
-    setSelectAberto((prev) => ({ ...prev, [campo]: false, }));
+    setSelectAberto((prev) => ({ ...prev, [campo]: false }));
   };
 
-  // Renderizador dinâmico que mapeia as listas corretas vindas do backend
   const renderSelectCustomizado = (campo: keyof typeof METADADOS_SELECTS) => {
     const config = METADADOS_SELECTS[campo];
     const valorAtual = valoresSelect[campo];
     const aberto = selectAberto[campo];
 
-    // Mapeia qual lista e quais propriedades usar para cada select baseado no contexto
     let listaAlvo: any[] = [];
     let extrairNome = (item: any) => "";
     let extrairId = (item: any) => "";
@@ -307,12 +294,10 @@ const CadastroProduto = () => {
       extrairId = (item) => String(item.usuarioId ?? item.usuarioID ?? item.id);
     }
 
-    // Busca dinamicamente a label que deve ser exibida na barra do select
-    const labelExibida = listaAlvo.find(
+    const itemSelecionado = listaAlvo.find(
       (item) => extrairId(item) === valorAtual,
-    )
-      ? extrairNome(listaAlvo.find((item) => extrairId(item) === valorAtual))
-      : "";
+    );
+    const labelExibida = itemSelecionado ? extrairNome(itemSelecionado) : "";
 
     return (
       <div
@@ -344,7 +329,7 @@ const CadastroProduto = () => {
         <label className="label">{config.label}</label>
 
         {aberto && (
-          <ul className="dropdown_options" style={{ display: "block" }}>
+          <ul className="dropdown_options">
             <li onClick={() => handleSelecionarOpcao(campo, "")}>
               <Lucide name="RectangleEllipsis" className="reset_lucide" />{" "}
               Nenhum
@@ -371,176 +356,170 @@ const CadastroProduto = () => {
       <Header />
       <main className="min_height">
         <svg
-          width="265"
-          height="592"
-          viewBox="0 0 265 592"
+          width="313"
+          height="590"
+          viewBox="0 0 313 590"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
           className="fixed path2"
-          style={{ left: "0", top: "240" }}
+          style={{ left: "0" }}
         >
           <path
-            d="M-1.86295 104.196C123.047 137.918 143.137 -39.8031 202.637 
-            30.6968C262.137 101.197 148.637 111.197 132.137 202.697C115.637 
-            294.197 208.638 265.196 242.121 336.696C275.605 408.195 198.138 
-            502.197 122.138 484.696C46.1375 467.195 -32 577.619 -32 577.619"
+            d="M0 109.002C17.5003 109.002 147.819 -34.6658 208.195 28.5686C281.301 105.137 137.521 125.098 138.875 209.814C140.446 308.076 298.245 287.843 299.985 396.703C302.34 544.035 22.0093 577.488 0 577.488"
             strokeWidth="20"
             strokeLinecap="round"
           />
         </svg>
 
         <svg
-          width="265"
-          height="592"
-          viewBox="0 0 265 592"
+          width="313"
+          height="590"
+          viewBox="0 0 313 590"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
           className="fixed path2"
-          style={{ right: "-100", top: "90" }}
+          style={{ right: "0" }}
         >
           <path
-            d="M173.295 409.198C173.295 409.198 69.7944 381.967 57.7955 328.197C45.3221 
-            272.301 118.796 295.197 135.296 203.697C151.796 112.197 55.2792 221.197 21.7954 
-            149.697C-11.6883 78.1978 31.242 34.2975 86.2959 13.6974C129.816 -2.58704 202.294 40.1974 202.294 40.1974"
+            d="M312.5 577.5C312.5 577.5 77.8148 563.562 77.8148 469.65C77.8148 387.284 204.507 379.047 204.507 298.199C204.507 219.164 12.5 241 12.5 131.741C12.5 -29.8913 196.591 -4.19628 312.5 73.8153"
             strokeWidth="20"
             strokeLinecap="round"
           />
         </svg>
+
         <section className="container column">
-          <h1 className="title2">
-            {telaEditar ? "Editar" : "Cadastrar"} Produto
-          </h1>
+          <h1 className="h1">{telaEditar ? "Editar" : "Cadastrar"} Produto</h1>
 
-          <form
-            className="form grid info"
-            ref={formRef}
-            onSubmit={salvarProduto}
-            id="form-produto"
-          >
-            {/* Coluna 1 */}
-            <div className="column full_height">
-              <div className="campo_img">
-                <label htmlFor="upload-foto" className="input_upload">
-                  {preview ? (
-                    <div className="relative_pos full_size_preview">
-                      <img
-                        src={renderizarPreview(preview)}
-                        alt="Preview"
-                        className="preview_img"
-                      />
-                      <button
-                        type="button"
-                        onClick={handleRemoveImage}
-                        className="btn_delete"
-                      >
-                        X
-                      </button>
-                    </div>
-                  ) : (
-                    <>
-                      <Lucide
-                        name="Upload"
-                        size={24}
-                        className="upload_lucide"
-                      />
-                      <span>Escolher Imagem</span>
-                    </>
-                  )}
-                </label>
-                <input
-                  id="upload-foto"
-                  type="file"
-                  accept="image/*"
-                  className="input_img"
-                  required={!telaEditar}
-                  onChange={handleFileChange}
-                />
+          <div className="info column">
+            <form
+              className="form grid"
+              ref={formRef}
+              onSubmit={salvarProduto}
+              id="form-produto"
+            >
+              {/* Coluna 1 - Upload Imagem */}
+              <div className="column full_height">
+                <div className="campo_img">
+                  <label htmlFor="upload-foto" className="input_upload">
+                    {preview ? (
+                      <div className="relative_pos full_size_preview">
+                        <img
+                          src={renderizarPreview(preview)}
+                          alt="Preview"
+                          className="preview_img"
+                        />
+                        <button
+                          type="button"
+                          onClick={handleRemoveImage}
+                          className="btn_delete"
+                        >
+                          X
+                        </button>
+                      </div>
+                    ) : (
+                      <>
+                        <Lucide
+                          name="Upload"
+                          size={24}
+                          className="upload_lucide"
+                        />
+                        <span>Escolher Imagem</span>
+                      </>
+                    )}
+                  </label>
+                  <input
+                    id="upload-foto"
+                    type="file"
+                    accept="image/*"
+                    className="input_img"
+                    required={!telaEditar && !preview}
+                    onChange={handleFileChange}
+                  />
+                </div>
               </div>
+
+              {/* Coluna 2 - Dados de Texto */}
+              <div className="column full_height">
+                <div className="campo_form">
+                  <Lucide name="ALargeSmall" className="lucide" />
+                  <input
+                    type="text"
+                    id="titulo"
+                    placeholder=" "
+                    className="input"
+                    value={titulo}
+                    onChange={(e) => setTitulo(e.target.value)}
+                    required
+                  />
+                  <label htmlFor="titulo" className="label">
+                    Título
+                  </label>
+                </div>
+                <div className="campo_form">
+                  <Lucide name="Tag" className="lucide" />
+                  <input
+                    type="text"
+                    id="preco"
+                    placeholder=" "
+                    className="input"
+                    value={preco}
+                    onChange={(e) => setPreco(e.target.value)}
+                    required
+                  />
+                  <label htmlFor="preco" className="label">
+                    Preço
+                  </label>
+                </div>
+                <div className="campo_form">
+                  <Lucide
+                    name="MessageSquareText"
+                    className="lucide desc_lucide"
+                  />
+                  <textarea
+                    id="descricao"
+                    placeholder=" "
+                    className="textarea"
+                    value={descricao}
+                    onChange={(e) => setDescricao(e.target.value)}
+                  />
+                  <label htmlFor="descricao" className="label">
+                    Descrição
+                  </label>
+                </div>
+              </div>
+
+              {/* Coluna 3 - Selects Dinâmicos */}
+              <div className="column full_height">
+                {renderSelectCustomizado("tipo")}
+                {renderSelectCustomizado("categoria")}
+                {renderSelectCustomizado("localizacao")}
+                {renderSelectCustomizado("usuario")}
+
+                <div className="campo_form">
+                  <Lucide name="RulerDimensionLine" className="lucide" />
+                  <input
+                    type="text"
+                    id="tamanho"
+                    placeholder=" "
+                    className="input"
+                    value={tamanho}
+                    onChange={(e) => setTamanho(e.target.value)}
+                    required
+                  />
+                  <label htmlFor="tamanho" className="label">
+                    Tamanho
+                  </label>
+                </div>
+              </div>
+            </form>
+            <div className="row">
+              <Link href="/home" className="btn2">
+                Voltar
+              </Link>
+              <Button type="submit" form="form-produto">
+                Salvar
+              </Button>
             </div>
-
-            {/* Coluna 2 */}
-            <div className="column full_height">
-              <div className="campo_form">
-                <Lucide name="ALargeSmall" className="lucide" />
-                <input
-                  type="text"
-                  id="titulo"
-                  placeholder=" "
-                  className="input"
-                  value={titulo}
-                  onChange={(e) => setTitulo(e.target.value)}
-                  required
-                />
-                <label htmlFor="titulo" className="label">
-                  Título
-                </label>
-              </div>
-              <div className="campo_form">
-                <Lucide name="Tag" className="lucide" />
-                <input
-                  type="text"
-                  id="preco"
-                  placeholder=" "
-                  className="input"
-                  value={preco}
-                  onChange={(e) => setPreco(e.target.value)}
-                  required
-                />
-                <label htmlFor="preco" className="label">
-                  Preço
-                </label>
-              </div>
-              <div className="campo_form">
-                <Lucide
-                  name="MessageSquareText"
-                  className="lucide desc_lucide"
-                />
-                <textarea
-                  id="descricao"
-                  placeholder=" "
-                  className="textarea"
-                  value={descricao}
-                  onChange={(e) => setDescricao(e.target.value)}
-                  required
-                />
-                <label htmlFor="descricao" className="label">
-                  Descrição
-                </label>
-              </div>
-            </div>
-
-            {/* Coluna 3 */}
-            <div className="column full_height">
-              {renderSelectCustomizado("tipo")}
-              {renderSelectCustomizado("categoria")}
-              {renderSelectCustomizado("localizacao")}
-              {renderSelectCustomizado("usuario")}
-
-              <div className="campo_form">
-                <Lucide name="RulerDimensionLine" className="lucide" />
-                <input
-                  type="text"
-                  id="tamanho"
-                  placeholder=" "
-                  className="input"
-                  value={tamanho}
-                  onChange={(e) => setTamanho(e.target.value)}
-                  required
-                />
-                <label htmlFor="tamanho" className="label">
-                  Tamanho
-                </label>
-              </div>
-            </div>
-          </form>
-
-          <div className="row">
-            <Link href="/home" className="btn2">
-              Voltar
-            </Link>
-            <Button type="submit" form="form-produto">
-              Salvar
-            </Button>
           </div>
         </section>
       </main>

@@ -1,3 +1,6 @@
+/*? ============================= */
+/*?   Propriedades Customizadas   */
+/*? ============================= */
 @property --bg {
   syntax: "<color>";
   inherits: true;
@@ -10,20 +13,22 @@
   initial-value: hsl(85, 40%, 80%);
 }
 
-/*? 1. VARIÁVEIS GLOBAIS (:ROOT) */
+/*? ===================== */
+/*?   Variáveis Globais   */
+/*? ===================== */
 :root {
   --verde-fonte: hsl(145, 90%, 10%);
   --verde-primario: hsl(125, 35%, 20%);
   --verde-secundario: hsl(115, 35%, 40%);
   --destaque: hsl(85, 40%, 80%);
-  --bg: hsl(35, 100%, 97%);
-  --branco: hsl(0, 0%, 100%);
+  --bg: hsl(45, 100%, 92%);
+  --branco: hsl(45, 100%, 96%);
   --cinza: hsl(120, 40%, 7%);
   --preto: hsl(145, 100%, 5%);
   --verde-tema: hsl(150, 100%, 40%);
   --verde-vivo: hsl(125, 100%, 40%);
   --vermelho: hsl(340, 100%, 50%);
-  --surface: hsl(0, 0%, 100%);
+  --surface: hsl(44, 100%, 96%);
 
   --lucide: var(--verde-vivo);
   --text-main: var(--verde-fonte);
@@ -63,7 +68,9 @@
   --shadow-lg: 0 8px 24px hsla(0, 0%, 0%, 0.7);
 }
 
-/*? 2. RESET & ESTILOS BASE */
+/*? ======================== */
+/*?   Reset e Estilos Base   */
+/*? ======================== */
 * {
   margin: 0;
   padding: 0;
@@ -111,11 +118,26 @@ li {
   color: var(--branco);
 }
 
-:is(body, *, .input, .textarea, .select, .dropdown_options, .info, .Toastify__toast) {
-  transition: background 0.5s ease, color 1s ease, border-color 1s ease, box-shadow 1s ease;
+:is(
+  body,
+  *,
+  .input,
+  .textarea,
+  .select,
+  .dropdown_options,
+  .info,
+  .Toastify__toast
+) {
+  transition:
+    background 0.5s ease,
+    color 1s ease,
+    border-color 1s ease,
+    box-shadow 1s ease;
 }
 
-/*? 3. TIPOGRAFIA & TEXTOS */
+/*? ======================= */
+/*?   Tipografia e Textos   */
+/*? ======================= */
 :is(.p, .h1, .h2, .h3, .h4) {
   overflow-wrap: break-word;
 }
@@ -146,6 +168,7 @@ li {
 }
 
 .title {
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -173,7 +196,9 @@ span {
   font-size: 1.25rem;
 }
 
-/*? 4. LINKS & INTERATIVIDADE */
+/*? ========================== */
+/*?   Links e Interatividade   */
+/*? ========================== */
 a {
   position: relative;
   color: var(--branco);
@@ -200,7 +225,9 @@ a {
   width: 100%;
 }
 
-/*? 5. MÍDIA (IMAGENS & VÍDEOS) */
+/*? ============================ */
+/*?   Mídia (Imagens e Vídeos)   */
+/*? ============================ */
 :is(.img, .picture, .video, .canvas, .svg) {
   display: block;
   max-width: 100%;
@@ -256,11 +283,14 @@ a {
   height: 32px;
   margin-right: 0;
   transform: none;
+}
+
+.menuIcon path {
   stroke: var(--verde-fonte);
   transition: stroke 0.15s ease;
 }
 
-.menuIcon:hover .lucide {
+.menuIcon:hover path {
   stroke: var(--verde-tema);
 }
 
@@ -268,14 +298,16 @@ a {
   width: 100%;
 }
 
-/*? 6. FORMULÁRIOS & ENTRADAS (INPUTS) */
+/*? ======================== */
+/*?   Formulários e Inputs   */
+/*? ======================== */
 .form {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 20px;
-  min-width: 80%;
+  width: 100%;
 }
 
 :is(.campo_form, .campo_select, .campo_img) {
@@ -287,7 +319,7 @@ a {
 }
 
 :is(.input, .input_upload, .select, .textarea) {
-  z-index: 1000;
+  z-index: 100;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -295,7 +327,10 @@ a {
   padding: var(--padding-md);
   border: 2px solid var(--border-input);
   border-radius: var(--radius-md);
-  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.15s ease;
 }
 
 :is(.input, .select, .textarea) {
@@ -350,13 +385,17 @@ a {
   border-radius: var(--radius-sm);
   transform: translateY(-50%);
   pointer-events: none;
-  transition: top 0.15s ease, font-size 0.15s ease, color 0.15s ease, transform 0.15s ease;
+  transition:
+    top 0.15s ease,
+    font-size 0.15s ease,
+    color 0.15s ease,
+    transform 0.15s ease;
 }
 
-:is(.input, .textarea):focus~.label,
-:is(.input, .textarea):not(:placeholder-shown)~.label,
-.select:focus~.label,
-.select:valid~.label,
+:is(.input, .textarea):focus ~ .label,
+:is(.input, .textarea):not(:placeholder-shown) ~ .label,
+.select:focus ~ .label,
+.select:valid ~ .label,
 .campo_select:is(.open, .has-value) .label {
   top: 0;
   color: var(--verde-secundario);
@@ -370,7 +409,9 @@ a {
   transform: none;
 }
 
-.campo_form:has(.textarea) .textarea:is(:focus, :not(:placeholder-shown))~.label {
+.campo_form:has(.textarea)
+  .textarea:is(:focus, :not(:placeholder-shown))
+  ~ .label {
   top: 0;
   transform: translateY(-50%);
 }
@@ -419,7 +460,8 @@ a {
   padding: 0;
   cursor: pointer;
   border: 2px dashed var(--verde-primario);
-  box-shadow: inset 0 0 25px color-mix(in srgb, var(--verde-primario), transparent 75%);
+  box-shadow: inset 0 0 25px
+    color-mix(in srgb, var(--verde-primario), transparent 75%);
   overflow: hidden;
   aspect-ratio: 1 / 1;
 }
@@ -459,15 +501,6 @@ a {
   overflow-y: auto;
 }
 
-.dropdown_options::-webkit-scrollbar {
-  width: 6px;
-}
-
-.dropdown_options::-webkit-scrollbar-thumb {
-  background: var(--verde-secundario);
-  border-radius: 10px;
-}
-
 .dropdown_options li {
   display: flex;
   align-items: center;
@@ -475,7 +508,9 @@ a {
   padding: var(--padding-md) var(--padding-md) var(--padding-md) 50px;
   font-size: 1rem;
   cursor: pointer;
-  transition: background 0.15s ease, color 0.15s ease;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
 }
 
 .dropdown_options li:hover {
@@ -483,8 +518,13 @@ a {
   background: var(--verde-primario);
 }
 
+.campo_select {
+  position: relative;
+  z-index: 100;
+}
+
 .campo_select.open {
-  z-index: 1000;
+  z-index: 1010;
 }
 
 .campo_select.open .select {
@@ -492,9 +532,16 @@ a {
   box-shadow: var(--shadow-md);
 }
 
-/*? 7. BOTÕES */
+.input[type="number"]::-webkit-inner-spin-button {
+  appearance: none;
+}
+
+/*? ========== */
+/*?   Botões   */
+/*? ========== */
 :is(.btn, .btn2, .btn_card) {
-  z-index: 100;
+  position: relative;
+  z-index: 3;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -505,7 +552,11 @@ a {
   cursor: pointer;
   box-shadow: var(--shadow-md);
   user-select: none;
-  transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease, opacity 0.15s ease;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    filter 0.15s ease,
+    opacity 0.15s ease;
 }
 
 :is(.btn, .btn2) {
@@ -518,13 +569,18 @@ a {
   background: var(--verde-primario);
 }
 
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .btn * {
   color: var(--branco) !important;
 }
 
 .btn2 {
   color: var(--verde-secundario);
-  background: transparent;
+  background: color-mix(in srgb, var(--bg) 90%, transparent);
   border: 2px solid var(--verde-secundario);
 }
 
@@ -533,7 +589,7 @@ a {
 }
 
 :is(.btn, .btn2):hover {
-  z-index: 1000;
+  z-index: 4;
   box-shadow: var(--shadow-lg);
   filter: brightness(1.15);
   transform: translateY(-3px);
@@ -580,7 +636,9 @@ a {
   transform: translateY(-50%);
 }
 
-/*? 8. LAYOUT, GRID & UTILITY CLASSES */
+/*? ======================== */
+/*?   Layout e Utilitários   */
+/*? ======================== */
 .container {
   display: flex;
   align-items: center;
@@ -617,6 +675,10 @@ a {
   justify-content: flex-start;
 }
 
+.space_between {
+  justify-content: space-between;
+}
+
 .no_gap {
   gap: 0;
   width: 100%;
@@ -638,10 +700,11 @@ a {
 }
 
 .tr {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
   gap: 10px;
   width: 100%;
+  display: grid;
+  align-items: center;
+  grid-template-columns: repeat(4, 1fr);
 }
 
 .tr td {
@@ -665,11 +728,22 @@ a {
   z-index: 10;
   width: 100%;
   padding: var(--padding-lg);
-  background: color-mix(in srgb, var(--bg) 90%, transparent);
+  background: color-mix(in srgb, var(--bg) 98%, transparent);
   border: 2px solid color-mix(in srgb, var(--destaque), transparent);
   border-radius: var(--radius-lg);
   box-shadow: inset var(--shadow-sm);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.paginacao {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  padding: 2rem 0;
+  flex-wrap: wrap;
+  list-style: none;
 }
 
 .min_height {
@@ -723,7 +797,9 @@ a {
   height: 100%;
 }
 
-/*? 9. COMPONENTES DE TERCEIROS & CUSTOM SCROLLBARS */
+/*? =========================== */
+/*?   Componentes e Scrollbar   */
+/*? =========================== */
 .Toastify__toast {
   z-index: 1000;
   color: var(--text-main) !important;
@@ -734,7 +810,11 @@ a {
 }
 
 .Toastify__progress-bar--success {
-  background: linear-gradient(to right, var(--verde-primario), var(--verde-secundario)) !important;
+  background: linear-gradient(
+    to right,
+    var(--verde-primario),
+    var(--verde-secundario)
+  ) !important;
 }
 
 .Toastify__toast--success .Toastify__toast-icon svg {
@@ -758,13 +838,62 @@ a {
   background: var(--verde-primario);
 }
 
-:is(input, textarea, select):is(:-webkit-autofill, :-webkit-autofill:hover, :-webkit-autofill:focus) {
+:is(input, textarea, select):is(
+  :-webkit-autofill,
+  :-webkit-autofill:hover,
+  :-webkit-autofill:focus
+) {
   -webkit-text-fill-color: var(--text-main) !important;
   -webkit-box-shadow: inset 0 0 0px 1000px var(--surface);
   transition: background-color 1.5s ease-in-out;
 }
 
-/*? 10. MEDIA QUERIES (RESPONSIVIDADE) */
+/*? ===================== */
+/*?   Transições (View)   */
+/*? ===================== */
+::view-transition-old(root) {
+  animation: 0.35s ease both opacity-out;
+}
+
+::view-transition-new(root) {
+  animation: 0.35s ease both opacity-in;
+}
+
+::view-transition-group(root) {
+  overflow: hidden;
+}
+
+.main_header {
+  view-transition-name: header;
+}
+
+::view-transition-group(header) {
+  z-index: 1000;
+}
+
+.main_footer {
+  view-transition-name: footer;
+}
+
+::view-transition-group(footer) {
+  z-index: 1000;
+}
+
+@keyframes opacity-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes opacity-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/*? ================= */
+/*?   Media Queries   */
+/*? ================= */
 @media (max-width: 1080px) {
   .to_column {
     display: flex;
@@ -845,46 +974,5 @@ a {
     top: 30px;
     right: 20px;
     z-index: 100;
-  }
-}
-
-/*? 11. TRANSIÇÕES (VIEW TRANSITION) */
-::view-transition-old(root) {
-  animation: 0.35s ease both opacity-out;
-}
-
-::view-transition-new(root) {
-  animation: 0.35s ease both opacity-in;
-}
-
-::view-transition-group(root) {
-  overflow: hidden;
-}
-
-.main_header {
-  view-transition-name: header;
-}
-
-::view-transition-group(header) {
-  z-index: 1000;
-}
-
-.main_footer {
-  view-transition-name: footer;
-}
-
-::view-transition-group(footer) {
-  z-index: 1000;
-}
-
-@keyframes opacity-out {
-  to {
-    opacity: 0;
-  }
-}
-
-@keyframes opacity-in {
-  from {
-    opacity: 0;
   }
 }

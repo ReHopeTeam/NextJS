@@ -24,12 +24,11 @@ type Produto = {
   descricao: string;
   tamanho: string;
   imagem: string;
+  imagemUrl?: string | null;
   categoriaID: number;
   localizacaoID: number;
   usuarioID: string;
   tipoProdutoID: number;
-
-  // Atribuindo os IDs
   nomeUsuario: string;
   nomeCategoria: string;
   nomeLocalizacao: string;
@@ -87,6 +86,15 @@ const Detalhe = () => {
     listarProdutos();
   }, [router.isReady, id]);
 
+  // 🟢 Tratamento centralizado da imagem Base64 idêntico ao do Card
+  const imagemSrc = produto?.imagemUrl
+    ? produto.imagemUrl
+    : produto?.imagem
+      ? produto.imagem.startsWith("data:")
+        ? produto.imagem
+        : `data:image/jpeg;base64,${produto.imagem}`
+      : "/imgs/CardFantasma.png";
+
   return (
     <>
       <Header />
@@ -97,17 +105,11 @@ const Detalhe = () => {
               <div className={styles.imgContainer}>
                 <img
                   id={styles.img}
-                  src={
-                    !produto || !produto.imagem
-                      ? "/imgs/CardFantasma.png"
-                      : produto.imagem.startsWith("http") ||
-                        produto.imagem.startsWith("/")
-                        ? produto.imagem
-                        : `data:image/jpeg;base64,${produto.imagem}`
-                  }
+                  src={imagemSrc} // 🟢 Consome a variável tratada acima
                   alt={produto?.nomeProduto || "Imagem do produto"}
-                  className={`img small_radius ${produto?.statusProduto ? styles.ativoImg : styles.inativoImg
-                    }`}
+                  className={`img small_radius ${
+                    produto?.statusProduto ? styles.ativoImg : styles.inativoImg
+                  }`}
                 />
 
                 <h3
@@ -179,11 +181,8 @@ const Detalhe = () => {
                 <div className="column start small_gap grid_to_row">
                   <h3>Usuário:</h3>
                   <p>
-
                     {produto?.nomeUsuario ||
-                      (produto?.usuarioID
-                        ? "Carregando..."
-                        : "Não informado")}
+                      (produto?.usuarioID ? "Carregando..." : "Não informado")}
                   </p>
                 </div>
               </div>
@@ -203,10 +202,11 @@ const Detalhe = () => {
             </Link>
             <Link
               id={styles.button}
-              children="Editar"
               href={`/cProduto?id=${id}`}
               className="btn"
-            />
+            >
+              Editar
+            </Link>
           </div>
         </section>
       </main>

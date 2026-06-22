@@ -1,8 +1,12 @@
-/* 1. ESTRUTURA DO HEADER */
+/*? ========== */
+/*?   Header   */
+/*? ========== */
 #header {
   min-height: 10vh;
   background: var(--verde-primario);
-  clip-path: path("M0 0H1920V90C1920 90 1440 130 1340 90C1240 50 1160 55 1080 75C1010 88 990 88 960.5 88C931 88 911 88 841 75C761 55 681 50 581 90C481 130 0 90 0 90V0Z");
+  clip-path: path(
+    "M0 107.666C0 107.666 292.723 126.566 480 117.574C573.935 113.063 625.977 99.6848 720 97.7588C813.786 95.8377 865.949 107.666 960 107.666C1054.05 107.666 1106.21 95.8377 1200 97.7588C1294.02 99.6848 1346.06 113.063 1440 117.574C1627.28 126.566 1920 107.666 1920 107.666V-6.67572e-06H0V107.666Z"
+  );
 }
 
 #header::after {
@@ -35,7 +39,11 @@
   height: 60px;
   padding: var(--padding-sm);
   color: var(--branco);
-  background: color-mix(in srgb, var(--verde-primario), var(--verde-secundario));
+  background: color-mix(
+    in srgb,
+    var(--verde-primario),
+    var(--verde-secundario)
+  );
   border: 1px solid var(--destaque);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
@@ -52,7 +60,13 @@
   color: white;
 }
 
-/* 2. COMPONENTES (OVERLAY & SIDEBAR) */
+:global(html) .headerIcon path {
+  stroke: var(--branco);
+}
+
+/*? ================================= */
+/*?   Componentes (Overlay/Sidebar)   */
+/*? ================================= */
 .overlay {
   position: fixed;
   inset: 0;
@@ -72,6 +86,7 @@
   right: 0;
   z-index: 1000;
   display: flex;
+  align-items: flex-end;
   flex-direction: column;
   gap: 0.5rem;
   width: 320px;
@@ -90,9 +105,8 @@
 .menuLink {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
   gap: 10px;
-  width: 100%;
+  width: fit-content;
   height: var(--height);
   padding: 0.8rem;
   color: white;
@@ -127,7 +141,9 @@
   height: 2rem;
   stroke: var(--branco);
   transform: none;
-  transition: transform 0.1s ease, stroke 0.1s ease;
+  transition:
+    transform 0.1s ease,
+    stroke 0.1s ease;
 }
 
 .closeButton:hover :global(.lucide) {
@@ -135,12 +151,13 @@
   transform: scale(1.1);
 }
 
-/* 4. ANIMAÇÕES */
+/*? ============= */
+/*?   Animações   */
+/*? ============= */
 @keyframes fadeInOverlay {
   from {
     opacity: 0;
   }
-
   to {
     opacity: 1;
   }
@@ -150,7 +167,6 @@
   from {
     opacity: 1;
   }
-
   to {
     opacity: 0;
   }
@@ -160,7 +176,6 @@
   from {
     transform: translateX(100%);
   }
-
   to {
     transform: translateX(0);
   }
@@ -170,17 +185,14 @@
   from {
     transform: translateX(0);
   }
-
   to {
     transform: translateX(100%);
   }
 }
 
-:global(html) .headerIcon path {
-  stroke: var(--branco);
-}
-
-/* 5. MEDIA QUERIES */
+/*? ================= */
+/*?   Media Queries   */
+/*? ================= */
 @media (max-width: 1080px) {
   #header {
     width: 100%;
@@ -211,7 +223,11 @@
     top: 0;
     z-index: 1000;
     width: 100%;
-    background: linear-gradient(to bottom, color-mix(in srgb, var(--bg), var(--destaque) 75%), transparent);
+    background: linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--bg), var(--destaque) 75%),
+      transparent
+    );
     clip-path: none;
   }
 
@@ -226,7 +242,11 @@
     top: 0;
     z-index: 1000;
     width: 100%;
-    background: linear-gradient(to bottom, color-mix(in srgb, var(--bg), var(--destaque) 75%), transparent);
+    background: linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--bg), var(--destaque) 75%),
+      transparent
+    );
     clip-path: none;
   }
 

@@ -1,3 +1,6 @@
+/*? ================== */
+/*?   Imagem do Card   */
+/*? ================== */
 .imgContainer {
   position: relative;
   width: 100%;
@@ -19,6 +22,9 @@
   border: 2px solid var(--vermelho);
 }
 
+/*? ======================= */
+/*?   Tags de Status (H3)   */
+/*? ======================= */
 .ativoH3,
 .inativoH3 {
   position: absolute;
@@ -42,6 +48,9 @@
   border: 2px solid var(--vermelho);
 }
 
+/*? ====================== */
+/*?   Botão de Histórico   */
+/*? ====================== */
 #historico {
   display: flex;
   align-items: center;
@@ -63,6 +72,9 @@
   stroke: var(--verde-fonte);
 }
 
+/*? ================= */
+/*?   Media Queries   */
+/*? ================= */
 @media (max-width: 768px) {
   #img {
     width: 50%;

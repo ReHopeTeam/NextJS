@@ -38,6 +38,9 @@ import {
   PackagePlus,
   MailPlus,
   CircleQuestionMark,
+  LogIn,
+  ChevronUp,
+  ChevronDown,
 } from "lucide-react";
 
 const icons = {
@@ -79,6 +82,9 @@ const icons = {
   PackagePlus,
   MailPlus,
   CircleQuestionMark,
+  LogIn,
+  ChevronUp,
+  ChevronDown,
 };
 
 type IconName = keyof typeof icons;

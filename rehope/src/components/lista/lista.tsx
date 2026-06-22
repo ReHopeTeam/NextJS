@@ -277,7 +277,12 @@ const Lista = () => {
           {/* 3. Input Number para alterar dinamicamente a quantidade de itens por página */}
           <div
             className="campo_form"
-            style={{ minWidth: "90px", width: "90px", margin: 0 }}
+            style={{
+              minWidth: "90px",
+              width: "90px",
+              margin: 0,
+              position: "relative",
+            }}
           >
             <input
               type="number"
@@ -286,7 +291,11 @@ const Lista = () => {
               min="1"
               value={itensPorPagina}
               onChange={(e) => handleMudarItensPorPagina(e.target.value)}
-              style={{ textAlign: "center", paddingLeft: "15px" }}
+              style={{
+                textAlign: "center",
+                paddingLeft: "10px",
+                paddingRight: "30px",
+              }}
             />
             <label
               htmlFor="itensPorPagina"
@@ -295,6 +304,38 @@ const Lista = () => {
             >
               Qtd.
             </label>
+
+            {/* Controles customizados absolutos */}
+            <div className={styles.spin_controles}>
+              <button
+                type="button"
+                onClick={() =>
+                  handleMudarItensPorPagina(String(itensPorPagina + 1))
+                }
+                className={styles.spin_btn}
+              >
+                <Lucide
+                  name="ChevronUp"
+                  className="reset_lucide"
+                  style={{ width: "14px", height: "14px" }}
+                />
+              </button>
+              <button
+                type="button"
+                onClick={() =>
+                  handleMudarItensPorPagina(
+                    String(Math.max(1, itensPorPagina - 1)),
+                  )
+                }
+                className={styles.spin_btn}
+              >
+                <Lucide
+                  name="ChevronDown"
+                  className="reset_lucide"
+                  style={{ width: "14px", height: "14px" }}
+                />
+              </button>
+            </div>
           </div>
 
           <button
@@ -348,7 +389,7 @@ const Lista = () => {
       {/* Paginação */}
       {totalPaginas > 1 && (
         <nav>
-          <ul id={styles.paginacao}>
+          <ul className="paginacao">
             <li
               className="btn small_width"
               onClick={() => paginaAtual > 1 && setPaginaAtual(1)}

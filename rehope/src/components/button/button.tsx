@@ -1,4 +1,4 @@
-import { ComponentPropsWithoutRef, ReactNode } from "react";
+import { ComponentPropsWithoutRef } from "react";
 
 type ButtonProps = ComponentPropsWithoutRef<"button"> & {
   variant?: "default" | "icon";
@@ -14,7 +14,9 @@ const Botoes = ({
     `${variant === "default" ? "btn" : ""} ${className || ""}`.trim();
 
   return (
-    <button className={combinedClasses} {...props}>{children}</button>
+    <button className={combinedClasses} {...props}>
+      {children}
+    </button>
   );
 };
 
